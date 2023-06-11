@@ -6,9 +6,10 @@ interface IResponse {
 
 export const postGithubAuth = async (code: string | null): Promise<IResponse> => {
   const { data } = await axios
-    .get(`http://localhost:3030/login/oauth/access_token?code=${code}`, {
+    .get(`/oauth/github?code=${code}`, {
       headers: {
         Accept: 'application/json',
+        'ngrok-skip-browser-warning': '69420',
       },
     })
     .then((res) => {
@@ -21,9 +22,16 @@ export const postGithubAuth = async (code: string | null): Promise<IResponse> =>
 // export const postGithubRegister = () => {};
 
 export const postGoogleAuth = async (code: string | null): Promise<IResponse> => {
-  const { data } = await axios.post('http://localhost:3030/google/access_token', { code: code }).then((res) => {
-    return res;
-  });
+  const { data } = await axios
+    .post(`/oauth/google?code=${code}`, {
+      headers: {
+        Accept: 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+      },
+    })
+    .then((res) => {
+      return res;
+    });
   return data;
 };
 

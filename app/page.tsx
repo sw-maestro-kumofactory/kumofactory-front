@@ -14,7 +14,7 @@ const Home = () => {
           로그아웃하기
         </div>
       ) : (
-        <Link className='text-4xl font-bold text-gray-500 hover:text-gray-400 transition' href='/auth/login'>
+        <Link className='text-4xl font-bold text-gray-500 hover:text-gray-400 transition' href='/blueprint'>
           Build Your Own Architecture!
         </Link>
       )}
