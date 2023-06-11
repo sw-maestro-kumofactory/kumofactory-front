@@ -1,6 +1,7 @@
 import BeatLoader from 'react-spinners/FadeLoader';
 
 const Loading = () => {
+  console.log('Loading.....');
   return (
     <div className='contentWrap'>
       <div
