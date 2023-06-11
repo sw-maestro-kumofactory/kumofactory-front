@@ -1,6 +1,6 @@
 const useGoogleAuth = () => {
-  const client_id = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-  const redirect_uri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
+  const client_id = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const redirect_uri = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI;
   return {
     login() {
       open(

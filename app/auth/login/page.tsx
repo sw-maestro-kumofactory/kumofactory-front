@@ -2,9 +2,9 @@
 import { useLogin } from '@/src/hooks/useLogin';
 import useGoogleAuth from '@/src/hooks/Auth/useGoogleAuth';
 import useGithubAuth from '@/src/hooks/Auth/useGithubAuth';
-import KakaoAuthButton from '@/src/components/Auth/kakao/kakaoAuthButton';
-import GithubAuthButton from '@/src/components/Auth/github/githubAuthButton';
-import GoogleAuthButton from '@/src/components/Auth/google/googleAuthButton';
+import KakaoAuthButton from '@/src/components/Auth/Button/kakaoAuthButton';
+import GithubAuthButton from '@/src/components/Auth/Button/githubAuthButton';
+import GoogleAuthButton from '@/src/components/Auth/Button/googleAuthButton';
 
 const Login = () => {
   const { isLogin, login } = useLogin();
@@ -17,7 +17,7 @@ const Login = () => {
         <>Login Success!</>
       ) : (
         <>
-          <div className='font-bold text-6xl text-[#195091] '>Login with</div>
+          <div className='font-bold text-6xl text-[#195091]'>Login with</div>
           <div className='flex gap-16'>
             <KakaoAuthButton onClick={() => {}} />
             <GithubAuthButton
