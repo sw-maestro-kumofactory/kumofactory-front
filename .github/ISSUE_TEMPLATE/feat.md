@@ -14,13 +14,11 @@ assignees: ''
 작업 브랜치 명 작성
 
 **Target Source**
-- [ ] Controller
-- [ ] Service
-- [ ] Repository
-- [ ] Entity/DTO
-- [ ] Config
-- [ ] Common
-- [ ] Others
+- [ ] api
+- [ ] app
+- [ ] components
+- [ ] hooks
+- [ ] types
 
 **Additional**
 세부/부연 설명
