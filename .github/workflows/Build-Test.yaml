@@ -19,5 +19,8 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: env
+        run: echo "NEXT_PUBLIC_SERVER_URL=${{ vars.NEXT_PUBLIC_SERVER_URL }}" >> $GITHUB_ENV
+
       - name: Build Project
         run: npm run build
