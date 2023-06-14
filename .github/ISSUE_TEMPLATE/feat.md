@@ -18,9 +18,7 @@ assignees: ''
 - [ ] app/page
 - [ ] Components
 - [ ] hooks
-  - [ ] zustand
-    - [ ] zustand states
-    - [ ] zustand actions
+  - [ ] zustand state & action
   - [ ] custom hooks
 - [ ] utils
 - [ ] Others(style ...)
