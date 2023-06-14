@@ -14,11 +14,16 @@ assignees: ''
 작업 브랜치 명 작성
 
 **Target Source**
-- [ ] api
-- [ ] app
-- [ ] components
+- [ ] apis
+- [ ] app/page
+- [ ] Components
 - [ ] hooks
-- [ ] types
+  - [ ] zustand
+    - [ ] zustand states
+    - [ ] zustand actions
+  - [ ] custom hooks
+- [ ] utils
+- [ ] Others(style ...)
 
 **Additional**
 세부/부연 설명
