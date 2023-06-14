@@ -21,7 +21,7 @@ const Instance = (props: IProps) => {
 
   return (
     <svg
-      // onClick={props.onClick}
+      onClick={props.onClick}
       // onMouseDown={props.onMouseDown}
       // onMouseUp={props.onMouseUp}
       width='90'

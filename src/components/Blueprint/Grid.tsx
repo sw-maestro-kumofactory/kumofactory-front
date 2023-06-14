@@ -1,11 +1,29 @@
 'use client';
 import EC2 from '@/src/components/AWSService/EC2';
+import { useCounter } from '@/src/store/useCounter';
+import useServiceStore from '@/src/hooks/useServiceStore';
+import { useEffect } from 'react';
 
 interface GridProps {
   children?: React.ReactNode;
 }
 
 const Grid = ({ children }: GridProps) => {
+  const { services, onClickService, selectedServiceId, removeService, clearService } = useServiceStore();
+
+  // ESC to remove service
+  useEffect(() => {
+    const escKeyInput = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        clearService();
+      }
+    };
+    window.addEventListener('keydown', escKeyInput);
+    return () => {
+      window.removeEventListener('keydown', escKeyInput);
+    };
+  }, []);
+
   return (
     <div className='w-full h-full overflow-hidden'>
       <svg width='100%' height='100%' viewBox='0 0 1440 990'>
@@ -22,7 +40,19 @@ const Grid = ({ children }: GridProps) => {
           <rect fill='url(#boldPattern)' width='1440' height='990' />
           <rect fill='url(#grayPattern)' width='1440' height='990' />
         </svg>
-        <EC2 isActive={false} id={1} x={0} y={0} type={'ec2'} />
+        {services.map((service) => (
+          <EC2
+            onClick={() => {
+              onClickService(service);
+            }}
+            key={service.id}
+            isActive={service.id === selectedServiceId}
+            id={service.id}
+            x={service.x}
+            y={service.y}
+            type={'ec2'}
+          />
+        ))}
         {children}
       </svg>
     </div>

@@ -3,9 +3,12 @@ interface IProps {
   onClick: () => void;
 }
 
-const MenuItem = ({ name }: IProps) => {
+const MenuItem = ({ name, onClick }: IProps) => {
   return (
-    <div className='flex items-center justify-center bg-[#799ACF] text-white text-2xl font-bold h-32 cursor-pointer rounded-2xl m-4 select-none'>
+    <div
+      className='flex items-center justify-center bg-[#799ACF] text-white text-2xl font-bold h-32 cursor-pointer rounded-2xl m-4 select-none'
+      onClick={onClick}
+    >
       {name}
     </div>
   );
