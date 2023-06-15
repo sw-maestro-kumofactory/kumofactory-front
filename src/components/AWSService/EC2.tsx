@@ -3,9 +3,8 @@ import { useEffect, useRef } from 'react';
 import { IService } from '@/src/types';
 import Ec2 from 'assets/ec2.svg';
 interface IProps extends IService {
-  onClick?: (e: any) => void;
   onMouseDown?: (e: any) => void;
-  onMouseUp?: (e: any) => void;
+  onClick?: (e: any) => void;
   isActive: boolean;
 }
 
@@ -22,8 +21,7 @@ const Instance = (props: IProps) => {
   return (
     <svg
       onClick={props.onClick}
-      // onMouseDown={props.onMouseDown}
-      // onMouseUp={props.onMouseUp}
+      onMouseDown={props.onMouseDown}
       width='90'
       height='90'
       cursor='pointer'

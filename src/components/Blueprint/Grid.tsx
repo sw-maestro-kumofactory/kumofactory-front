@@ -1,15 +1,18 @@
 'use client';
 import EC2 from '@/src/components/AWSService/EC2';
-import { useCounter } from '@/src/store/useCounter';
 import useServiceStore from '@/src/hooks/useServiceStore';
 import { useEffect } from 'react';
 
-interface GridProps {
-  children?: React.ReactNode;
-}
-
-const Grid = ({ children }: GridProps) => {
-  const { services, onClickService, selectedServiceId, removeService, clearService } = useServiceStore();
+const Grid = () => {
+  const {
+    services,
+    selectedServiceId,
+    onClickGrid,
+    clearService,
+    onMouseDownService,
+    onMouseUpService,
+    onMouseMoveService,
+  } = useServiceStore();
 
   // ESC to remove service
   useEffect(() => {
@@ -25,8 +28,15 @@ const Grid = ({ children }: GridProps) => {
   }, []);
 
   return (
-    <div className='w-full h-full overflow-hidden'>
-      <svg width='100%' height='100%' viewBox='0 0 1440 990'>
+    <div className='w-full h-full overflow-hidden '>
+      <svg
+        width='100%'
+        height='100%'
+        viewBox='0 0 1247 785'
+        onClick={onClickGrid}
+        onMouseUp={onMouseUpService}
+        onMouseMove={(e: React.MouseEvent) => onMouseMoveService(e)}
+      >
         <svg>
           <defs>
             <pattern id='grayPattern' width='90' height='90' patternUnits='userSpaceOnUse'>
@@ -42,8 +52,12 @@ const Grid = ({ children }: GridProps) => {
         </svg>
         {services.map((service) => (
           <EC2
-            onClick={() => {
-              onClickService(service);
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              onMouseDownService(e, service);
             }}
             key={service.id}
             isActive={service.id === selectedServiceId}
@@ -53,7 +67,6 @@ const Grid = ({ children }: GridProps) => {
             type={'ec2'}
           />
         ))}
-        {children}
       </svg>
     </div>
   );

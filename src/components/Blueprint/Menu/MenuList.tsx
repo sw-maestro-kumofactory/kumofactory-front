@@ -7,15 +7,14 @@ const MenuBar = () => {
   const { services, addService, removeService, selectedServiceId } = useServiceStore();
   return (
     <div className='w-80 min-w-fit h-full border-r-2 border-[#195091]-100'>
-      <div>{selectedServiceId}</div>
       <MenuItem
         name='ec2'
         onClick={() =>
           addService({
             id: services.length + 1,
             type: 'ec2',
-            x: services.length + 1,
-            y: services.length + 1,
+            x: 250,
+            y: 50,
           })
         }
       />
