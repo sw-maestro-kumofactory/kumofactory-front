@@ -21,6 +21,7 @@ interface ServiceActions {
   onMouseUpService: (event: React.MouseEvent) => void;
   onMouseMoveService: (event: React.MouseEvent) => void;
 }
+// mouse down 이벤트만 사용해도 될듯?
 
 const useServiceStore = create<ServiceState & ServiceActions>()(
   devtools((set) => ({
