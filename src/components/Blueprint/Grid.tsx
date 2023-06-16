@@ -1,5 +1,5 @@
 'use client';
-import EC2 from '@/src/components/AWSService/EC2';
+import Service from '@/src/components/AWSService/Service';
 import useServiceStore from '@/src/hooks/useServiceStore';
 import { useEffect, useState } from 'react';
 import Loading from '@/src/components/common/Loading';
@@ -41,6 +41,7 @@ const Grid = () => {
       const { width, height } = component?.getBoundingClientRect() || { width: 0, height: 0 };
       setViewBox({ width, height });
     };
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -65,29 +66,31 @@ const Grid = () => {
                 <path d='M 45 -45 L 45 135' stroke='gray' strokeWidth='1' />
               </pattern>
               <pattern id='boldPattern' width='90' height='90' patternUnits='userSpaceOnUse'>
-                <path d='M 0 0 L 90 0 90 90 0 90 z' stroke='black' strokeWidth='1' fill='none' />
+                <path d='M 0 0 L 90 0 90 90 0 90 z' stroke='black' strokeWidth='1.5' fill='none' />
               </pattern>
             </defs>
             <rect fill='url(#boldPattern)' width={viewBox.width} height={viewBox.height} />
             <rect fill='url(#grayPattern)' width={viewBox.width} height={viewBox.height} />
           </svg>
-          {services.map((service) => (
-            <EC2
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              onMouseDown={(e) => {
-                e.stopPropagation();
-                onMouseDownService(e, service);
-              }}
-              key={service.id}
-              isActive={service.id === selectedServiceId}
-              id={service.id}
-              x={service.x}
-              y={service.y}
-              type={'ec2'}
-            />
-          ))}
+          <g id='services'>
+            {services.map((service) => (
+              <Service
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  onMouseDownService(e, service);
+                }}
+                key={service.id}
+                isActive={service.id === selectedServiceId}
+                id={service.id}
+                x={service.x}
+                y={service.y}
+                type={service.type}
+              />
+            ))}
+          </g>
         </svg>
       ) : (
         <Loading />
