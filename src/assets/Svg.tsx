@@ -2,7 +2,7 @@ interface Services {
   [key: string]: React.JSX.Element;
 }
 
-const serviceSvg: Services = {
+export const serviceSvg: Services = {
   EC2: (
     <>
       <path d='M0 0H90V90H0V0Z' fill='url(#paint0_linear_98_212)' />
@@ -78,8 +78,4 @@ const serviceSvg: Services = {
       </defs>
     </>
   ),
-};
-
-export const getService = (type: string): React.JSX.Element => {
-  return serviceSvg[type];
 };

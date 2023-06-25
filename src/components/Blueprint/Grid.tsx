@@ -1,8 +1,9 @@
 'use client';
 import Service from '@/src/components/AWSService/Service';
-import useServiceStore from '@/src/hooks/useServiceStore';
+import useServiceStore, { useServiceActions } from '@/src/hooks/useServiceStore';
 import { useEffect, useState } from 'react';
 import Loading from '@/src/components/common/Loading';
+import Options from '@/src/components/AWSService/Option/Options';
 
 interface IViewBox {
   width: number;
@@ -10,16 +11,8 @@ interface IViewBox {
 }
 
 const Grid = () => {
-  const {
-    services,
-    selectedServiceId,
-    onClickGrid,
-    clearService,
-    onMouseDownService,
-    onMouseUpService,
-    onMouseMoveService,
-  } = useServiceStore();
-
+  const { services, selectedService } = useServiceStore();
+  const { onClickGrid, clearService, onMouseDownService, onMouseUpService, onMouseMoveService } = useServiceActions();
   const [viewBox, setViewBox] = useState<IViewBox | null>(null);
 
   // ESC to remove service
@@ -52,6 +45,7 @@ const Grid = () => {
     <div className='grid-wrapper w-full h-full overflow-hidden '>
       {viewBox ? (
         <svg
+          id='blueprint'
           width='100%'
           height='100%'
           viewBox={`0 0 ${viewBox.width} ${viewBox.height}`}
@@ -83,7 +77,7 @@ const Grid = () => {
                   onMouseDownService(e, service);
                 }}
                 key={service.id}
-                isActive={service.id === selectedServiceId}
+                isActive={service.id === selectedService?.id}
                 id={service.id}
                 x={service.x}
                 y={service.y}
@@ -95,6 +89,7 @@ const Grid = () => {
       ) : (
         <Loading />
       )}
+      {selectedService && <Options service={services.filter((service) => service.id === selectedService.id)[0]} />}
     </div>
   );
 };

@@ -1,11 +1,10 @@
-import { IService } from '@/src/types';
-import { useState } from 'react';
 import { devtools } from 'zustand/middleware';
 import create from 'zustand';
+import { IComponent, Services } from '@/src/types';
 
 interface ServiceState {
-  services: IService[];
-  selectedServiceId: number | null;
+  services: IComponent[];
+  selectedService: IComponent | null;
   isMouseDown: boolean;
   interval: {
     x: number;
@@ -13,73 +12,79 @@ interface ServiceState {
   };
 }
 interface ServiceActions {
-  addService: (service: IService) => void;
-  removeService: (id: number) => void;
-  clearService: () => void;
-  onClickGrid: (event: React.MouseEvent) => void;
-  onMouseDownService: (event: React.MouseEvent, service: IService | null) => void;
-  onMouseUpService: (event: React.MouseEvent) => void;
-  onMouseMoveService: (event: React.MouseEvent) => void;
+  action: {
+    addService: (service: Services) => void;
+    removeService: (id: number) => void;
+    clearService: () => void;
+    onClickGrid: (event: React.MouseEvent) => void;
+    onMouseDownService: (event: React.MouseEvent, service: IComponent | null) => void;
+    onMouseUpService: (event: React.MouseEvent) => void;
+    onMouseMoveService: (event: React.MouseEvent) => void;
+  };
 }
-// mouse down 이벤트만 사용해도 될듯?
 
 const useServiceStore = create<ServiceState & ServiceActions>()(
   devtools((set) => ({
     services: [],
-    selectedServiceId: null,
+    selectedService: null,
     interval: {
       x: 0,
       y: 0,
     },
     isMouseDown: false,
-    onClickGrid: (event: React.MouseEvent) => {
-      set(() => ({ selectedServiceId: null }));
-    },
-    onMouseDownService: (event: React.MouseEvent, service: IService | null) => {
-      set((state) => {
-        if (service) {
-          const newInterval = {
-            x: event.clientX - service.x,
-            y: event.clientY - service.y,
-          };
+    action: {
+      onClickGrid: (event: React.MouseEvent) => {
+        set(() => ({ selectedService: null }));
+      },
+      onMouseDownService: (event: React.MouseEvent, service: IComponent | null) => {
+        set((state) => {
+          if (service) {
+            const newInterval = {
+              x: event.clientX - service.x,
+              y: event.clientY - service.y,
+            };
+            return {
+              isMouseDown: true,
+              selectedService: service ? service : null,
+              interval: newInterval,
+            };
+          }
           return {
-            isMouseDown: true,
-            selectedServiceId: service ? service.id : null,
-            interval: newInterval,
+            ...state,
+            selectedService: null,
           };
-        }
-        return {
-          ...state,
-          selectedServiceId: null,
-        };
-      });
+        });
+      },
+      onMouseUpService: (e: React.MouseEvent) => {
+        set(() => ({
+          isMouseDown: false,
+        }));
+      },
+      onMouseMoveService: (event: React.MouseEvent) => {
+        set((state) => {
+          if (state.selectedService && state.isMouseDown) {
+            const updatedServices = [...state.services];
+            const index = updatedServices.findIndex((item) => item.id === state.selectedService?.id);
+            updatedServices[index].x = event.clientX - state.interval.x;
+            updatedServices[index].y = event.clientY - state.interval.y;
+            return {
+              services: updatedServices,
+            };
+          }
+          return state;
+        });
+      },
+      addService: (service: IComponent) =>
+        set((state) => ({ services: [...state.services, service], selectedService: null })),
+      removeService: (id: number) =>
+        set((state) => ({
+          services: state.services.filter((service) => service.id !== id),
+        })),
+      clearService: () => set(() => ({ services: [], selectedService: null })),
     },
-    onMouseUpService: (e: React.MouseEvent) => {
-      set(() => ({
-        isMouseDown: false,
-      }));
-    },
-    onMouseMoveService: (event: React.MouseEvent) => {
-      set((state) => {
-        if (state.selectedServiceId && state.isMouseDown) {
-          const updatedServices = [...state.services];
-          const index = updatedServices.findIndex((item) => item.id === state.selectedServiceId);
-          updatedServices[index].x = event.clientX - state.interval.x;
-          updatedServices[index].y = event.clientY - state.interval.y;
-          return {
-            services: updatedServices,
-          };
-        }
-        return state;
-      });
-    },
-    addService: (service: IService) => set((state) => ({ services: [...state.services, service] })),
-    removeService: (id: number) =>
-      set((state) => ({
-        services: state.services.filter((service) => service.id !== id),
-      })),
-    clearService: () => set(() => ({ services: [], selectedServiceId: null })),
   })),
 );
+
+export const useServiceActions = () => useServiceStore((state) => state.action);
 
 export default useServiceStore;
