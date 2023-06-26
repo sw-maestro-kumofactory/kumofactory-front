@@ -15,7 +15,7 @@ const MenuItem = ({ type }: IProps) => {
     <div
       className='flex items-center justify-center bg-[#799ACF] text-white text-2xl font-bold h-32 cursor-pointer rounded-2xl m-4 select-none'
       onClick={() => {
-        addService(serviceFactory.createService({ type: type, id: services.length }));
+        addService(serviceFactory.createService({ type: type }));
       }}
     >
       {type}
