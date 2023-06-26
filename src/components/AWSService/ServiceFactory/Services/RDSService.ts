@@ -1,8 +1,8 @@
 import { RDS } from '@/src/types';
 
-export const RDSService = ({ id }: { id: number }): RDS => {
+export const RDSService = (): RDS => {
   return {
-    id: id,
+    id: '0',
     x: 0,
     y: 0,
     type: 'RDS',

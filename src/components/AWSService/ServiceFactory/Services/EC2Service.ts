@@ -1,8 +1,8 @@
 import { EC2 } from '@/src/types';
 
-export const EC2Service = ({ id }: { id: number }): EC2 => {
+export const EC2Service = (): EC2 => {
   return {
-    id: id,
+    id: '0',
     x: 0,
     y: 0,
     type: 'EC2',

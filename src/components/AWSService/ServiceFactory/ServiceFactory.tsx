@@ -6,24 +6,23 @@ import { S3Service } from '@/src/components/AWSService/ServiceFactory/Services/S
 
 interface IServiceFactory {
   type: string;
-  id: number;
 }
 
 interface IFactory {
-  createService: ({ type, id }: IServiceFactory) => Services;
+  createService: ({ type }: IServiceFactory) => Services;
 }
 
 export class ServiceFactory implements IFactory {
-  public createService({ type, id }: IServiceFactory): Services {
+  public createService({ type }: IServiceFactory): Services {
     switch (type) {
       case 'EC2':
-        return EC2Service({ id: id });
+        return EC2Service();
       case 'RDS':
-        return RDSService({ id: id });
+        return RDSService();
       case 'S3':
-        return S3Service({ id: id });
+        return S3Service();
       default:
-        return EC2Service({ id: id });
+        return EC2Service();
     }
   }
 }
