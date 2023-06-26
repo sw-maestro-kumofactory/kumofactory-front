@@ -5,7 +5,7 @@ const Options = ({ service }: { service: IComponent }) => {
   const optionList = OptionList[service.type];
 
   return (
-    <div className='fixed top-20 right-0 w-80  h-full bg-amber-50'>
+    <div className='fixed top-20 right-0 w-80  h-full bg-amber-50 select-none'>
       {Object.keys(optionList).map((key) => (
         <div key={key}>
           <span>{key} : </span>
