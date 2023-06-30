@@ -1,6 +1,5 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
-import Recoil from '@/src/components/common/Recoil';
 import { Header } from '@/src/components/Layout/Header';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -14,10 +13,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body className={(inter.className, 'bg-[#FCF7F4]')}>
-        <Recoil>
-          <Header />
-          <div className='w-full h-full pt-20'>{children}</div>
-        </Recoil>
+        <Header />
+        <div className='w-full h-full pt-20'>{children}</div>
       </body>
     </html>
   );

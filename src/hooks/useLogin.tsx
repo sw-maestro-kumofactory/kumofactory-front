@@ -5,7 +5,6 @@ import { accessTokenState } from '@/src/atoms/auth';
 
 export const useLogin = () => {
   const setAccessToken = useSetRecoilState(accessTokenState);
-  const [isLogin, setIsLogin] = useState<string | null>(useRecoilValue(accessTokenState));
 
   const login = (token: string) => {
     return 0;
@@ -13,8 +12,7 @@ export const useLogin = () => {
 
   const logout = () => {
     setAccessToken(null);
-    setIsLogin(null);
   };
 
-  return { isLogin, login, logout };
+  return { login, logout };
 };
