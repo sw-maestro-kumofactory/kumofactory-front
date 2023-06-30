@@ -1,10 +1,11 @@
 'use client';
 import Service from '@/src/components/AWSService/Service';
-import useServiceStore, { useServiceActions } from '@/src/hooks/useServiceStore';
+import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { useEffect, useState } from 'react';
 import Loading from '@/src/components/common/Loading';
 import Options from '@/src/components/AWSService/Option/Options';
 import { ExportButton } from '@/src/components/Blueprint/FloatingButton/ExportButton';
+import AZ from '@/src/components/Blueprint/Area/AZ';
 
 interface IViewBox {
   width: number;
@@ -12,22 +13,26 @@ interface IViewBox {
 }
 
 const Grid = () => {
-  const { services, selectedService } = useServiceStore();
-  const { onClickGrid, removeService, onMouseDownService, onMouseUpService, onMouseMoveService } = useServiceActions();
   const [viewBox, setViewBox] = useState<IViewBox | null>(null);
-
+  const { onClickGrid, onMouseUp, onMouseMove } = useBlueprintStore((state) => state.CommonAction);
+  const areas = useBlueprintStore((state) => state.areas);
+  const selectedArea = useBlueprintStore((state) => state.selectedArea);
+  const services = useBlueprintStore((state) => state.services);
+  const selectedService = useBlueprintStore((state) => state.selectedService);
+  const { onMouseDownService } = useBlueprintStore((state) => state.ServiceAction);
+  const {} = useBlueprintStore((state) => state.AreaAction);
   // ESC to remove service
-  useEffect(() => {
-    const escKeyInput = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        removeService();
-      }
-    };
-    window.addEventListener('keydown', escKeyInput);
-    return () => {
-      window.removeEventListener('keydown', escKeyInput);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const escKeyInput = (e: KeyboardEvent) => {
+  //     if (e.key === 'Escape') {
+  //       removeService();
+  //     }
+  //   };
+  //   window.addEventListener('keydown', escKeyInput);
+  //   return () => {
+  //     window.removeEventListener('keydown', escKeyInput);
+  //   };
+  // }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -52,8 +57,8 @@ const Grid = () => {
             height={viewBox.height}
             viewBox={`0 0 ${viewBox.width} ${viewBox.height}`}
             onClick={onClickGrid}
-            onMouseUp={onMouseUpService}
-            onMouseMove={(e: React.MouseEvent) => onMouseMoveService(e)}
+            onMouseUp={onMouseUp}
+            onMouseMove={(e: React.MouseEvent) => onMouseMove(e)}
             xmlns='http://www.w3.org/2000/svg'
           >
             <g id='background'>
@@ -68,6 +73,11 @@ const Grid = () => {
               </defs>
               <rect fill='url(#boldPattern)' width={viewBox.width} height={viewBox.height} />
               <rect fill='url(#grayPattern)' width={viewBox.width} height={viewBox.height} />
+            </g>
+            <g id='zone'>
+              {Object.keys(areas).map((key) => (
+                <AZ key={areas[key].id} Area={areas[key]} activate={selectedArea === areas[key]} />
+              ))}
             </g>
             <g id='services'>
               {Object.keys(services).map((key) => (

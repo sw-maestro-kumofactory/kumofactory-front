@@ -1,6 +1,7 @@
 'use client';
-import MenuItem from '@/src/components/Blueprint/Menu/MenuItem';
+import MenuItem from '@/src/components/Blueprint/Menu/ServiceItem';
 import { regionList } from '@/src/assets/RegionList';
+import AreaItem from '@/src/components/Blueprint/Menu/AreaItem';
 
 const ServiceList = [
   {
@@ -33,6 +34,8 @@ const MenuBar = () => {
       {ServiceList.map((service) => (
         <MenuItem key={service.type} type={service.type} />
       ))}
+      <Title title={'Visualization'} />
+      <AreaItem key={'AZ'} type={'AZ'} />
     </div>
   );
 };
