@@ -14,7 +14,7 @@ interface IViewBox {
 
 const Grid = () => {
   const [viewBox, setViewBox] = useState<IViewBox | null>(null);
-  const { onClickGrid, onMouseUp, onMouseMove } = useBlueprintStore((state) => state.CommonAction);
+  const { onClickGrid, onMouseUp, onMouseMove, setGridSrc } = useBlueprintStore((state) => state.CommonAction);
   const areas = useBlueprintStore((state) => state.areas);
   const selectedArea = useBlueprintStore((state) => state.selectedArea);
   const services = useBlueprintStore((state) => state.services);
@@ -36,7 +36,9 @@ const Grid = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      const component = document.querySelector('.grid-wrapper');
+      const component = document.querySelector('.grid-wrapper')!;
+      const box = component.getBoundingClientRect();
+      setGridSrc(box.x, box.y);
       const { width, height } = component?.getBoundingClientRect() || { width: 0, height: 0 };
       setViewBox({ width, height });
     };
@@ -76,7 +78,7 @@ const Grid = () => {
             </g>
             <g id='zone'>
               {Object.keys(areas).map((key) => (
-                <AZ key={areas[key].id} Area={areas[key]} activate={selectedArea === areas[key]} />
+                <AZ key={areas[key].id} Area={areas[key]} activate={selectedArea?.id === areas[key].id} />
               ))}
             </g>
             <g id='services'>
