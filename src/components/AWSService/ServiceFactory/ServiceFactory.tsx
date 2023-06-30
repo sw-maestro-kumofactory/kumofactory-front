@@ -1,4 +1,4 @@
-import { EC2, RDS, S3, Services } from '@/src/types';
+import { EC2, RDS, S3, Services } from '@/src/types/Services';
 
 import { EC2Service } from '@/src/components/AWSService/ServiceFactory/Services/EC2Service';
 import { RDSService } from '@/src/components/AWSService/ServiceFactory/Services/RDSService';

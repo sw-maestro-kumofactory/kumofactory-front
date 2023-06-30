@@ -1,4 +1,4 @@
-import { S3 } from '@/src/types';
+import { S3 } from '@/src/types/Services';
 
 export const S3Service = (): S3 => {
   return {

@@ -1,4 +1,4 @@
-import { RDS } from '@/src/types';
+import { RDS } from '@/src/types/Services';
 
 export const RDSService = (): RDS => {
   return {

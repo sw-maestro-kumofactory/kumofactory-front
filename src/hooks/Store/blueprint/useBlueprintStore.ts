@@ -1,19 +1,10 @@
 import { devtools } from 'zustand/middleware';
 import create from 'zustand';
-import { IComponent, ServiceOptions, Services } from '@/src/types';
+import { IComponent, ServiceOptions, Services } from '@/src/types/Services';
 import { immer } from 'zustand/middleware/immer';
 import { v1 } from 'uuid';
 
 interface ServiceState {
-  services: Record<string, Services>;
-  selectedService: IComponent | null;
-  isMouseDown: boolean;
-  interval: {
-    x: number;
-    y: number;
-  };
-}
-interface ServiceActions {
   action: {
     addService: (service: Services) => void;
     removeService: () => void;
@@ -26,7 +17,7 @@ interface ServiceActions {
   };
 }
 
-const useServiceStore = create<ServiceState & ServiceActions>()(
+const useServiceStore = create<ServiceState>()(
   devtools(
     immer((set, get) => ({
       services: {},
@@ -67,8 +58,8 @@ const useServiceStore = create<ServiceState & ServiceActions>()(
         onMouseMoveService: (event: React.MouseEvent) => {
           set((state) => {
             if (state.selectedService && state.isMouseDown) {
-              const newX = Math.round((event.clientX - state.interval.x) / 18) * 18;
-              const newY = Math.round((event.clientY - state.interval.y) / 18) * 18;
+              const newX = Math.round((event.clientX - state.interval.x) / 22.5) * 22.5;
+              const newY = Math.round((event.clientY - state.interval.y) / 22.5) * 22.5;
               state.services[state.selectedService.id].x = newX;
               state.services[state.selectedService.id].y = newY;
               return state;

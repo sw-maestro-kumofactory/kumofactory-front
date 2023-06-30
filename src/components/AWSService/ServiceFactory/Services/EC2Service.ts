@@ -1,4 +1,4 @@
-import { EC2 } from '@/src/types';
+import { EC2 } from '@/src/types/Services';
 
 export const EC2Service = (): EC2 => {
   return {

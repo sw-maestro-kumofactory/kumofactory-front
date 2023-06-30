@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { IComponent, ServicesString } from '@/src/types';
+import { IComponent, ServicesString } from '@/src/types/Services';
 import { serviceSvg } from '@/src/assets/Svg';
 
 interface IProps extends IComponent {
