@@ -32,6 +32,9 @@ const AZ = ({ Area, activate }: IProps) => {
             x2={Area.sx + Area.width}
             y2={Area.sy}
             strokeLinecap='round'
+            onMouseDown={() => {
+              setResizable(true, 4);
+            }}
           />
           <line
             className='cursor-s-resize'
@@ -55,6 +58,9 @@ const AZ = ({ Area, activate }: IProps) => {
             x2={Area.sx}
             y2={Area.sy + Area.height}
             strokeLinecap='round'
+            onMouseDown={() => {
+              setResizable(true, 2);
+            }}
           />
           <line
             className='cursor-e-resize'

@@ -159,10 +159,24 @@ export const useCommonSlice: StateCreator<
             const newWidth = event.clientX - state.gridSrc.x - state.selectedArea.sx;
             if (newWidth > 0) state.areas[state.selectedArea.id].width = newWidth;
           } else if (state.resizable.dir === 2) {
+            const diff = state.selectedArea.sx - event.clientX + state.gridSrc.x;
+            const newWidth = state.selectedArea.width + diff;
+            const newSx = event.clientX - state.gridSrc.x;
+            if (newWidth > 0) {
+              state.areas[state.selectedArea.id].width = newWidth;
+              state.areas[state.selectedArea.id].sx = newSx;
+            }
           } else if (state.resizable.dir === 3) {
             const newHeight = event.clientY - state.gridSrc.y - state.selectedArea.sy;
             if (newHeight > 0) state.areas[state.selectedArea.id].height = newHeight;
           } else if (state.resizable.dir === 4) {
+            const diff = state.selectedArea.sy - event.clientY + state.gridSrc.y;
+            const newHeight = state.selectedArea.height + diff;
+            const newSy = event.clientY - state.gridSrc.y;
+            if (newHeight > 0) {
+              state.areas[state.selectedArea.id].height = newHeight;
+              state.areas[state.selectedArea.id].sy = newSy;
+            }
           }
         } else if (state.draggable) {
           const newX = Math.round((event.clientX - state.interval.x) / 22.5) * 22.5;
