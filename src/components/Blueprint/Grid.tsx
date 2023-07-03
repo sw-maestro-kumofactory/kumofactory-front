@@ -4,8 +4,9 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { useEffect, useState } from 'react';
 import Loading from '@/src/components/common/Loading';
 import Options from '@/src/components/AWSService/Option/Options';
-import { ExportButton } from '@/src/components/Blueprint/FloatingButton/ExportButton';
-import AZ from '@/src/components/Blueprint/Area/AZ';
+import { ExportButton } from '@/src/components/Blueprint/FloatingButton/Export/ExportButton';
+import AZ from '@/src/components/AWSService/Area/AZ';
+import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 
 interface IViewBox {
   width: number;
@@ -14,13 +15,16 @@ interface IViewBox {
 
 const Grid = () => {
   const [viewBox, setViewBox] = useState<IViewBox | null>(null);
-  const { onClickGrid, onMouseUp, onMouseMove, setGridSrc } = useBlueprintStore((state) => state.CommonAction);
   const areas = useBlueprintStore((state) => state.areas);
   const selectedArea = useBlueprintStore((state) => state.selectedArea);
   const services = useBlueprintStore((state) => state.services);
   const selectedService = useBlueprintStore((state) => state.selectedService);
+  const isMoving = useBlueprintStore((state) => state.isMoving);
+  const gridSrc = useBlueprintStore((state) => state.gridSrc);
   const { onMouseDownService } = useBlueprintStore((state) => state.ServiceAction);
+  const { onClickGrid, onMouseUp, onMouseMove, setGridSrc } = useBlueprintStore((state) => state.CommonAction);
   const {} = useBlueprintStore((state) => state.AreaAction);
+
   // ESC to remove service
   // useEffect(() => {
   //   const escKeyInput = (e: KeyboardEvent) => {
@@ -105,7 +109,12 @@ const Grid = () => {
       ) : (
         <Loading />
       )}
-      {selectedService && <Options service={selectedService} />}
+      {selectedService && !isMoving && (
+        <>
+          <Options service={selectedService} />
+          <CreateLineContainer />
+        </>
+      )}
     </div>
   );
 };

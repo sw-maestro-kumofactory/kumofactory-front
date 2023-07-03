@@ -30,8 +30,10 @@ const Service = (props: IProps) => {
       viewBox='0 0 90 90'
       xmlns='http://www.w3.org/2000/svg'
       ref={svgRef}
+      className='service-svg animate-service'
     >
       {serviceSvg[props.type]}
+      {/* 활성화 시 테두리 나타나게 */}
       {props.isActive && (
         <path d='M0 0 L 0 90 L 90 90 L 90 0z' stroke='#195091' fill='#195091' fillOpacity='0.1' strokeWidth='2' />
       )}

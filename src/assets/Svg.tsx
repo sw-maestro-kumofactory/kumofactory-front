@@ -11,7 +11,7 @@ export const serviceSvg: Services = {
         fill='white'
       />
       <defs>
-        <linearGradient id='paint0_linear_98_212' x1='0' y1='9000' x2='9000' y2='0' gradientUnits='userSpaceOnUse'>
+        <linearGradient id='paint0_linear_98_212' x1='0' y1='10000' x2='10000' y2='0' gradientUnits='userSpaceOnUse'>
           <stop stopColor='#C8511B' />
           <stop offset='1' stopColor='#FF9900' />
         </linearGradient>

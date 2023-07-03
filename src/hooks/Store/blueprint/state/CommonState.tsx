@@ -8,6 +8,7 @@ export interface CommonState {
     y: number;
   };
   draggable: boolean;
+  isMoving: boolean;
   resizable: {
     isResizable: boolean;
     dir: number;

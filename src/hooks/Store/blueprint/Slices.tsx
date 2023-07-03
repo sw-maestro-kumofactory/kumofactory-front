@@ -16,6 +16,10 @@ export const useServiceSlice: StateCreator<
 > = (set, get) => ({
   services: {},
   selectedService: null,
+  lineContainerLocation: {
+    x: -1,
+    y: -1,
+  },
   ServiceAction: {
     onMouseDownService: (event, service) => {
       set((state) => {
@@ -70,6 +74,7 @@ export const useAreaSlice: StateCreator<
     createArea: (area: IArea) =>
       // @ts-ignore
       set((state) => {
+        state.selectedService = null;
         const id = v1().toString();
         state.areas[id] = {
           ...area,
@@ -120,6 +125,7 @@ export const useCommonSlice: StateCreator<
     y: 0,
   },
   draggable: false,
+  isMoving: false,
   resizable: {
     isResizable: false,
     dir: -1,
@@ -144,17 +150,17 @@ export const useCommonSlice: StateCreator<
       }));
     },
     onMouseUp: (e) => {
-      set(() => ({
-        draggable: false,
-        resizable: {
-          isResizable: false,
-          dir: -1,
-        },
-      }));
+      set((state) => {
+        state.draggable = false;
+        state.isMoving = false;
+        state.resizable.isResizable = false;
+        state.resizable.dir = -1;
+      });
     },
     onMouseMove: (event) => {
       set((state) => {
         if (state.resizable.isResizable && state.selectedArea) {
+          state.isMoving = true;
           if (state.resizable.dir === 1) {
             const newWidth = event.clientX - state.gridSrc.x - state.selectedArea.sx;
             if (newWidth > 0) state.areas[state.selectedArea.id].width = newWidth;
@@ -179,11 +185,14 @@ export const useCommonSlice: StateCreator<
             }
           }
         } else if (state.draggable) {
+          state.isMoving = true;
           const newX = Math.round((event.clientX - state.interval.x) / 22.5) * 22.5;
           const newY = Math.round((event.clientY - state.interval.y) / 22.5) * 22.5;
           if (state.selectedService) {
             state.services[state.selectedService.id].x = newX;
             state.services[state.selectedService.id].y = newY;
+            state.lineContainerLocation.x = newX + state.gridSrc.x + 100;
+            state.lineContainerLocation.y = newY + state.gridSrc.y - 10;
           } else if (state.selectedArea) {
             state.areas[state.selectedArea.id].sx = newX;
             state.areas[state.selectedArea.id].sy = newY;
