@@ -35,7 +35,7 @@ const Service = (props: IProps) => {
       {serviceSvg[props.type]}
       {/* 활성화 시 테두리 나타나게 */}
       {props.isActive && (
-        <path d='M0 0 L 0 90 L 90 90 L 90 0z' stroke='#195091' fill='#195091' fillOpacity='0.1' strokeWidth='2' />
+        <path d='M0 0 L 0 90 L 90 90 L 90 0z' stroke='#195091' fill='transparent' fillOpacity='0.1' strokeWidth='4' />
       )}
     </svg>
   );

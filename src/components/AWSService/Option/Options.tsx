@@ -1,8 +1,8 @@
 import { IComponent } from '@/src/types/Services';
 import { OptionList } from '@/src/assets/OptionList';
 
-const Options = ({ service }: { service: IComponent }) => {
-  const optionList = OptionList[service.type];
+const Options = ({ serviceType }: { serviceType: 'EC2' | 'RDS' | 'S3' }) => {
+  const optionList = OptionList[serviceType];
 
   return (
     <div className='absolute top-20 right-0 w-80  h-full bg-amber-50 select-none pointer-events-none bg-opacity-50'>

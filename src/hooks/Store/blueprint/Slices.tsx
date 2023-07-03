@@ -15,11 +15,8 @@ export const useServiceSlice: StateCreator<
   ServiceState
 > = (set, get) => ({
   services: {},
-  selectedService: null,
-  lineContainerLocation: {
-    x: -1,
-    y: -1,
-  },
+  selectedServiceId: null,
+  lineDrawingMode: false,
   ServiceAction: {
     onMouseDownService: (event, service) => {
       set((state) => {
@@ -28,17 +25,11 @@ export const useServiceSlice: StateCreator<
             x: event.clientX - service.x,
             y: event.clientY - service.y,
           };
-          return {
-            draggable: true,
-            selectedArea: null,
-            selectedService: service,
-            interval: newInterval,
-          };
+          state.draggable = true;
+          state.selectedArea = null;
+          state.selectedServiceId = service.id;
+          state.interval = newInterval;
         }
-        return {
-          ...state,
-          selectedService: null,
-        };
       });
     },
     createService: (service) =>
@@ -49,6 +40,10 @@ export const useServiceSlice: StateCreator<
           ...service,
           id,
         };
+      }),
+    setLineDrawingMode: () =>
+      set((state) => {
+        state.lineDrawingMode = true;
       }),
     setOptions: (service) => {},
   },
@@ -74,7 +69,7 @@ export const useAreaSlice: StateCreator<
     createArea: (area: IArea) =>
       // @ts-ignore
       set((state) => {
-        state.selectedService = null;
+        state.selectedServiceId = null;
         const id = v1().toString();
         state.areas[id] = {
           ...area,
@@ -91,7 +86,7 @@ export const useAreaSlice: StateCreator<
           console.log(area);
           return {
             draggable: true,
-            selectedService: null,
+            selectedServiceId: null,
             selectedArea: area,
             interval: newInterval,
           };
@@ -140,7 +135,7 @@ export const useCommonSlice: StateCreator<
       })),
     onClickGrid: (e) => {
       set(() => ({
-        selectedService: null,
+        selectedServiceId: null,
         selectedArea: null,
         resizable: {
           isResizable: false,
@@ -155,10 +150,13 @@ export const useCommonSlice: StateCreator<
         state.isMoving = false;
         state.resizable.isResizable = false;
         state.resizable.dir = -1;
+        // selectedService 상태 업데이트하기
       });
     },
     onMouseMove: (event) => {
       set((state) => {
+        if (state.lineDrawingMode) {
+        }
         if (state.resizable.isResizable && state.selectedArea) {
           state.isMoving = true;
           if (state.resizable.dir === 1) {
@@ -188,11 +186,9 @@ export const useCommonSlice: StateCreator<
           state.isMoving = true;
           const newX = Math.round((event.clientX - state.interval.x) / 22.5) * 22.5;
           const newY = Math.round((event.clientY - state.interval.y) / 22.5) * 22.5;
-          if (state.selectedService) {
-            state.services[state.selectedService.id].x = newX;
-            state.services[state.selectedService.id].y = newY;
-            state.lineContainerLocation.x = newX + state.gridSrc.x + 100;
-            state.lineContainerLocation.y = newY + state.gridSrc.y - 10;
+          if (state.selectedServiceId) {
+            state.services[state.selectedServiceId].x = newX;
+            state.services[state.selectedServiceId].y = newY;
           } else if (state.selectedArea) {
             state.areas[state.selectedArea.id].sx = newX;
             state.areas[state.selectedArea.id].sy = newY;

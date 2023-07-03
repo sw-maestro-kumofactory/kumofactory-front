@@ -18,7 +18,7 @@ const Grid = () => {
   const areas = useBlueprintStore((state) => state.areas);
   const selectedArea = useBlueprintStore((state) => state.selectedArea);
   const services = useBlueprintStore((state) => state.services);
-  const selectedService = useBlueprintStore((state) => state.selectedService);
+  const selectedServiceId = useBlueprintStore((state) => state.selectedServiceId);
   const isMoving = useBlueprintStore((state) => state.isMoving);
   const gridSrc = useBlueprintStore((state) => state.gridSrc);
   const { onMouseDownService } = useBlueprintStore((state) => state.ServiceAction);
@@ -96,7 +96,7 @@ const Grid = () => {
                     onMouseDownService(e, services[key]);
                   }}
                   key={services[key].id}
-                  isActive={services[key].id === selectedService?.id}
+                  isActive={services[key].id === selectedServiceId}
                   id={services[key].id}
                   x={services[key].x}
                   y={services[key].y}
@@ -109,10 +109,14 @@ const Grid = () => {
       ) : (
         <Loading />
       )}
-      {selectedService && !isMoving && (
+
+      {selectedServiceId && !isMoving && (
         <>
-          <Options service={selectedService} />
-          <CreateLineContainer />
+          <Options serviceType={services[selectedServiceId].type} />
+          <CreateLineContainer
+            x={services[selectedServiceId].x + gridSrc.x + 100}
+            y={services[selectedServiceId].y + gridSrc.y - 10}
+          />
         </>
       )}
     </div>
