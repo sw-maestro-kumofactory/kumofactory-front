@@ -9,13 +9,11 @@ export const postGithubAuth = async (code: string | null): Promise<IResponse> =>
     .get(`/api/oauth/github?code=${code}`, {
       headers: {
         Accept: 'application/json',
-        'ngrok-skip-browser-warning': '69420',
       },
     })
     .then((res) => {
       return res;
     });
-
   return data;
 };
 
@@ -26,7 +24,6 @@ export const postGoogleAuth = async (code: string | null): Promise<IResponse> =>
     .get(`/api/oauth/google?code=${code}`, {
       headers: {
         Accept: 'application/json',
-        'ngrok-skip-browser-warning': '69420',
       },
     })
     .then((res) => {

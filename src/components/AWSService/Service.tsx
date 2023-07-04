@@ -5,6 +5,7 @@ import { serviceSvg } from '@/src/assets/Svg';
 
 interface IProps extends IComponent {
   onMouseDown?: (e: any) => void;
+  onMouseEnter?: (e: any) => void;
   onClick?: (e: any) => void;
   type: ServicesString;
   isActive: boolean;
@@ -24,6 +25,7 @@ const Service = (props: IProps) => {
     <svg
       onClick={props.onClick}
       onMouseDown={props.onMouseDown}
+      onMouseEnter={props.onMouseEnter}
       width='90'
       height='90'
       cursor='pointer'

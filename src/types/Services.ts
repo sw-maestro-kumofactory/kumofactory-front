@@ -1,4 +1,8 @@
-export interface IComponent {
+export interface HasLine {
+  lines: string[];
+}
+
+export interface IComponent extends HasLine {
   id: string;
   x: number;
   y: number;

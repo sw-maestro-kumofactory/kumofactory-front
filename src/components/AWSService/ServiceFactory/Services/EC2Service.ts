@@ -6,6 +6,7 @@ export const EC2Service = (): EC2 => {
     x: 0,
     y: 0,
     type: 'EC2',
+    lines: [],
     options: {
       instanceType: 't2',
       size: 'micro',

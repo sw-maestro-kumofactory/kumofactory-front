@@ -6,7 +6,7 @@ export interface ServiceState {
   lineDrawingMode: boolean;
   ServiceAction: {
     onMouseDownService: (e: React.MouseEvent, services: Services | null) => void;
-
+    onMouseEnterService: (e: React.MouseEvent, services: Services | null) => void;
     createService: (service: Services) => void;
     setOptions: (service: IComponent) => void;
   };

@@ -26,7 +26,7 @@ const Grid = () => {
   const dstPoint = useBlueprintStore((state) => state.dstPoint);
   const lines = useBlueprintStore((state) => state.lines);
   const circles = useBlueprintStore((state) => state.circles);
-  const { onMouseDownService } = useBlueprintStore((state) => state.ServiceAction);
+  const { onMouseDownService, onMouseEnterService } = useBlueprintStore((state) => state.ServiceAction);
   const { onClickGrid, onMouseUp, onMouseMove, setGridSrc } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
   const {} = useBlueprintStore((state) => state.AreaAction);
@@ -100,12 +100,17 @@ const Grid = () => {
                     e.stopPropagation();
                     onMouseDownService(e, services[key]);
                   }}
+                  onMouseEnter={(e) => {
+                    e.stopPropagation();
+                    onMouseEnterService(e, services[key]);
+                  }}
                   key={services[key].id}
                   isActive={services[key].id === selectedServiceId}
                   id={services[key].id}
                   x={services[key].x}
                   y={services[key].y}
                   type={services[key].type}
+                  lines={services[key].lines}
                 />
               ))}
             </g>

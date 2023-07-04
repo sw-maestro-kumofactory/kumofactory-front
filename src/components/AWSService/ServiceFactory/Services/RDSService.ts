@@ -6,6 +6,7 @@ export const RDSService = (): RDS => {
     x: 0,
     y: 0,
     type: 'RDS',
+    lines: [],
     options: {
       instanceType: 't2',
       size: 'micro',
