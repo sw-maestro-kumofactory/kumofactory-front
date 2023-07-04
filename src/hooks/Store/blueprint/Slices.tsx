@@ -1,12 +1,13 @@
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
 import { CommonState } from '@/src/hooks/Store/blueprint/state/CommonState';
 import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
-
+import { LineState } from '@/src/hooks/Store/blueprint/state/LineState';
 import { StateCreator } from 'zustand';
 import { IArea } from '@/src/types/Area';
 import { v1 } from 'uuid';
+import { Coordinate } from '@/src/types/Common';
 
-export type AllBluePrintStates = AreaState & CommonState & ServiceState;
+export type AllBluePrintStates = AreaState & CommonState & ServiceState & LineState;
 
 export const useServiceSlice: StateCreator<
   AllBluePrintStates,
@@ -41,11 +42,44 @@ export const useServiceSlice: StateCreator<
           id,
         };
       }),
-    setLineDrawingMode: () =>
-      set((state) => {
-        state.lineDrawingMode = true;
-      }),
     setOptions: (service) => {},
+  },
+});
+
+export const useLineSlice: StateCreator<
+  AllBluePrintStates,
+  [],
+  [['zustand/devtools', never], ['zustand/immer', never]],
+  LineState
+> = (set, get) => ({
+  lines: {},
+  srcPoint: '',
+  dstPoint: '',
+  LineAction: {
+    setLineDrawingMode: (flag: boolean) =>
+      set((state) => {
+        if (flag) {
+          state.lineDrawingMode = true;
+          const srcId = v1().toString();
+          const dstId = v1().toString();
+          state.srcPoint = srcId;
+          state.dstPoint = dstId;
+          state.circles[srcId] = {
+            x: 0,
+            y: 0,
+            id: srcId,
+          };
+          state.circles[dstId] = {
+            x: 0,
+            y: 0,
+            id: dstId,
+          };
+        } else {
+          state.lineDrawingMode = false;
+          state.srcPoint = '';
+          state.dstPoint = '';
+        }
+      }),
   },
 });
 
@@ -57,6 +91,10 @@ export const useAreaSlice: StateCreator<
 > = (set, get) => ({
   areas: {},
   selectedArea: null,
+  resizable: {
+    isResizable: false,
+    dir: -1,
+  },
   AreaAction: {
     setResizable: (flag: boolean, dir: number) => {
       set((state) => {
@@ -83,7 +121,6 @@ export const useAreaSlice: StateCreator<
             x: event.clientX - area.sx,
             y: event.clientY - area.sy,
           };
-          console.log(area);
           return {
             draggable: true,
             selectedServiceId: null,
@@ -111,6 +148,7 @@ export const useCommonSlice: StateCreator<
   [['zustand/devtools', never], ['zustand/immer', never]],
   CommonState
 > = (set, get) => ({
+  circles: {},
   interval: {
     x: 0,
     y: 0,
@@ -121,10 +159,6 @@ export const useCommonSlice: StateCreator<
   },
   draggable: false,
   isMoving: false,
-  resizable: {
-    isResizable: false,
-    dir: -1,
-  },
   CommonAction: {
     setGridSrc: (x, y) =>
       set(() => ({
@@ -134,15 +168,33 @@ export const useCommonSlice: StateCreator<
         },
       })),
     onClickGrid: (e) => {
-      set(() => ({
-        selectedServiceId: null,
-        selectedArea: null,
-        resizable: {
+      set((state) => {
+        if (state.lineDrawingMode) {
+          const id = v1().toString();
+
+          state.lines[id] = {
+            id: id,
+            srcId: state.srcPoint,
+            dstId: state.dstPoint,
+          };
+
+          state.srcPoint = state.dstPoint;
+          const newDstId = v1().toString();
+          state.dstPoint = newDstId;
+          state.circles[newDstId] = {
+            x: 0,
+            y: 0,
+            id: newDstId,
+          };
+        }
+        state.selectedServiceId = null;
+        state.selectedArea = null;
+        state.resizable = {
           isResizable: false,
           dir: -1,
-        },
-        draggable: false,
-      }));
+        };
+        state.draggable = false;
+      });
     },
     onMouseUp: (e) => {
       set((state) => {
@@ -156,7 +208,33 @@ export const useCommonSlice: StateCreator<
     onMouseMove: (event) => {
       set((state) => {
         if (state.lineDrawingMode) {
+          if (state.selectedServiceId) {
+            const sx = event.clientX - state.gridSrc.x - state.services[state.selectedServiceId].x - 45;
+            const sy = event.clientY - state.gridSrc.y - state.services[state.selectedServiceId].y - 45;
+            const currentX = state.services[state.selectedServiceId].x;
+            const currentY = state.services[state.selectedServiceId].y;
+            const absSx = Math.abs(sx);
+            const absSy = Math.abs(sy);
+
+            if (sx > 0 && absSx > absSy) {
+              state.circles[state.srcPoint].x = currentX + 90;
+              state.circles[state.srcPoint].y = currentY + 45;
+            } else if (sy > 0 && absSx < absSy) {
+              state.circles[state.srcPoint].x = currentX + 45;
+              state.circles[state.srcPoint].y = currentY + 90;
+            } else if (sx < 0 && absSx > absSy) {
+              state.circles[state.srcPoint].x = currentX;
+              state.circles[state.srcPoint].y = currentY + 45;
+            } else if (sy < 0 && absSx < absSy) {
+              state.circles[state.srcPoint].x = currentX + 45;
+              state.circles[state.srcPoint].y = currentY;
+            }
+          } else {
+          }
+          state.circles[state.dstPoint].x = event.clientX - state.gridSrc.x;
+          state.circles[state.dstPoint].y = event.clientY - state.gridSrc.y;
         }
+
         if (state.resizable.isResizable && state.selectedArea) {
           state.isMoving = true;
           if (state.resizable.dir === 1) {

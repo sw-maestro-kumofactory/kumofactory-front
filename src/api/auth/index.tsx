@@ -6,7 +6,7 @@ interface IResponse {
 
 export const postGithubAuth = async (code: string | null): Promise<IResponse> => {
   const { data } = await axios
-    .get(`/oauth/github?code=${code}`, {
+    .get(`/api/oauth/github?code=${code}`, {
       headers: {
         Accept: 'application/json',
         'ngrok-skip-browser-warning': '69420',
@@ -23,7 +23,7 @@ export const postGithubAuth = async (code: string | null): Promise<IResponse> =>
 
 export const postGoogleAuth = async (code: string | null): Promise<IResponse> => {
   const { data } = await axios
-    .post(`/oauth/google?code=${code}`, {
+    .get(`/api/oauth/google?code=${code}`, {
       headers: {
         Accept: 'application/json',
         'ngrok-skip-browser-warning': '69420',

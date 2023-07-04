@@ -7,6 +7,7 @@ import Options from '@/src/components/AWSService/Option/Options';
 import { ExportButton } from '@/src/components/Blueprint/FloatingButton/Export/ExportButton';
 import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
+import Circle from '@/src/components/Blueprint/Circle/Circle';
 
 interface IViewBox {
   width: number;
@@ -21,22 +22,26 @@ const Grid = () => {
   const selectedServiceId = useBlueprintStore((state) => state.selectedServiceId);
   const isMoving = useBlueprintStore((state) => state.isMoving);
   const gridSrc = useBlueprintStore((state) => state.gridSrc);
+  const srcPoint = useBlueprintStore((state) => state.srcPoint);
+  const dstPoint = useBlueprintStore((state) => state.dstPoint);
+  const lines = useBlueprintStore((state) => state.lines);
+  const circles = useBlueprintStore((state) => state.circles);
   const { onMouseDownService } = useBlueprintStore((state) => state.ServiceAction);
   const { onClickGrid, onMouseUp, onMouseMove, setGridSrc } = useBlueprintStore((state) => state.CommonAction);
+  const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
   const {} = useBlueprintStore((state) => state.AreaAction);
-
   // ESC to remove service
-  // useEffect(() => {
-  //   const escKeyInput = (e: KeyboardEvent) => {
-  //     if (e.key === 'Escape') {
-  //       removeService();
-  //     }
-  //   };
-  //   window.addEventListener('keydown', escKeyInput);
-  //   return () => {
-  //     window.removeEventListener('keydown', escKeyInput);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const escKeyInput = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setLineDrawingMode(false);
+      }
+    };
+    window.addEventListener('keydown', escKeyInput);
+    return () => {
+      window.removeEventListener('keydown', escKeyInput);
+    };
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -104,6 +109,32 @@ const Grid = () => {
                 />
               ))}
             </g>
+            {Object.keys(lines).map((key) => (
+              <line
+                key={key}
+                x1={circles[lines[key].srcId].x}
+                y1={circles[lines[key].srcId].y}
+                x2={circles[lines[key].dstId].x}
+                y2={circles[lines[key].dstId].y}
+                stroke={'black'}
+              />
+            ))}
+            {Object.keys(circles).map((key) => {
+              if (circles[key].x === 0) return null;
+              return <Circle key={key} id={key} cx={circles[key].x} cy={circles[key].y} />;
+            })}
+            {/* Temp Line */}
+            {circles[dstPoint] && circles[dstPoint].x !== 0 && (
+              <line
+                key={'tempLine'}
+                x1={circles[srcPoint].x}
+                y1={circles[srcPoint].y}
+                x2={circles[dstPoint].x}
+                y2={circles[dstPoint].y}
+                strokeWidth={2}
+                stroke={'black'}
+              />
+            )}
           </svg>
         </div>
       ) : (

@@ -5,11 +5,11 @@ interface IProps {
 }
 
 const CreateLineButton = ({ children }: IProps) => {
-  const setLineDrawingMode = useBlueprintStore((state) => state.ServiceAction.setLineDrawingMode);
+  const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
   return (
     <button
       className='flex items-center justify-center w-12 h-12 rounded-full bg-[#195091]'
-      onClick={setLineDrawingMode}
+      onClick={() => setLineDrawingMode(true)}
     >
       {children}
     </button>

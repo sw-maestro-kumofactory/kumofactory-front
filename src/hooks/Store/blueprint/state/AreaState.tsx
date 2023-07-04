@@ -3,6 +3,10 @@ import { IArea } from '@/src/types/Area';
 export interface AreaState {
   areas: Record<string, IArea>;
   selectedArea: IArea | null;
+  resizable: {
+    isResizable: boolean;
+    dir: number;
+  };
   AreaAction: {
     setResizable: (flag: boolean, dir: number) => void;
     createArea: (area: IArea) => void;

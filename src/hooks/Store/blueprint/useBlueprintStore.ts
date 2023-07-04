@@ -1,6 +1,12 @@
 import create from 'zustand';
 
-import { useServiceSlice, useAreaSlice, useCommonSlice, AllBluePrintStates } from '@/src/hooks/Store/blueprint/Slices';
+import {
+  useServiceSlice,
+  useAreaSlice,
+  useCommonSlice,
+  AllBluePrintStates,
+  useLineSlice,
+} from '@/src/hooks/Store/blueprint/Slices';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
@@ -9,6 +15,7 @@ const useBlueprintStore = create<AllBluePrintStates>()(
     immer((...a) => ({
       ...useServiceSlice(...a),
       ...useAreaSlice(...a),
+      ...useLineSlice(...a),
       ...useCommonSlice(...a),
     })),
   ),

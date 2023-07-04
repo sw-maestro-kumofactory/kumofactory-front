@@ -7,7 +7,7 @@ import GithubAuthButton from '@/src/components/Auth/Button/githubAuthButton';
 import GoogleAuthButton from '@/src/components/Auth/Button/googleAuthButton';
 
 const Login = () => {
-  const { isLogin, login } = useLogin();
+  const isLogin = false;
   const googleAuth = useGoogleAuth();
   const githubAuth = useGithubAuth();
 

@@ -1,18 +1,11 @@
+import { Coordinate, Point } from '@/src/types/Common';
+
 export interface CommonState {
-  interval: {
-    x: number;
-    y: number;
-  };
-  gridSrc: {
-    x: number;
-    y: number;
-  };
+  circles: Record<string, Point>;
+  interval: Coordinate;
+  gridSrc: Coordinate;
   draggable: boolean;
   isMoving: boolean;
-  resizable: {
-    isResizable: boolean;
-    dir: number;
-  };
   CommonAction: {
     setGridSrc: (x: number, y: number) => void;
     onMouseUp: (e: React.MouseEvent) => void;
