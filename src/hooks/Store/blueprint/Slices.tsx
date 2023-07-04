@@ -281,8 +281,6 @@ export const useCommonSlice: StateCreator<
           const newX = Math.round((event.clientX - state.interval.x) / 22.5) * 22.5;
           const newY = Math.round((event.clientY - state.interval.y) / 22.5) * 22.5;
           if (state.selectedServiceId) {
-            const diffX = newX - state.services[state.selectedServiceId].x;
-            const diffY = newY - state.services[state.selectedServiceId].y;
             const currentX = state.services[state.selectedServiceId].x;
             const currentY = state.services[state.selectedServiceId].y;
             state.services[state.selectedServiceId].lines.map((line) => {
