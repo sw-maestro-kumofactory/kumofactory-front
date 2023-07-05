@@ -1,5 +1,6 @@
 import { UserState } from '@/src/hooks/Store/auth/state/UserState';
 import { StateCreator } from 'zustand';
+import { v1 } from 'uuid';
 export const useUserSlice: StateCreator<
   UserState,
   [],
@@ -9,6 +10,11 @@ export const useUserSlice: StateCreator<
   id: '',
   accessToken: '',
   UserAction: {
+    setId: () =>
+      set((state) => {
+        state.id = v1().toString();
+        return state;
+      }),
     setAccessToken: (token: string) =>
       set((state) => {
         state.accessToken = token;

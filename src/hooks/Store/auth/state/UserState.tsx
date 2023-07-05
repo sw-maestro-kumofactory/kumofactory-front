@@ -3,5 +3,6 @@ export interface UserState {
   accessToken: string;
   UserAction: {
     setAccessToken: (token: string) => void;
+    setId: () => void;
   };
 }
