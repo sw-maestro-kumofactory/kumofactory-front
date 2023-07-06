@@ -15,7 +15,7 @@ const CreateLineContainer = ({ x, y }: IProps) => {
         top: y.toString() + 'px',
         left: x.toString() + 'px',
       }}
-      className={`flex flex-col absolute gap-y-4 text-2xl w-12 `}
+      className={`flex flex-col absolute gap-y-4 text-2xl w-12 z-10`}
     >
       <CreateLineButton>
         <FontAwesomeIcon color={'white'} icon={faArrowUpLong} />

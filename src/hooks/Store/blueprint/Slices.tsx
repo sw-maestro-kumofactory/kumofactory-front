@@ -9,9 +9,6 @@ import { Point } from '@/src/types/Common';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 export type AllBluePrintStates = AreaState & CommonState & ServiceState & LineState;
 
-// variables
-const stdScale = 2.52;
-
 export const useServiceSlice: StateCreator<
   AllBluePrintStates,
   [],
@@ -37,6 +34,7 @@ export const useServiceSlice: StateCreator<
             x: e.clientX - service.x * state.scale,
             y: e.clientY - service.y * state.scale,
           };
+          console.log(newInterval);
           state.draggable = true;
           state.selectedArea = null;
           state.selectedServiceId = service.id;
@@ -147,9 +145,10 @@ export const useAreaSlice: StateCreator<
       set((state) => {
         if (area) {
           const newInterval = {
-            x: e.clientX - area.sx,
-            y: e.clientY - area.sy,
+            x: e.clientX - area.sx * state.scale,
+            y: e.clientY - area.sy * state.scale,
           };
+          console.log(newInterval);
           state.draggable = true;
           state.selectedServiceId = null;
           state.selectedArea = area;
@@ -192,7 +191,13 @@ export const useCommonSlice: StateCreator<
   },
   scale: 1,
   oneByFourPoint: 22.5,
+  stdScale: null,
   CommonAction: {
+    setStdScale: (scale: number) =>
+      set((state) => {
+        state.stdScale = scale;
+        return state;
+      }),
     setViewBox: (width, height) =>
       set((state) => {
         state.viewBox.width = width;
@@ -208,9 +213,11 @@ export const useCommonSlice: StateCreator<
       })),
     setScale: (scale: number) =>
       set((state) => {
-        const s = scale / 2.804;
-        state.scale = s;
-        state.oneByFourPoint = (90 * s) / 4;
+        if (state.stdScale) {
+          const s = scale / state.stdScale;
+          state.scale = s;
+          state.oneByFourPoint = (90 * s) / 4;
+        }
         return state;
       }),
     onClickGrid: (e) => {
@@ -241,7 +248,6 @@ export const useCommonSlice: StateCreator<
           isResizable: false,
           dir: -1,
         };
-        console.log(e.clientX, e.clientY, state.scale, state.oneByFourPoint);
         state.draggable = false;
         return state;
       });
@@ -258,6 +264,16 @@ export const useCommonSlice: StateCreator<
     },
     onMouseMove: (e) => {
       set((state) => {
+        let scale = state.scale;
+        if (!state.stdScale) {
+          const background = document.getElementById('background')!.getBoundingClientRect();
+          if (background) {
+            const tmpStdScale = 1080 / background.width;
+            scale = state.scale / tmpStdScale;
+            state.stdScale = tmpStdScale;
+            state.scale = scale;
+          }
+        }
         if (state.lineDrawingMode) {
           if (state.selectedServiceId) {
             const sx = e.clientX - state.gridSrc.x - state.services[state.selectedServiceId].x - 45;
@@ -274,7 +290,7 @@ export const useCommonSlice: StateCreator<
         if (state.resizable.isResizable && state.selectedArea) {
           state.isMoving = true;
           if (state.resizable.dir === 1) {
-            const newWidth = e.clientX - state.gridSrc.x - state.selectedArea.sx;
+            const newWidth = e.clientX - state.gridSrc.x - state.interval.x - state.selectedArea.sx;
             if (newWidth > 0) state.areas[state.selectedArea.id].width = newWidth;
           } else if (state.resizable.dir === 2) {
             const diff = state.selectedArea.sx - e.clientX + state.gridSrc.x;

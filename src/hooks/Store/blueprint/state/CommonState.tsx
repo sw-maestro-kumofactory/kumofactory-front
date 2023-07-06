@@ -8,12 +8,14 @@ export interface CommonState {
   isMoving: boolean;
   scale: number;
   oneByFourPoint: number;
+  stdScale: number | null;
   viewBox: {
     width: number;
     height: number;
   };
   CommonAction: {
     setGridSrc: (x: number, y: number) => void;
+    setStdScale: (scale: number) => void;
     setViewBox: (width: number, height: number) => void;
     setScale: (scale: number) => void;
     onMouseUp: (e: React.MouseEvent) => void;

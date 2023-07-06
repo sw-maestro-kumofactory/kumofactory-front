@@ -1,7 +1,7 @@
 'use client';
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Loading from '@/src/components/common/Loading';
 import Options from '@/src/components/AWSService/Option/Options';
 import { ExportButton } from '@/src/components/Blueprint/FloatingButton/Export/ExportButton';
@@ -30,7 +30,6 @@ const Grid = () => {
   const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
   const {} = useBlueprintStore((state) => state.AreaAction);
 
-  const standardScale = 2.804;
   // @ts-ignore
   function handleScaleChange(e) {
     setScale(e.instance.transformState.scale);
@@ -60,21 +59,34 @@ const Grid = () => {
 
   return (
     <div className='grid-wrapper w-full h-full overflow-hidden'>
+      <ExportButton />
+      {selectedServiceId && !isMoving && (
+        <>
+          <Options serviceType={services[selectedServiceId].type} />
+          <CreateLineContainer
+            x={services[selectedServiceId].x + gridSrc.x + 100}
+            y={services[selectedServiceId].y + gridSrc.y - 10}
+          />
+        </>
+      )}
       <TransformWrapper
         minScale={0.5}
-        initialScale={standardScale}
+        initialScale={1}
         maxScale={10}
         defaultScale={1}
-        onTransformed={(e) => handleScaleChange(e)}
+        onTransformed={(e: any) => {
+          handleScaleChange(e);
+        }}
       >
         <TransformComponent>
-          <ExportButton />
           {viewBox ? (
             <div id='blueprint'>
               <svg
                 width={viewBox.width}
                 height={viewBox.height}
-                viewBox={`-250 -100 ${viewBox.width + 1000} ${viewBox.height + 1000}`}
+                viewBox={`${-(viewBox.width - 80) / 2} ${-(viewBox.height - 350) / 2}  ${viewBox.width + 1000} ${
+                  viewBox.height + 1000
+                }`}
                 onClick={onClickGrid}
                 onMouseUp={onMouseUp}
                 onMouseMove={(e: React.MouseEvent) => {
@@ -156,16 +168,6 @@ const Grid = () => {
             </div>
           ) : (
             <Loading />
-          )}
-
-          {selectedServiceId && !isMoving && (
-            <>
-              <Options serviceType={services[selectedServiceId].type} />
-              <CreateLineContainer
-                x={services[selectedServiceId].x + gridSrc.x + 100}
-                y={services[selectedServiceId].y + gridSrc.y - 10}
-              />
-            </>
           )}
         </TransformComponent>
       </TransformWrapper>
