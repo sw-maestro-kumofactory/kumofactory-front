@@ -4,6 +4,7 @@ export interface CommonState {
   circles: Record<string, Point>;
   interval: Coordinate;
   gridSrc: Coordinate;
+  blueprintSrc: Coordinate;
   draggable: boolean;
   isMoving: boolean;
   scale: number;
@@ -14,8 +15,9 @@ export interface CommonState {
     height: number;
   };
   CommonAction: {
-    setGridSrc: (x: number, y: number) => void;
-    setStdScale: (scale: number) => void;
+    setBlueprintSrc: (x: number, y: number) => void;
+    setGridSrc: () => void;
+    setStdScale: () => void;
     setViewBox: (width: number, height: number) => void;
     setScale: (scale: number) => void;
     onMouseUp: (e: React.MouseEvent) => void;

@@ -25,7 +25,7 @@ const AZ = ({ Area, activate }: IProps) => {
         <>
           <line
             className='cursor-n-resize'
-            strokeWidth='3'
+            strokeWidth='8'
             stroke='blue'
             x1={Area.sx}
             y1={Area.sy}
@@ -38,7 +38,7 @@ const AZ = ({ Area, activate }: IProps) => {
           />
           <line
             className='cursor-s-resize'
-            strokeWidth='3'
+            strokeWidth='8'
             stroke='blue'
             x1={Area.sx}
             y1={Area.sy + Area.height}
@@ -51,7 +51,7 @@ const AZ = ({ Area, activate }: IProps) => {
           />
           <line
             className='cursor-w-resize'
-            strokeWidth='3'
+            strokeWidth='8'
             stroke='blue'
             x1={Area.sx}
             y1={Area.sy}
@@ -64,7 +64,7 @@ const AZ = ({ Area, activate }: IProps) => {
           />
           <line
             className='cursor-e-resize'
-            strokeWidth='3'
+            strokeWidth='8'
             stroke='blue'
             x1={Area.sx + Area.width}
             y1={Area.sy}

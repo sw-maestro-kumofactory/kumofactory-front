@@ -7,6 +7,7 @@ import { IArea } from '@/src/types/Area';
 import { v1 } from 'uuid';
 import { Point } from '@/src/types/Common';
 import { getQuadrant } from '@/src/utils/getQuadrant';
+
 export type AllBluePrintStates = AreaState & CommonState & ServiceState & LineState;
 
 export const useServiceSlice: StateCreator<
@@ -36,7 +37,7 @@ export const useServiceSlice: StateCreator<
           };
           console.log(newInterval);
           state.draggable = true;
-          state.selectedArea = null;
+          state.selectedAreaId = null;
           state.selectedServiceId = service.id;
           state.interval = newInterval;
         }
@@ -116,7 +117,7 @@ export const useAreaSlice: StateCreator<
   AreaState
 > = (set, get) => ({
   areas: {},
-  selectedArea: null,
+  selectedAreaId: null,
   resizable: {
     isResizable: false,
     dir: -1,
@@ -151,10 +152,10 @@ export const useAreaSlice: StateCreator<
           console.log(newInterval);
           state.draggable = true;
           state.selectedServiceId = null;
-          state.selectedArea = area;
+          state.selectedAreaId = area.id;
           state.interval = newInterval;
         } else {
-          state.selectedArea = null;
+          state.selectedAreaId = null;
         }
         return state;
       });
@@ -183,6 +184,10 @@ export const useCommonSlice: StateCreator<
     x: 0,
     y: 0,
   },
+  blueprintSrc: {
+    x: 0,
+    y: 0,
+  },
   draggable: false,
   isMoving: false,
   viewBox: {
@@ -193,9 +198,12 @@ export const useCommonSlice: StateCreator<
   oneByFourPoint: 22.5,
   stdScale: null,
   CommonAction: {
-    setStdScale: (scale: number) =>
+    setStdScale: () =>
       set((state) => {
-        state.stdScale = scale;
+        const background = document.querySelector('#background')!.getBoundingClientRect();
+        const tmpStdScale = 1080 / background.width;
+        state.scale = state.scale / tmpStdScale;
+        state.stdScale = tmpStdScale;
         return state;
       }),
     setViewBox: (width, height) =>
@@ -204,9 +212,16 @@ export const useCommonSlice: StateCreator<
         state.viewBox.height = height;
         return state;
       }),
-    setGridSrc: (x, y) =>
+    setGridSrc: () =>
+      set((state) => {
+        const gridComponent = document.querySelector('#background')!.getBoundingClientRect();
+        state.gridSrc.x = gridComponent.x;
+        state.gridSrc.y = gridComponent.y;
+        return state;
+      }),
+    setBlueprintSrc: (x, y) =>
       set(() => ({
-        gridSrc: {
+        blueprintSrc: {
           x: x,
           y: y,
         },
@@ -221,6 +236,7 @@ export const useCommonSlice: StateCreator<
         return state;
       }),
     onClickGrid: (e) => {
+      console.log(e.clientX, e.clientY);
       set((state) => {
         if (state.lineDrawingMode) {
           const id = v1().toString();
@@ -243,7 +259,7 @@ export const useCommonSlice: StateCreator<
           };
         }
         state.selectedServiceId = null;
-        state.selectedArea = null;
+        state.selectedAreaId = null;
         state.resizable = {
           isResizable: false,
           dir: -1,
@@ -264,52 +280,49 @@ export const useCommonSlice: StateCreator<
     },
     onMouseMove: (e) => {
       set((state) => {
-        let scale = state.scale;
-        if (!state.stdScale) {
-          const background = document.getElementById('background')!.getBoundingClientRect();
-          if (background) {
-            const tmpStdScale = 1080 / background.width;
-            scale = state.scale / tmpStdScale;
-            state.stdScale = tmpStdScale;
-            state.scale = scale;
-          }
-        }
         if (state.lineDrawingMode) {
           if (state.selectedServiceId) {
-            const sx = e.clientX - state.gridSrc.x - state.services[state.selectedServiceId].x - 45;
-            const sy = e.clientY - state.gridSrc.y - state.services[state.selectedServiceId].y - 45;
+            const sx = e.clientX - state.blueprintSrc.x - state.services[state.selectedServiceId].x - 45;
+            const sy = e.clientY - state.blueprintSrc.y - state.services[state.selectedServiceId].y - 45;
             const currentX = state.services[state.selectedServiceId].x;
             const currentY = state.services[state.selectedServiceId].y;
             const { x, y } = getQuadrant(sx, sy, currentX, currentY);
             state.circles[state.srcPoint].x = x;
             state.circles[state.srcPoint].y = y;
           }
-          state.circles[state.dstPoint].x = e.clientX - state.gridSrc.x;
-          state.circles[state.dstPoint].y = e.clientY - state.gridSrc.y;
+          state.circles[state.dstPoint].x = e.clientX - state.blueprintSrc.x;
+          state.circles[state.dstPoint].y = e.clientY - state.blueprintSrc.y;
         }
-        if (state.resizable.isResizable && state.selectedArea) {
+        if (state.resizable.isResizable && state.selectedAreaId) {
+          const calculatedSX = state.areas[state.selectedAreaId].sx * state.scale;
+          const calculatedSY = state.areas[state.selectedAreaId].sy * state.scale;
           state.isMoving = true;
           if (state.resizable.dir === 1) {
-            const newWidth = e.clientX - state.gridSrc.x - state.interval.x - state.selectedArea.sx;
-            if (newWidth > 0) state.areas[state.selectedArea.id].width = newWidth;
+            // 동
+            const newWidth = (e.clientX - state.gridSrc.x - calculatedSX) / state.scale;
+            if (newWidth > 0) state.areas[state.selectedAreaId].width = newWidth;
           } else if (state.resizable.dir === 2) {
-            const diff = state.selectedArea.sx - e.clientX + state.gridSrc.x;
-            const newWidth = state.selectedArea.width + diff;
-            const newSx = e.clientX - state.gridSrc.x;
+            // 서
+            const diff = (calculatedSX - e.clientX + state.gridSrc.x) / state.scale;
+            const newWidth = state.areas[state.selectedAreaId].width + diff;
+            const newSx = (e.clientX - state.gridSrc.x) / state.scale;
             if (newWidth > 0) {
-              state.areas[state.selectedArea.id].width = newWidth;
-              state.areas[state.selectedArea.id].sx = newSx;
+              state.areas[state.selectedAreaId].width = newWidth;
+              state.areas[state.selectedAreaId].sx = newSx;
             }
           } else if (state.resizable.dir === 3) {
-            const newHeight = e.clientY - state.gridSrc.y - state.selectedArea.sy;
-            if (newHeight > 0) state.areas[state.selectedArea.id].height = newHeight;
+            // 남
+            const newHeight = (e.clientY - state.gridSrc.y - calculatedSY) / state.scale;
+            if (newHeight > 0) state.areas[state.selectedAreaId].height = newHeight;
           } else if (state.resizable.dir === 4) {
-            const diff = state.selectedArea.sy - e.clientY + state.gridSrc.y;
-            const newHeight = state.selectedArea.height + diff;
-            const newSy = e.clientY - state.gridSrc.y;
+            // 북
+            const diff = (calculatedSY - e.clientY + state.gridSrc.y) / state.scale;
+            const newHeight = state.areas[state.selectedAreaId].height + diff;
+            const newSy = (e.clientY - state.gridSrc.y) / state.scale;
+
             if (newHeight > 0) {
-              state.areas[state.selectedArea.id].height = newHeight;
-              state.areas[state.selectedArea.id].sy = newSy;
+              state.areas[state.selectedAreaId].height = newHeight;
+              state.areas[state.selectedAreaId].sy = newSy;
             }
           }
         } else if (state.draggable) {
@@ -330,9 +343,9 @@ export const useCommonSlice: StateCreator<
             });
             state.services[state.selectedServiceId].x = newX;
             state.services[state.selectedServiceId].y = newY;
-          } else if (state.selectedArea) {
-            state.areas[state.selectedArea.id].sx = newX;
-            state.areas[state.selectedArea.id].sy = newY;
+          } else if (state.selectedAreaId) {
+            state.areas[state.selectedAreaId].sx = newX;
+            state.areas[state.selectedAreaId].sy = newY;
           }
         } else {
         }
@@ -341,8 +354,8 @@ export const useCommonSlice: StateCreator<
     },
     clearComponent: () => {
       set(() => ({
-        selectedService: null,
-        selectedArea: null,
+        selectedServiceId: null,
+        selectedAreaId: null,
       }));
     },
   },

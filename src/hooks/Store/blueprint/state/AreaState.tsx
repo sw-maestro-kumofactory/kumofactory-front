@@ -2,7 +2,7 @@ import { IArea } from '@/src/types/Area';
 
 export interface AreaState {
   areas: Record<string, IArea>;
-  selectedArea: IArea | null;
+  selectedAreaId: string | null;
   resizable: {
     isResizable: boolean;
     dir: number;

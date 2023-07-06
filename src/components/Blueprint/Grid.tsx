@@ -13,20 +13,19 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 const Grid = () => {
   const areas = useBlueprintStore((state) => state.areas);
-  const selectedArea = useBlueprintStore((state) => state.selectedArea);
+  const selectedAreaId = useBlueprintStore((state) => state.selectedAreaId);
   const services = useBlueprintStore((state) => state.services);
   const selectedServiceId = useBlueprintStore((state) => state.selectedServiceId);
   const isMoving = useBlueprintStore((state) => state.isMoving);
-  const gridSrc = useBlueprintStore((state) => state.gridSrc);
+  const blueprintSrc = useBlueprintStore((state) => state.blueprintSrc);
   const viewBox = useBlueprintStore((state) => state.viewBox);
   const srcPoint = useBlueprintStore((state) => state.srcPoint);
   const dstPoint = useBlueprintStore((state) => state.dstPoint);
   const lines = useBlueprintStore((state) => state.lines);
   const circles = useBlueprintStore((state) => state.circles);
   const { onMouseDownService, onMouseEnterService } = useBlueprintStore((state) => state.ServiceAction);
-  const { onClickGrid, onMouseUp, onMouseMove, setGridSrc, setViewBox, setScale } = useBlueprintStore(
-    (state) => state.CommonAction,
-  );
+  const { onClickGrid, onMouseUp, onMouseMove, setGridSrc, setBlueprintSrc, setViewBox, setScale, setStdScale } =
+    useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
   const {} = useBlueprintStore((state) => state.AreaAction);
 
@@ -44,7 +43,7 @@ const Grid = () => {
     const handleResize = () => {
       const component = document.querySelector('.grid-wrapper')!;
       const box = component.getBoundingClientRect();
-      setGridSrc(box.x, box.y);
+      setBlueprintSrc(box.x, box.y);
       const { width, height } = component?.getBoundingClientRect() || { width: 0, height: 0 };
       setViewBox(width, height);
     };
@@ -57,6 +56,14 @@ const Grid = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const component = document.getElementById('background');
+    if (component !== null) {
+      setStdScale();
+      setGridSrc();
+    }
+  }, [viewBox]);
+
   return (
     <div className='grid-wrapper w-full h-full overflow-hidden'>
       <ExportButton />
@@ -64,8 +71,8 @@ const Grid = () => {
         <>
           <Options serviceType={services[selectedServiceId].type} />
           <CreateLineContainer
-            x={services[selectedServiceId].x + gridSrc.x + 100}
-            y={services[selectedServiceId].y + gridSrc.y - 10}
+            x={services[selectedServiceId].x + blueprintSrc.x + 100}
+            y={services[selectedServiceId].y + blueprintSrc.y - 10}
           />
         </>
       )}
@@ -75,11 +82,12 @@ const Grid = () => {
         maxScale={10}
         defaultScale={1}
         onTransformed={(e: any) => {
+          setGridSrc();
           handleScaleChange(e);
         }}
       >
         <TransformComponent>
-          {viewBox ? (
+          {viewBox.width !== 0 ? (
             <div id='blueprint'>
               <svg
                 width={viewBox.width}
@@ -111,7 +119,7 @@ const Grid = () => {
                 </g>
                 <g id='zone'>
                   {Object.keys(areas).map((key) => (
-                    <AZ key={areas[key].id} Area={areas[key]} activate={selectedArea?.id === areas[key].id} />
+                    <AZ key={areas[key].id} Area={areas[key]} activate={selectedAreaId === areas[key].id} />
                   ))}
                 </g>
                 <g id='services'>
