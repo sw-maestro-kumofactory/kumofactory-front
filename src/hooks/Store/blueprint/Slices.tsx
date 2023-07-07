@@ -19,6 +19,10 @@ export const useServiceSlice: StateCreator<
   services: {},
   selectedServiceId: null,
   lineDrawingMode: false,
+  lineDrawingLocation: {
+    x: 0,
+    y: 0,
+  },
   ServiceAction: {
     onMouseEnterService: (event, service) => {
       set((state) => {
@@ -35,11 +39,14 @@ export const useServiceSlice: StateCreator<
             x: e.clientX - service.x * state.scale,
             y: e.clientY - service.y * state.scale,
           };
-          console.log(newInterval);
           state.draggable = true;
           state.selectedAreaId = null;
           state.selectedServiceId = service.id;
           state.interval = newInterval;
+          state.lineDrawingLocation = {
+            x: service.x * state.scale + state.gridSrc.x + 100 * state.scale,
+            y: service.y * state.scale + state.gridSrc.y,
+          };
         }
         return state;
       });
@@ -149,7 +156,6 @@ export const useAreaSlice: StateCreator<
             x: e.clientX - area.sx * state.scale,
             y: e.clientY - area.sy * state.scale,
           };
-          console.log(newInterval);
           state.draggable = true;
           state.selectedServiceId = null;
           state.selectedAreaId = area.id;
@@ -236,7 +242,6 @@ export const useCommonSlice: StateCreator<
         return state;
       }),
     onClickGrid: (e) => {
-      console.log(e.clientX, e.clientY);
       set((state) => {
         if (state.lineDrawingMode) {
           const id = v1().toString();
@@ -253,8 +258,8 @@ export const useCommonSlice: StateCreator<
           const newDstId = v1().toString();
           state.dstPoint = newDstId;
           state.circles[newDstId] = {
-            x: 0,
-            y: 0,
+            x: state.circles[state.srcPoint].x,
+            y: state.circles[state.srcPoint].y,
             id: newDstId,
           };
         }
@@ -274,24 +279,38 @@ export const useCommonSlice: StateCreator<
         state.isMoving = false;
         state.resizable.isResizable = false;
         state.resizable.dir = -1;
+        if (state.selectedServiceId) {
+          //TODO re set line drawing location
+          state.lineDrawingLocation = {
+            x: state.services[state.selectedServiceId].x * state.scale + state.gridSrc.x + 100 * state.scale,
+            y: state.services[state.selectedServiceId].y * state.scale + state.gridSrc.y,
+          };
+        }
         return state;
-        // selectedService 상태 업데이트하기
       });
     },
     onMouseMove: (e) => {
       set((state) => {
         if (state.lineDrawingMode) {
           if (state.selectedServiceId) {
-            const sx = e.clientX - state.blueprintSrc.x - state.services[state.selectedServiceId].x - 45;
-            const sy = e.clientY - state.blueprintSrc.y - state.services[state.selectedServiceId].y - 45;
-            const currentX = state.services[state.selectedServiceId].x;
-            const currentY = state.services[state.selectedServiceId].y;
+            // e.clientX - state.gridSrc.x / state.scale : mouse position in grid
+            // state.services[state.selectedServiceId].x - 45 * state.scale : service position in grid
+            const sx =
+              (e.clientX - state.gridSrc.x) / state.scale -
+              state.services[state.selectedServiceId].x -
+              45 * state.scale;
+            const sy =
+              (e.clientY - state.gridSrc.y) / state.scale -
+              state.services[state.selectedServiceId].y -
+              45 * state.scale;
+            const currentX = state.services[state.selectedServiceId].x + 45;
+            const currentY = state.services[state.selectedServiceId].y + 45;
             const { x, y } = getQuadrant(sx, sy, currentX, currentY);
             state.circles[state.srcPoint].x = x;
             state.circles[state.srcPoint].y = y;
           }
-          state.circles[state.dstPoint].x = e.clientX - state.blueprintSrc.x;
-          state.circles[state.dstPoint].y = e.clientY - state.blueprintSrc.y;
+          state.circles[state.dstPoint].x = (e.clientX - state.gridSrc.x) / state.scale;
+          state.circles[state.dstPoint].y = (e.clientY - state.gridSrc.y) / state.scale;
         }
         if (state.resizable.isResizable && state.selectedAreaId) {
           const calculatedSX = state.areas[state.selectedAreaId].sx * state.scale;
@@ -319,7 +338,6 @@ export const useCommonSlice: StateCreator<
             const diff = (calculatedSY - e.clientY + state.gridSrc.y) / state.scale;
             const newHeight = state.areas[state.selectedAreaId].height + diff;
             const newSy = (e.clientY - state.gridSrc.y) / state.scale;
-
             if (newHeight > 0) {
               state.areas[state.selectedAreaId].height = newHeight;
               state.areas[state.selectedAreaId].sy = newSy;
@@ -335,9 +353,9 @@ export const useCommonSlice: StateCreator<
             state.services[state.selectedServiceId].lines.map((line) => {
               const src = state.lines[line].srcId;
               const dst = state.lines[line].dstId;
-              const cx = state.circles[dst].x - currentX;
-              const cy = state.circles[dst].y - currentY;
-              const { x, y } = getQuadrant(cx, cy, newX, newY);
+              const cx = state.circles[dst].x - currentX - 45;
+              const cy = state.circles[dst].y - currentY - 45;
+              const { x, y } = getQuadrant(cx, cy, newX + 45, newY + 45);
               state.circles[src].x = x;
               state.circles[src].y = y;
             });

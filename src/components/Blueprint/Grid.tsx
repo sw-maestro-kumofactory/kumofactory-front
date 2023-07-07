@@ -23,6 +23,7 @@ const Grid = () => {
   const dstPoint = useBlueprintStore((state) => state.dstPoint);
   const lines = useBlueprintStore((state) => state.lines);
   const circles = useBlueprintStore((state) => state.circles);
+  const lineDrawingLocation = useBlueprintStore((state) => state.lineDrawingLocation);
   const { onMouseDownService, onMouseEnterService } = useBlueprintStore((state) => state.ServiceAction);
   const { onClickGrid, onMouseUp, onMouseMove, setGridSrc, setBlueprintSrc, setViewBox, setScale, setStdScale } =
     useBlueprintStore((state) => state.CommonAction);
@@ -69,11 +70,8 @@ const Grid = () => {
       <ExportButton />
       {selectedServiceId && !isMoving && (
         <>
-          <Options serviceType={services[selectedServiceId].type} />
-          <CreateLineContainer
-            x={services[selectedServiceId].x + blueprintSrc.x + 100}
-            y={services[selectedServiceId].y + blueprintSrc.y - 10}
-          />
+          {/*<Options serviceType={services[selectedServiceId].type} />*/}
+          <CreateLineContainer x={lineDrawingLocation.x} y={lineDrawingLocation.y} />
         </>
       )}
       <TransformWrapper
@@ -81,6 +79,7 @@ const Grid = () => {
         initialScale={1}
         maxScale={10}
         defaultScale={1}
+        doubleClick={{ disabled: true }}
         onTransformed={(e: any) => {
           setGridSrc();
           handleScaleChange(e);
