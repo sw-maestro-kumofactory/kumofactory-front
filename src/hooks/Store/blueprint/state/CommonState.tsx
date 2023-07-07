@@ -8,8 +8,8 @@ export interface CommonState {
   draggable: boolean;
   isMoving: boolean;
   scale: number;
-  oneByFourPoint: number;
   stdScale: number | null;
+  oneByFourPoint: number;
   viewBox: {
     width: number;
     height: number;

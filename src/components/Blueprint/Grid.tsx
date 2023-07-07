@@ -3,7 +3,7 @@ import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { useEffect } from 'react';
 import Loading from '@/src/components/common/Loading';
-import Options from '@/src/components/AWSService/Option/Options';
+// import Options from '@/src/components/AWSService/Option/Options';
 import { ExportButton } from '@/src/components/Blueprint/FloatingButton/Export/ExportButton';
 import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
@@ -17,7 +17,6 @@ const Grid = () => {
   const services = useBlueprintStore((state) => state.services);
   const selectedServiceId = useBlueprintStore((state) => state.selectedServiceId);
   const isMoving = useBlueprintStore((state) => state.isMoving);
-  const blueprintSrc = useBlueprintStore((state) => state.blueprintSrc);
   const viewBox = useBlueprintStore((state) => state.viewBox);
   const srcPoint = useBlueprintStore((state) => state.srcPoint);
   const dstPoint = useBlueprintStore((state) => state.dstPoint);

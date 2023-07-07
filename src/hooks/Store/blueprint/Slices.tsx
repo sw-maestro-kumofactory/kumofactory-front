@@ -293,8 +293,6 @@ export const useCommonSlice: StateCreator<
       set((state) => {
         if (state.lineDrawingMode) {
           if (state.selectedServiceId) {
-            // e.clientX - state.gridSrc.x / state.scale : mouse position in grid
-            // state.services[state.selectedServiceId].x - 45 * state.scale : service position in grid
             const sx =
               (e.clientX - state.gridSrc.x) / state.scale -
               state.services[state.selectedServiceId].x -
