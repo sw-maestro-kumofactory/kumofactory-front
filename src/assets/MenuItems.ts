@@ -18,11 +18,35 @@ export const MenuItemList: itemType = {
       name: 'S3',
       type: 'S3',
     },
+    {
+      name: 'EFS',
+      type: 'EFS',
+    },
   ],
   Database: [
     {
       name: 'RDS',
       type: 'RDS',
+    },
+    {
+      name: 'ElastiCache',
+      type: 'ElastiCache',
+    },
+  ],
+  Network: [
+    {
+      name: 'Route53',
+      type: 'Route53',
+    },
+    {
+      name: 'CloudFront',
+      type: 'CloudFront',
+    },
+  ],
+  Security: [
+    {
+      name: 'WAF',
+      type: 'WAF',
     },
   ],
 };
