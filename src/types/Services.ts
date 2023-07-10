@@ -1,5 +1,3 @@
-import { Route } from 'next';
-
 export interface HasLine {
   lines: string[];
 }
@@ -74,7 +72,16 @@ export interface EFS extends IComponent {
   options?: EFSOptions;
 }
 
-export type Services = EC2 | RDS | S3 | Route53 | WAF | ElastiCache | CloudFront | EFS;
+export interface NATOptions {}
+export interface NAT extends IComponent {
+  options?: NATOptions;
+}
+
+export interface VPCOptions {}
+export interface VPC extends IComponent {
+  options?: VPCOptions;
+}
+export type Services = EC2 | RDS | S3 | Route53 | WAF | ElastiCache | CloudFront | EFS | NAT | VPC;
 export type ServiceOptions =
   | EC2Options
   | RDSOptions
@@ -83,5 +90,17 @@ export type ServiceOptions =
   | WAFOptions
   | ElastiCacheOptions
   | CloudFrontOptions
-  | EFSOptions;
-export type ServicesString = 'EC2' | 'RDS' | 'S3' | 'Route53' | 'WAF' | 'ElastiCache' | 'CloudFront' | 'EFS';
+  | EFSOptions
+  | NATOptions
+  | VPCOptions;
+export type ServicesString =
+  | 'EC2'
+  | 'RDS'
+  | 'S3'
+  | 'Route53'
+  | 'WAF'
+  | 'ElastiCache'
+  | 'CloudFront'
+  | 'EFS'
+  | 'NAT'
+  | 'VPC';

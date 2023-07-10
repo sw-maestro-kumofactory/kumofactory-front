@@ -1,6 +1,8 @@
-import { UserState } from '@/src/hooks/Store/auth/state/UserState';
 import { StateCreator } from 'zustand';
 import { v1 } from 'uuid';
+
+import { UserState } from '@/src/hooks/Store/auth/state/UserState';
+
 export const useUserSlice: StateCreator<
   UserState,
   [],

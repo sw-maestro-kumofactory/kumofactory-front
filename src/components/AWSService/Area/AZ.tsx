@@ -23,10 +23,11 @@ const AZ = ({ Area, activate }: IProps) => {
       {activate && (
         // 상 하 좌 우
         <>
+          {/*<rect x={Area.sx + Area.width / 2} y={Area.sy - 5} width={10} height={10} stroke={'black'} />*/}
           <line
             className='cursor-n-resize'
             strokeWidth='8'
-            stroke='blue'
+            stroke='#799ACF'
             x1={Area.sx}
             y1={Area.sy}
             x2={Area.sx + Area.width}
@@ -39,7 +40,7 @@ const AZ = ({ Area, activate }: IProps) => {
           <line
             className='cursor-s-resize'
             strokeWidth='8'
-            stroke='blue'
+            stroke='#799ACF'
             x1={Area.sx}
             y1={Area.sy + Area.height}
             x2={Area.sx + Area.width}
@@ -52,7 +53,7 @@ const AZ = ({ Area, activate }: IProps) => {
           <line
             className='cursor-w-resize'
             strokeWidth='8'
-            stroke='blue'
+            stroke='#799ACF'
             x1={Area.sx}
             y1={Area.sy}
             x2={Area.sx}
@@ -65,7 +66,7 @@ const AZ = ({ Area, activate }: IProps) => {
           <line
             className='cursor-e-resize'
             strokeWidth='8'
-            stroke='blue'
+            stroke='#799ACF'
             x1={Area.sx + Area.width}
             y1={Area.sy}
             x2={Area.sx + Area.width}
@@ -80,9 +81,12 @@ const AZ = ({ Area, activate }: IProps) => {
       <rect
         x={Area.sx}
         y={Area.sy}
-        fill={activate ? '#C9DFF9cc' : '#C0DFF985'}
+        fill={'#00000011'}
         width={Area.width}
         height={Area.height}
+        strokeWidth={2}
+        stroke={'black'}
+        strokeDasharray={10}
       />
       <text x={Area.sx} y={Area.sy}>
         Availability zone

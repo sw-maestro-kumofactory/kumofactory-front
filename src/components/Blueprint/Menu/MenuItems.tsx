@@ -6,9 +6,10 @@ import { MenuItemList } from '@/src/assets/MenuItems';
 
 interface IProps {
   type: string;
+  children?: React.ReactNode;
 }
 
-const MenuItems = ({ type }: IProps) => {
+const MenuItems = ({ type, children }: IProps) => {
   const createService = useBlueprintStore((state) => state.ServiceAction.createService);
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
   const serviceFactory = new ServiceFactory();
@@ -34,7 +35,15 @@ const MenuItems = ({ type }: IProps) => {
               }
             }}
           >
-            {item.name}
+            <svg
+              cursor='pointer'
+              viewBox='0 0 80 80'
+              xmlns='http://www.w3.org/2000/svg'
+              className='service-svg animate-service'
+            >
+              {serviceFactory.getSvg({ type: item.type })}
+            </svg>
+            <div className='text-black'>{item.type.toString()}</div>
           </ItemButtonContainer>
         ))}
     </div>

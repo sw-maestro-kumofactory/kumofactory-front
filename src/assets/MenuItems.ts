@@ -42,6 +42,14 @@ export const MenuItemList: itemType = {
       name: 'CloudFront',
       type: 'CloudFront',
     },
+    {
+      name: 'VPC',
+      type: 'VPC',
+    },
+    {
+      name: 'NAT',
+      type: 'NAT',
+    },
   ],
   Security: [
     {

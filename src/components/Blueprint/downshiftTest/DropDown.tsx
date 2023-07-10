@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
 interface IProps {
   show?: boolean;
   title: string;
   children: React.ReactNode;
 }
 const DropDown = ({ title, children }: IProps) => {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(true);
   return (
     <div className='m-4 max-w-sm'>
       <div className='flex justify-between text-center'>

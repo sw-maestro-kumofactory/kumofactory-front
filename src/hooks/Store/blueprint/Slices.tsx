@@ -1,10 +1,11 @@
+import { StateCreator } from 'zustand';
+import { v1 } from 'uuid';
+
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
 import { CommonState } from '@/src/hooks/Store/blueprint/state/CommonState';
 import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
 import { LineState } from '@/src/hooks/Store/blueprint/state/LineState';
-import { StateCreator } from 'zustand';
 import { IArea } from '@/src/types/Area';
-import { v1 } from 'uuid';
 import { Point } from '@/src/types/Common';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 
@@ -52,13 +53,13 @@ export const useServiceSlice: StateCreator<
       });
     },
     createService: (service) =>
-      // @ts-ignore
       set((state) => {
         const id = v1().toString();
         state.services[id] = {
           ...service,
           id,
         };
+        return state;
       }),
     setOptions: (service) => {},
   },
@@ -201,7 +202,7 @@ export const useCommonSlice: StateCreator<
     height: 0,
   },
   scale: 1,
-  oneByFourPoint: 22.5,
+  oneByFourPoint: 20,
   stdScale: null,
   CommonAction: {
     setStdScale: () =>
@@ -296,13 +297,13 @@ export const useCommonSlice: StateCreator<
             const sx =
               (e.clientX - state.gridSrc.x) / state.scale -
               state.services[state.selectedServiceId].x -
-              45 * state.scale;
+              40 * state.scale;
             const sy =
               (e.clientY - state.gridSrc.y) / state.scale -
               state.services[state.selectedServiceId].y -
-              45 * state.scale;
-            const currentX = state.services[state.selectedServiceId].x + 45;
-            const currentY = state.services[state.selectedServiceId].y + 45;
+              40 * state.scale;
+            const currentX = state.services[state.selectedServiceId].x + 40;
+            const currentY = state.services[state.selectedServiceId].y + 40;
             const { x, y } = getQuadrant(sx, sy, currentX, currentY);
             state.circles[state.srcPoint].x = x;
             state.circles[state.srcPoint].y = y;
@@ -343,17 +344,17 @@ export const useCommonSlice: StateCreator<
           }
         } else if (state.draggable) {
           state.isMoving = true;
-          const newX = Math.round((e.clientX - state.interval.x) / state.scale / 22.5) * 22.5;
-          const newY = Math.round((e.clientY - state.interval.y) / state.scale / 22.5) * 22.5;
+          const newX = Math.round((e.clientX - state.interval.x) / state.scale / 20) * 20;
+          const newY = Math.round((e.clientY - state.interval.y) / state.scale / 20) * 20;
           if (state.selectedServiceId) {
             const currentX = state.services[state.selectedServiceId].x;
             const currentY = state.services[state.selectedServiceId].y;
             state.services[state.selectedServiceId].lines.map((line) => {
               const src = state.lines[line].srcId;
               const dst = state.lines[line].dstId;
-              const cx = state.circles[dst].x - currentX - 45;
-              const cy = state.circles[dst].y - currentY - 45;
-              const { x, y } = getQuadrant(cx, cy, newX + 45, newY + 45);
+              const cx = state.circles[dst].x - currentX - 40;
+              const cy = state.circles[dst].y - currentY - 40;
+              const { x, y } = getQuadrant(cx, cy, newX + 40, newY + 40);
               state.circles[src].x = x;
               state.circles[src].y = y;
             });

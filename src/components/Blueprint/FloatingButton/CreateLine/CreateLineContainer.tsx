@@ -1,7 +1,8 @@
 'use client';
-import CreateLineButton from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
+
+import CreateLineButton from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineButton';
 
 interface IProps {
   x: number;

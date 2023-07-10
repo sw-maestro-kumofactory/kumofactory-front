@@ -1,7 +1,8 @@
 'use client';
 import { useEffect } from 'react';
-import Loading from '@/src/components/common/Loading';
 import { useRouter } from 'next/navigation';
+
+import Loading from '@/src/components/common/Loading';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface CallbackProps {

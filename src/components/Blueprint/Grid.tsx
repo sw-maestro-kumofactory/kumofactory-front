@@ -1,15 +1,14 @@
 'use client';
+import { useEffect } from 'react';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import { useEffect } from 'react';
 import Loading from '@/src/components/common/Loading';
-// import Options from '@/src/components/AWSService/Option/Options';
 import { ExportButton } from '@/src/components/Blueprint/FloatingButton/Export/ExportButton';
 import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import Circle from '@/src/components/Blueprint/Circle/Circle';
-
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 const Grid = () => {
   const areas = useBlueprintStore((state) => state.areas);
@@ -90,6 +89,7 @@ const Grid = () => {
               <svg
                 width={viewBox.width}
                 height={viewBox.height}
+                // TODO: 어떤 값으로 둘지?
                 viewBox={`${-(viewBox.width - 80) / 2} ${-(viewBox.height - 350) / 2}  ${viewBox.width + 1000} ${
                   viewBox.height + 1000
                 }`}
@@ -103,17 +103,17 @@ const Grid = () => {
               >
                 <g id='background'>
                   <defs>
-                    <pattern id='grayPattern' width='90' height='90' patternUnits='userSpaceOnUse'>
-                      <path d='M -45 45 L 135 45' stroke='gray' strokeWidth='1' />
-                      <path d='M 45 -45 L 45 135' stroke='gray' strokeWidth='1' />
+                    <pattern id='grayPattern' width='80' height='80' patternUnits='userSpaceOnUse'>
+                      <path d='M -40 40 L 120 40' stroke='gray' strokeWidth='1' />
+                      <path d='M 40 -40 L 40 120' stroke='gray' strokeWidth='1' />
                     </pattern>
-                    <pattern id='boldPattern' width='90' height='90' patternUnits='userSpaceOnUse'>
-                      <path d='M 0 0 L 90 0 90 90 0 90 z' stroke='black' strokeWidth='1.5' fill='none' />
+                    <pattern id='boldPattern' width='80' height='80' patternUnits='userSpaceOnUse'>
+                      <path d='M 0 0 L 80 0 80 80 0 80 z' stroke='black' strokeWidth='1.5' fill='none' />
                     </pattern>
                   </defs>
                   {/* 이 부분 고정 */}
-                  <rect fill='url(#boldPattern)' width={1080} height={1350} className='cursor-move' />
-                  <rect fill='url(#grayPattern)' width={1080} height={1350} className='cursor-move' />
+                  <rect fill='url(#boldPattern)' width={1040} height={1360} className='cursor-move' />
+                  <rect fill='url(#grayPattern)' width={1040} height={1360} className='cursor-move' />
                 </g>
                 <g id='zone'>
                   {Object.keys(areas).map((key) => (
@@ -136,9 +136,9 @@ const Grid = () => {
                       }}
                       key={services[key].id}
                       isActive={services[key].id === selectedServiceId}
-                      id={services[key].id}
                       x={services[key].x}
                       y={services[key].y}
+                      id={services[key].id}
                       type={services[key].type}
                       lines={services[key].lines}
                     />
