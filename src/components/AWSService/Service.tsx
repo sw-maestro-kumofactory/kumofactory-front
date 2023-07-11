@@ -7,6 +7,7 @@ import { ServiceFactory } from '@/src/components/AWSService/ServiceFactory/Servi
 interface IProps extends IComponent {
   onMouseDown: (e: any) => void;
   onMouseEnter: (e: any) => void;
+  onMouseLeave: (e: any) => void;
   onClick: (e: any) => void;
   type: ServicesString;
   isActive: boolean;
@@ -28,6 +29,7 @@ const Service = (props: IProps) => {
       onClick={props.onClick}
       onMouseDown={props.onMouseDown}
       onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
       cursor='pointer'
     >
       {serviceFactory.getSvg({ type: props.type })}

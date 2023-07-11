@@ -1,12 +1,10 @@
 import { ElastiCache } from '@/src/types/Services';
+import { CommonInfo } from '@/src/components/AWSService/ServiceFactory/Services/CommonInfo';
 
 export const ElastiCacheService = (): ElastiCache => {
   return {
-    id: '0',
-    x: 0,
-    y: 0,
+    ...CommonInfo,
     type: 'ElastiCache',
-    lines: [],
     options: {},
   };
 };

@@ -1,12 +1,10 @@
 import { CloudFront } from '@/src/types/Services';
+import { CommonInfo } from '@/src/components/AWSService/ServiceFactory/Services/CommonInfo';
 
 export const CloudFrontService = (): CloudFront => {
   return {
-    id: '0',
-    x: 0,
-    y: 0,
+    ...CommonInfo,
     type: 'CloudFront',
-    lines: [],
     options: {},
   };
 };

@@ -1,12 +1,10 @@
 import { WAF } from '@/src/types/Services';
+import { CommonInfo } from '@/src/components/AWSService/ServiceFactory/Services/CommonInfo';
 
 export const WAFService = (): WAF => {
   return {
-    id: '0',
-    x: 0,
-    y: 0,
+    ...CommonInfo,
     type: 'WAF',
-    lines: [],
     options: {},
   };
 };

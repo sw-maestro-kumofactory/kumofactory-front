@@ -1,12 +1,10 @@
 import { EC2 } from '@/src/types/Services';
+import { CommonInfo } from '@/src/components/AWSService/ServiceFactory/Services/CommonInfo';
 
 export const EC2Service = (): EC2 => {
   return {
-    id: '0',
-    x: 0,
-    y: 0,
+    ...CommonInfo,
     type: 'EC2',
-    lines: [],
     options: {
       instanceType: 't2',
       size: 'micro',

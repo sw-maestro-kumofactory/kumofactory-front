@@ -23,7 +23,6 @@ const AZ = ({ Area, activate }: IProps) => {
       {activate && (
         // 상 하 좌 우
         <>
-          {/*<rect x={Area.sx + Area.width / 2} y={Area.sy - 5} width={10} height={10} stroke={'black'} />*/}
           <line
             className='cursor-n-resize'
             strokeWidth='8'
