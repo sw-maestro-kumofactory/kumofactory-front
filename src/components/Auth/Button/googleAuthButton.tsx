@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import AuthButton from '@/src/components/Auth/Button/Button';
 interface IProps {
   onClick: () => void;
