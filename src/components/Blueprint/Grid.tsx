@@ -1,6 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { namedTypes } from 'ast-types';
 
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -10,6 +11,8 @@ import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import Circle from '@/src/components/Blueprint/Circle/Circle';
 
+import Line = namedTypes.Line;
+
 const Grid = () => {
   const areas = useBlueprintStore((state) => state.areas);
   const selectedAreaId = useBlueprintStore((state) => state.selectedAreaId);
@@ -17,11 +20,10 @@ const Grid = () => {
   const selectedServiceId = useBlueprintStore((state) => state.selectedServiceId);
   const isMoving = useBlueprintStore((state) => state.isMoving);
   const viewBox = useBlueprintStore((state) => state.viewBox);
-  const srcPoint = useBlueprintStore((state) => state.srcPoint);
-  const dstPoint = useBlueprintStore((state) => state.dstPoint);
   const lines = useBlueprintStore((state) => state.lines);
   const circles = useBlueprintStore((state) => state.circles);
   const lineDrawingLocation = useBlueprintStore((state) => state.lineDrawingLocation);
+  const lineDrawingMode = useBlueprintStore((state) => state.lineDrawingMode);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService } = useBlueprintStore(
     (state) => state.ServiceAction,
   );
@@ -78,7 +80,7 @@ const Grid = () => {
   return (
     <div className='grid-wrapper w-full h-full overflow-hidden'>
       <ExportButton />
-      {selectedServiceId && !isMoving && (
+      {selectedServiceId && !isMoving && !lineDrawingMode && (
         <>
           {/*<Options serviceType={services[selectedServiceId].type} />*/}
           <CreateLineContainer x={lineDrawingLocation.x} y={lineDrawingLocation.y} />
@@ -135,18 +137,46 @@ const Grid = () => {
                   if (circles[key].x === 0) return null;
                   return <Circle key={key} id={key} cx={circles[key].x} cy={circles[key].y} />;
                 })}
+                {Object.keys(lines).map((key) => {
+                  return (
+                    <line
+                      key={key}
+                      id={key}
+                      x1={lines[key].src.x}
+                      y1={lines[key].src.y}
+                      x2={lines[key].dst.x}
+                      y2={lines[key].dst.y}
+                      strokeWidth={2}
+                      stroke={'black'}
+                    />
+                  );
+                })}
                 {/* Temp Line */}
-                {circles[dstPoint] && circles[dstPoint].x !== 0 && (
-                  <line
-                    key={'tempLine'}
-                    x1={circles[srcPoint].x}
-                    y1={circles[srcPoint].y}
-                    x2={circles[dstPoint].x}
-                    y2={circles[dstPoint].y}
-                    strokeWidth={2}
-                    stroke={'black'}
-                  />
-                )}
+                {/*{circles[dstPoint] && circles[dstPoint].x !== 0 && (*/}
+                {/*  <line*/}
+                {/*    key={'tempLine'}*/}
+                {/*    x1={circles[srcPoint].x}*/}
+                {/*    y1={circles[srcPoint].y}*/}
+                {/*    x2={circles[dstPoint].x}*/}
+                {/*    y2={circles[dstPoint].y}*/}
+                {/*    strokeWidth={2}*/}
+                {/*    stroke={'black'}*/}
+                {/*  />*/}
+                {/*)}*/}
+                {/* Registered Line */}
+                {/*{Object.keys(lines).map((key) => {*/}
+                {/*  return (*/}
+                {/*    <line*/}
+                {/*      key={key}*/}
+                {/*      x1={circles[lines[key].srcId].x}*/}
+                {/*      y1={circles[lines[key].srcId].y}*/}
+                {/*      x2={circles[lines[key].dstId].x}*/}
+                {/*      y2={circles[lines[key].dstId].y}*/}
+                {/*      stroke={'black'}*/}
+                {/*    />*/}
+                {/*  );*/}
+                {/*})}*/}
+
                 <g id='services'>
                   {Object.keys(services).map((key) => (
                     <Service
@@ -172,24 +202,9 @@ const Grid = () => {
                       id={services[key].id}
                       type={services[key].type}
                       lines={services[key].lines}
-                      linkedPoints={services[key].linkedPoints}
                     />
                   ))}
                 </g>
-                {Object.keys(lines).map((key) => {
-                  // console.log(circles[lines[key].srcId]);
-                  // console.log(circles[lines[key].dstId]);
-                  return (
-                    <line
-                      key={key}
-                      x1={circles[lines[key].srcId].x}
-                      y1={circles[lines[key].srcId].y}
-                      x2={circles[lines[key].dstId].x}
-                      y2={circles[lines[key].dstId].y}
-                      stroke={'black'}
-                    />
-                  );
-                })}
               </svg>
             </div>
           ) : (

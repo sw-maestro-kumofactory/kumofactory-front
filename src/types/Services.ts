@@ -1,6 +1,5 @@
 export interface HasLine {
   lines: string[];
-  linkedPoints: string[];
 }
 
 export interface IComponent extends HasLine {

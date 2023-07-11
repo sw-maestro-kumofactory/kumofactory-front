@@ -1,5 +1,6 @@
 import { StateCreator } from 'zustand';
 import { v1 } from 'uuid';
+import { namedTypes } from 'ast-types';
 
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
 import { CommonState } from '@/src/hooks/Store/blueprint/state/CommonState';
@@ -8,6 +9,8 @@ import { LineState } from '@/src/hooks/Store/blueprint/state/LineState';
 import { IArea } from '@/src/types/Area';
 import { Point } from '@/src/types/Common';
 import { getQuadrant } from '@/src/utils/getQuadrant';
+
+import Line = namedTypes.Line;
 
 export type AllBluePrintStates = AreaState & CommonState & ServiceState & LineState;
 
@@ -44,11 +47,17 @@ export const useServiceSlice: StateCreator<
     onMouseDownService: (e, service) => {
       set((state) => {
         if (service) {
+          if (state.lineDrawingMode) {
+            if (state.linkedServiceId && state.curLineId) {
+              state.lines[state.curLineId].dst.componentId = state.linkedServiceId;
+              state.services[state.linkedServiceId].lines.push(state.curLineId);
+              state.services[state.lines[state.curLineId].src.componentId].lines.push(state.curLineId);
+            }
+          }
           const newInterval = {
             x: e.clientX - service.x * state.scale,
             y: e.clientY - service.y * state.scale,
           };
-          const tmpSelectedServiceId = state.selectedServiceId;
           state.draggable = true;
           state.selectedAreaId = null;
           state.selectedServiceId = service.id;
@@ -57,48 +66,9 @@ export const useServiceSlice: StateCreator<
             x: service.x * state.scale + state.gridSrc.x + 100 * state.scale,
             y: service.y * state.scale + state.gridSrc.y,
           };
-          if (state.lineDrawingMode) {
-            const id = v1().toString();
 
-            state.lines[id] = {
-              id: id,
-              srcId: state.srcPoint,
-              dstId: state.dstPoint,
-            };
-
-            // service들을 연결할때 처리하는 부분
-            if (tmpSelectedServiceId) {
-              if (state.linkedServiceId) {
-                state.services[state.linkedServiceId].lines.push(id);
-                state.services[state.linkedServiceId].linkedPoints.push(state.dstPoint);
-              }
-              state.services[tmpSelectedServiceId].lines.push(id);
-              state.services[tmpSelectedServiceId].linkedPoints.push(state.srcPoint);
-              // 새로운 점 만들기
-              const tmpXY = state.circles[state.srcPoint];
-              state.srcPoint = v1().toString();
-              state.dstPoint = v1().toString();
-              state.circles[state.srcPoint] = {
-                x: tmpXY.x,
-                y: tmpXY.y,
-                id: state.srcPoint,
-              };
-              state.circles[state.dstPoint] = {
-                x: tmpXY.x,
-                y: tmpXY.y,
-                id: state.dstPoint,
-              };
-            } else {
-              state.srcPoint = state.dstPoint;
-              const newDstId = v1().toString();
-              state.dstPoint = newDstId;
-              state.circles[newDstId] = {
-                x: state.circles[state.srcPoint].x,
-                y: state.circles[state.srcPoint].y,
-                id: newDstId,
-              };
-            }
-          }
+          state.linkedServiceId = undefined;
+          state.lineDrawingMode = false;
         }
         return state;
       });
@@ -125,41 +95,34 @@ export const useLineSlice: StateCreator<
   lines: {},
   srcPoint: '',
   dstPoint: '',
+  curLineId: undefined,
   linkedServiceId: undefined,
   LineAction: {
+    // flag === true => lineDrawing mode on
+    // flag === false => lineDrawing mode off
     setLineDrawingMode: (flag: boolean) =>
       set((state) => {
-        if (flag) {
+        if (flag && state.selectedServiceId) {
           state.lineDrawingMode = true;
-          const srcId = v1().toString();
-          const dstId = v1().toString();
-          state.srcPoint = srcId;
-          state.dstPoint = dstId;
-          state.circles[srcId] = {
-            x: 0,
-            y: 0,
-            id: srcId,
+          const lineId = v1().toString();
+          state.lines[lineId] = {
+            id: lineId,
+            src: {
+              x: state.services[state.selectedServiceId].x + 40,
+              y: state.services[state.selectedServiceId].y + 40,
+              componentId: state.selectedServiceId,
+            },
+            dst: {
+              x: state.services[state.selectedServiceId].x + 40,
+              y: state.services[state.selectedServiceId].y + 40,
+              componentId: '',
+            },
           };
-          state.circles[dstId] = {
-            x: 0,
-            y: 0,
-            id: dstId,
-          };
+          state.curLineId = lineId;
         } else {
-          if (!state.linkedServiceId && state.selectedServiceId) {
-            state.circles = Object.keys(state.circles).reduce((acc: Record<string, Point>, key) => {
-              if (key !== state.dstPoint && key !== state.srcPoint) {
-                acc[key] = state.circles[key];
-              }
-              return acc;
-            }, {});
-          } else {
-            state.circles = Object.keys(state.circles).reduce((acc: Record<string, Point>, key) => {
-              if (key !== state.dstPoint) {
-                acc[key] = state.circles[key];
-              }
-              return acc;
-            }, {});
+          if (state.curLineId) {
+            delete state.lines[state.curLineId];
+            state.curLineId = undefined;
           }
           state.lineDrawingMode = false;
           state.srcPoint = '';
@@ -296,28 +259,6 @@ export const useCommonSlice: StateCreator<
       }),
     onClickGrid: (e) => {
       set((state) => {
-        if (state.lineDrawingMode) {
-          const id = v1().toString();
-          state.lines[id] = {
-            id: id,
-            srcId: state.srcPoint,
-            dstId: state.dstPoint,
-          };
-
-          if (state.selectedServiceId) {
-            state.services[state.selectedServiceId].lines.push(id);
-            state.services[state.selectedServiceId].linkedPoints.push(state.srcPoint);
-          }
-
-          state.srcPoint = state.dstPoint;
-          const newDstId = v1().toString();
-          state.dstPoint = newDstId;
-          state.circles[newDstId] = {
-            x: state.circles[state.srcPoint].x,
-            y: state.circles[state.srcPoint].y,
-            id: newDstId,
-          };
-        }
         state.selectedServiceId = null;
         state.selectedAreaId = null;
         state.resizable = {
@@ -348,34 +289,28 @@ export const useCommonSlice: StateCreator<
       set((state) => {
         const gridMouseX = (e.clientX - state.gridSrc.x) / state.scale;
         const gridMouseY = (e.clientY - state.gridSrc.y) / state.scale;
-        if (state.lineDrawingMode) {
-          if (state.selectedServiceId) {
-            const service = state.services[state.selectedServiceId];
-            const sx = gridMouseX - service.x - 40 * state.scale;
-            const sy = gridMouseY - service.y - 40 * state.scale;
-            const currentX = service.x + 40;
-            const currentY = service.y + 40;
-            const { x, y } = getQuadrant(sx, sy, currentX, currentY);
-            state.circles[state.srcPoint].x = x;
-            state.circles[state.srcPoint].y = y;
-
-            if (state.linkedServiceId) {
-              const linkedService = state.services[state.linkedServiceId];
-              const cx = service.x - linkedService.x + 40;
-              const cy = service.y - linkedService.y + 40;
-              const { x, y } = getQuadrant(cx, cy, linkedService.x + 40, linkedService.y + 40);
-              state.circles[state.dstPoint].x = x;
-              state.circles[state.dstPoint].y = y;
-            } else {
-              state.circles[state.dstPoint].x = gridMouseX;
-              state.circles[state.dstPoint].y = gridMouseY;
-            }
+        if (state.lineDrawingMode && state.curLineId) {
+          if (state.linkedServiceId) {
+            const service = state.services[state.lines[state.curLineId].src.componentId];
+            // legacy
+            const linkedService = state.services[state.linkedServiceId];
+            const cx = service.x - linkedService.x + 40;
+            const cy = service.y - linkedService.y + 40;
+            const { x, y } = getQuadrant(cx, cy, linkedService.x + 40, linkedService.y + 40);
+            state.lines[state.curLineId].dst.x = x;
+            state.lines[state.curLineId].dst.y = y;
           } else {
-            state.circles[state.dstPoint].x = gridMouseX;
-            state.circles[state.dstPoint].y = gridMouseY;
+            state.lines[state.curLineId].dst.x = gridMouseX;
+            state.lines[state.curLineId].dst.y = gridMouseY;
           }
+          // src의 좌표 움직이기
+          const service = state.services[state.lines[state.curLineId].src.componentId];
+          const cx = gridMouseX - service.x + 40;
+          const cy = gridMouseY - service.y + 40;
+          const { x, y } = getQuadrant(cx, cy, service.x + 40, service.y + 40);
+          state.lines[state.curLineId].src.x = x;
+          state.lines[state.curLineId].src.y = y;
         }
-
         if (state.resizable.isResizable && state.selectedAreaId) {
           const area = state.areas[state.selectedAreaId];
           const calculatedSX = area.sx * state.scale;
@@ -416,27 +351,28 @@ export const useCommonSlice: StateCreator<
 
           if (state.selectedServiceId) {
             const service = state.services[state.selectedServiceId];
+
             state.services[state.selectedServiceId].lines.forEach((line) => {
-              // TODO: Update this logic
-              const src = state.lines[line].srcId;
-              const dst = state.lines[line].dstId;
-              if (service.linkedPoints.includes(src)) {
-                const cx = state.circles[dst].x - service.x - 40;
-                const cy = state.circles[dst].y - service.y - 40;
-                const { x, y } = getQuadrant(cx, cy, newX + 40, newY + 40);
-                state.circles[src].x = x;
-                state.circles[src].y = y;
-              } else if (service.linkedPoints.includes(dst)) {
-                // TODO
-                const standardX = service.x;
-                const standardY = service.y;
-                const cx = state.circles[src].x - service.x + 40;
-                const cy = state.circles[src].y - service.y + 40;
-                const { x, y } = getQuadrant(cx, cy, standardX + 40, standardY + 40);
-                state.circles[dst].x = x;
-                state.circles[dst].y = y;
-              }
+              const srcService = state.services[state.lines[line].src.componentId];
+              const dstService = state.services[state.lines[line].dst.componentId];
+              const src = state.lines[line].src;
+              const dst = state.lines[line].dst;
+
+              // 연결된 선 둘 다 처리하자.
+              // 1. src
+              const srcSx = dstService.x - srcService.x;
+              const srcSy = dstService.y - srcService.y;
+              const { x: srcX, y: srcY } = getQuadrant(srcSx, srcSy, srcService.x + 40, srcService.y + 40);
+              src.x = srcX;
+              src.y = srcY;
+              // 2. dst
+              const dstSx = srcService.x - dstService.x;
+              const dstSy = srcService.y - dstService.y;
+              const { x: dstX, y: dstY } = getQuadrant(dstSx, dstSy, dstService.x + 40, dstService.y + 40);
+              dst.x = dstX;
+              dst.y = dstY;
             });
+
             service.x = newX;
             service.y = newY;
           } else if (state.selectedAreaId) {
@@ -461,6 +397,7 @@ export const useCommonSlice: StateCreator<
             Object.entries(state.areas).filter(([key, value]) => key !== state.selectedAreaId),
           );
         }
+        // TODO line 선택, 제거할 수 있도록
         // else if(state.selectedLineId) {
 
         // 모든 상태 null
