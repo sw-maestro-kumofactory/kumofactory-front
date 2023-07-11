@@ -28,7 +28,15 @@ export const useServiceSlice: StateCreator<
     onMouseEnterService: (event, service) => {
       set((state) => {
         if (state.lineDrawingMode) {
-          //   for linking services with lines
+          state.linkedServiceId = service!.id;
+        }
+        return state;
+      });
+    },
+    onMouseLeaveService: (e, service) => {
+      set((state) => {
+        if (state.lineDrawingMode) {
+          state.linkedServiceId = undefined;
         }
         return state;
       });
@@ -40,6 +48,7 @@ export const useServiceSlice: StateCreator<
             x: e.clientX - service.x * state.scale,
             y: e.clientY - service.y * state.scale,
           };
+          const tmpSelectedServiceId = state.selectedServiceId;
           state.draggable = true;
           state.selectedAreaId = null;
           state.selectedServiceId = service.id;
@@ -48,6 +57,48 @@ export const useServiceSlice: StateCreator<
             x: service.x * state.scale + state.gridSrc.x + 100 * state.scale,
             y: service.y * state.scale + state.gridSrc.y,
           };
+          if (state.lineDrawingMode) {
+            const id = v1().toString();
+
+            state.lines[id] = {
+              id: id,
+              srcId: state.srcPoint,
+              dstId: state.dstPoint,
+            };
+
+            // service들을 연결할때 처리하는 부분
+            if (tmpSelectedServiceId) {
+              if (state.linkedServiceId) {
+                state.services[state.linkedServiceId].lines.push(id);
+                state.services[state.linkedServiceId].linkedPoints.push(state.dstPoint);
+              }
+              state.services[tmpSelectedServiceId].lines.push(id);
+              state.services[tmpSelectedServiceId].linkedPoints.push(state.srcPoint);
+              // 새로운 점 만들기
+              const tmpXY = state.circles[state.srcPoint];
+              state.srcPoint = v1().toString();
+              state.dstPoint = v1().toString();
+              state.circles[state.srcPoint] = {
+                x: tmpXY.x,
+                y: tmpXY.y,
+                id: state.srcPoint,
+              };
+              state.circles[state.dstPoint] = {
+                x: tmpXY.x,
+                y: tmpXY.y,
+                id: state.dstPoint,
+              };
+            } else {
+              state.srcPoint = state.dstPoint;
+              const newDstId = v1().toString();
+              state.dstPoint = newDstId;
+              state.circles[newDstId] = {
+                x: state.circles[state.srcPoint].x,
+                y: state.circles[state.srcPoint].y,
+                id: newDstId,
+              };
+            }
+          }
         }
         return state;
       });
@@ -74,6 +125,7 @@ export const useLineSlice: StateCreator<
   lines: {},
   srcPoint: '',
   dstPoint: '',
+  linkedServiceId: undefined,
   LineAction: {
     setLineDrawingMode: (flag: boolean) =>
       set((state) => {
@@ -94,7 +146,7 @@ export const useLineSlice: StateCreator<
             id: dstId,
           };
         } else {
-          if (state.selectedServiceId) {
+          if (!state.linkedServiceId && state.selectedServiceId) {
             state.circles = Object.keys(state.circles).reduce((acc: Record<string, Point>, key) => {
               if (key !== state.dstPoint && key !== state.srcPoint) {
                 acc[key] = state.circles[key];
@@ -251,8 +303,10 @@ export const useCommonSlice: StateCreator<
             srcId: state.srcPoint,
             dstId: state.dstPoint,
           };
+
           if (state.selectedServiceId) {
             state.services[state.selectedServiceId].lines.push(id);
+            state.services[state.selectedServiceId].linkedPoints.push(state.srcPoint);
           }
 
           state.srcPoint = state.dstPoint;
@@ -292,29 +346,42 @@ export const useCommonSlice: StateCreator<
     },
     onMouseMove: (e) => {
       set((state) => {
+        const gridMouseX = (e.clientX - state.gridSrc.x) / state.scale;
+        const gridMouseY = (e.clientY - state.gridSrc.y) / state.scale;
         if (state.lineDrawingMode) {
           if (state.selectedServiceId) {
-            const sx =
-              (e.clientX - state.gridSrc.x) / state.scale -
-              state.services[state.selectedServiceId].x -
-              40 * state.scale;
-            const sy =
-              (e.clientY - state.gridSrc.y) / state.scale -
-              state.services[state.selectedServiceId].y -
-              40 * state.scale;
-            const currentX = state.services[state.selectedServiceId].x + 40;
-            const currentY = state.services[state.selectedServiceId].y + 40;
+            const service = state.services[state.selectedServiceId];
+            const sx = gridMouseX - service.x - 40 * state.scale;
+            const sy = gridMouseY - service.y - 40 * state.scale;
+            const currentX = service.x + 40;
+            const currentY = service.y + 40;
             const { x, y } = getQuadrant(sx, sy, currentX, currentY);
             state.circles[state.srcPoint].x = x;
             state.circles[state.srcPoint].y = y;
+
+            if (state.linkedServiceId) {
+              const linkedService = state.services[state.linkedServiceId];
+              const cx = service.x - linkedService.x + 40;
+              const cy = service.y - linkedService.y + 40;
+              const { x, y } = getQuadrant(cx, cy, linkedService.x + 40, linkedService.y + 40);
+              state.circles[state.dstPoint].x = x;
+              state.circles[state.dstPoint].y = y;
+            } else {
+              state.circles[state.dstPoint].x = gridMouseX;
+              state.circles[state.dstPoint].y = gridMouseY;
+            }
+          } else {
+            state.circles[state.dstPoint].x = gridMouseX;
+            state.circles[state.dstPoint].y = gridMouseY;
           }
-          state.circles[state.dstPoint].x = (e.clientX - state.gridSrc.x) / state.scale;
-          state.circles[state.dstPoint].y = (e.clientY - state.gridSrc.y) / state.scale;
         }
+
         if (state.resizable.isResizable && state.selectedAreaId) {
-          const calculatedSX = state.areas[state.selectedAreaId].sx * state.scale;
-          const calculatedSY = state.areas[state.selectedAreaId].sy * state.scale;
+          const area = state.areas[state.selectedAreaId];
+          const calculatedSX = area.sx * state.scale;
+          const calculatedSY = area.sy * state.scale;
           state.isMoving = true;
+
           if (state.resizable.dir === 1) {
             // 동
             const newWidth = (e.clientX - state.gridSrc.x - calculatedSX) / state.scale;
@@ -322,7 +389,7 @@ export const useCommonSlice: StateCreator<
           } else if (state.resizable.dir === 2) {
             // 서
             const diff = (calculatedSX - e.clientX + state.gridSrc.x) / state.scale;
-            const newWidth = state.areas[state.selectedAreaId].width + diff;
+            const newWidth = area.width + diff;
             const newSx = (e.clientX - state.gridSrc.x) / state.scale;
             if (newWidth > 0) {
               state.areas[state.selectedAreaId].width = newWidth;
@@ -335,7 +402,7 @@ export const useCommonSlice: StateCreator<
           } else if (state.resizable.dir === 4) {
             // 북
             const diff = (calculatedSY - e.clientY + state.gridSrc.y) / state.scale;
-            const newHeight = state.areas[state.selectedAreaId].height + diff;
+            const newHeight = area.height + diff;
             const newSy = (e.clientY - state.gridSrc.y) / state.scale;
             if (newHeight > 0) {
               state.areas[state.selectedAreaId].height = newHeight;
@@ -346,34 +413,64 @@ export const useCommonSlice: StateCreator<
           state.isMoving = true;
           const newX = Math.round((e.clientX - state.interval.x) / state.scale / 20) * 20;
           const newY = Math.round((e.clientY - state.interval.y) / state.scale / 20) * 20;
+
           if (state.selectedServiceId) {
-            const currentX = state.services[state.selectedServiceId].x;
-            const currentY = state.services[state.selectedServiceId].y;
-            state.services[state.selectedServiceId].lines.map((line) => {
+            const service = state.services[state.selectedServiceId];
+            state.services[state.selectedServiceId].lines.forEach((line) => {
+              // TODO: Update this logic
               const src = state.lines[line].srcId;
               const dst = state.lines[line].dstId;
-              const cx = state.circles[dst].x - currentX - 40;
-              const cy = state.circles[dst].y - currentY - 40;
-              const { x, y } = getQuadrant(cx, cy, newX + 40, newY + 40);
-              state.circles[src].x = x;
-              state.circles[src].y = y;
+              if (service.linkedPoints.includes(src)) {
+                const cx = state.circles[dst].x - service.x - 40;
+                const cy = state.circles[dst].y - service.y - 40;
+                const { x, y } = getQuadrant(cx, cy, newX + 40, newY + 40);
+                state.circles[src].x = x;
+                state.circles[src].y = y;
+              } else if (service.linkedPoints.includes(dst)) {
+                // TODO
+                const standardX = service.x;
+                const standardY = service.y;
+                const cx = state.circles[src].x - service.x + 40;
+                const cy = state.circles[src].y - service.y + 40;
+                const { x, y } = getQuadrant(cx, cy, standardX + 40, standardY + 40);
+                state.circles[dst].x = x;
+                state.circles[dst].y = y;
+              }
             });
-            state.services[state.selectedServiceId].x = newX;
-            state.services[state.selectedServiceId].y = newY;
+            service.x = newX;
+            service.y = newY;
           } else if (state.selectedAreaId) {
             state.areas[state.selectedAreaId].sx = newX;
             state.areas[state.selectedAreaId].sy = newY;
           }
-        } else {
         }
+
         return state;
       });
     },
     clearComponent: () => {
-      set(() => ({
-        selectedServiceId: null,
-        selectedAreaId: null,
-      }));
+      set((state) => {
+        if (state.selectedServiceId) {
+          //   selectedService 제거
+          state.services = Object.fromEntries(
+            Object.entries(state.services).filter(([key, value]) => key !== state.selectedServiceId),
+          );
+        } else if (state.selectedAreaId) {
+          //   selectedArea 제거
+          state.areas = Object.fromEntries(
+            Object.entries(state.areas).filter(([key, value]) => key !== state.selectedAreaId),
+          );
+        }
+        // else if(state.selectedLineId) {
+
+        // 모든 상태 null
+        state.selectedServiceId = null;
+        state.selectedAreaId = null;
+        state.isMoving = false;
+        state.lineDrawingMode = false;
+        state.linkedServiceId = undefined;
+        return state;
+      });
     },
   },
 });

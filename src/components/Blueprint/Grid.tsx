@@ -22,21 +22,34 @@ const Grid = () => {
   const lines = useBlueprintStore((state) => state.lines);
   const circles = useBlueprintStore((state) => state.circles);
   const lineDrawingLocation = useBlueprintStore((state) => state.lineDrawingLocation);
-  const { onMouseDownService, onMouseEnterService } = useBlueprintStore((state) => state.ServiceAction);
-  const { onClickGrid, onMouseUp, onMouseMove, setGridSrc, setBlueprintSrc, setViewBox, setScale, setStdScale } =
-    useBlueprintStore((state) => state.CommonAction);
+  const { onMouseDownService, onMouseEnterService, onMouseLeaveService } = useBlueprintStore(
+    (state) => state.ServiceAction,
+  );
+  const {
+    onClickGrid,
+    onMouseUp,
+    onMouseMove,
+    setGridSrc,
+    setBlueprintSrc,
+    setViewBox,
+    setScale,
+    setStdScale,
+    clearComponent,
+  } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
   const {} = useBlueprintStore((state) => state.AreaAction);
 
   // @ts-ignore
-  function handleScaleChange(e) {
+  const handleScaleChange = (e) => {
     setScale(e.instance.transformState.scale);
-  }
+  };
 
   useEffect(() => {
     const escKeyInput = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setLineDrawingMode(false);
+      } else if (e.key === 'Backspace' || e.key === 'Delete') {
+        clearComponent();
       }
     };
     const handleResize = () => {
@@ -62,7 +75,6 @@ const Grid = () => {
       setGridSrc();
     }
   }, [viewBox]);
-
   return (
     <div className='grid-wrapper w-full h-full overflow-hidden'>
       <ExportButton />
@@ -111,7 +123,6 @@ const Grid = () => {
                       <path d='M 0 0 L 80 0 80 80 0 80 z' stroke='black' strokeWidth='1.5' fill='none' />
                     </pattern>
                   </defs>
-                  {/* 이 부분 고정 */}
                   <rect fill='url(#boldPattern)' width={1040} height={1360} className='cursor-move' />
                   <rect fill='url(#grayPattern)' width={1040} height={1360} className='cursor-move' />
                 </g>
@@ -120,40 +131,6 @@ const Grid = () => {
                     <AZ key={areas[key].id} Area={areas[key]} activate={selectedAreaId === areas[key].id} />
                   ))}
                 </g>
-                <g id='services'>
-                  {Object.keys(services).map((key) => (
-                    <Service
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        onMouseDownService(e, services[key]);
-                      }}
-                      onMouseEnter={(e) => {
-                        e.stopPropagation();
-                        onMouseEnterService(e, services[key]);
-                      }}
-                      key={services[key].id}
-                      isActive={services[key].id === selectedServiceId}
-                      x={services[key].x}
-                      y={services[key].y}
-                      id={services[key].id}
-                      type={services[key].type}
-                      lines={services[key].lines}
-                    />
-                  ))}
-                </g>
-                {Object.keys(lines).map((key) => (
-                  <line
-                    key={key}
-                    x1={circles[lines[key].srcId].x}
-                    y1={circles[lines[key].srcId].y}
-                    x2={circles[lines[key].dstId].x}
-                    y2={circles[lines[key].dstId].y}
-                    stroke={'black'}
-                  />
-                ))}
                 {Object.keys(circles).map((key) => {
                   if (circles[key].x === 0) return null;
                   return <Circle key={key} id={key} cx={circles[key].x} cy={circles[key].y} />;
@@ -170,6 +147,49 @@ const Grid = () => {
                     stroke={'black'}
                   />
                 )}
+                <g id='services'>
+                  {Object.keys(services).map((key) => (
+                    <Service
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                        onMouseDownService(e, services[key]);
+                      }}
+                      onMouseEnter={(e) => {
+                        e.stopPropagation();
+                        onMouseEnterService(e, services[key]);
+                      }}
+                      onMouseLeave={(e) => {
+                        e.stopPropagation();
+                        onMouseLeaveService(e, services[key]);
+                      }}
+                      key={services[key].id}
+                      isActive={services[key].id === selectedServiceId}
+                      x={services[key].x}
+                      y={services[key].y}
+                      id={services[key].id}
+                      type={services[key].type}
+                      lines={services[key].lines}
+                      linkedPoints={services[key].linkedPoints}
+                    />
+                  ))}
+                </g>
+                {Object.keys(lines).map((key) => {
+                  // console.log(circles[lines[key].srcId]);
+                  // console.log(circles[lines[key].dstId]);
+                  return (
+                    <line
+                      key={key}
+                      x1={circles[lines[key].srcId].x}
+                      y1={circles[lines[key].srcId].y}
+                      x2={circles[lines[key].dstId].x}
+                      y2={circles[lines[key].dstId].y}
+                      stroke={'black'}
+                    />
+                  );
+                })}
               </svg>
             </div>
           ) : (
