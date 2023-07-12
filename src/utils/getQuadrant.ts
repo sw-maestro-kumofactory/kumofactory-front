@@ -8,15 +8,19 @@ export const getQuadrant = (x: number, y: number, standardX: number, standardY: 
   const absY = Math.abs(y);
   if (x >= 0 && absX >= absY) {
     // 동쪽
+    console.log('동쪽');
     return { x: standardX + 40, y: standardY };
   } else if (y >= 0 && absX <= absY) {
     // 남쪽
+    console.log('남쪽');
     return { x: standardX, y: standardY + 40 };
   } else if (x <= 0 && absX >= absY) {
     // 서쪽
+    console.log('서쪽');
     return { x: standardX - 40, y: standardY };
   } else if (y <= 0 && absX <= absY) {
     // 북쪽
+    console.log('북쪽');
     return { x: standardX, y: standardY - 40 };
   } else {
     return { x: 0, y: 0 };

@@ -53,6 +53,7 @@ export const useServiceSlice: StateCreator<
               state.services[state.linkedServiceId].lines.push(state.curLineId);
               state.services[state.lines[state.curLineId].src.componentId].lines.push(state.curLineId);
             }
+            state.curLineId = undefined;
           }
           const newInterval = {
             x: e.clientX - service.x * state.scale,
@@ -223,7 +224,7 @@ export const useCommonSlice: StateCreator<
     setStdScale: () =>
       set((state) => {
         const background = document.querySelector('#background')!.getBoundingClientRect();
-        const tmpStdScale = 1080 / background.width;
+        const tmpStdScale = 1040 / background.width;
         state.scale = state.scale / tmpStdScale;
         state.stdScale = tmpStdScale;
         return state;
@@ -292,7 +293,6 @@ export const useCommonSlice: StateCreator<
         if (state.lineDrawingMode && state.curLineId) {
           if (state.linkedServiceId) {
             const service = state.services[state.lines[state.curLineId].src.componentId];
-            // legacy
             const linkedService = state.services[state.linkedServiceId];
             const cx = service.x - linkedService.x + 40;
             const cy = service.y - linkedService.y + 40;
@@ -305,8 +305,8 @@ export const useCommonSlice: StateCreator<
           }
           // src의 좌표 움직이기
           const service = state.services[state.lines[state.curLineId].src.componentId];
-          const cx = gridMouseX - service.x + 40;
-          const cy = gridMouseY - service.y + 40;
+          const cx = gridMouseX - service.x - 40;
+          const cy = gridMouseY - service.y - 40;
           const { x, y } = getQuadrant(cx, cy, service.x + 40, service.y + 40);
           state.lines[state.curLineId].src.x = x;
           state.lines[state.curLineId].src.y = y;
@@ -352,6 +352,7 @@ export const useCommonSlice: StateCreator<
           if (state.selectedServiceId) {
             const service = state.services[state.selectedServiceId];
 
+            //선택된 선 처리
             state.services[state.selectedServiceId].lines.forEach((line) => {
               const srcService = state.services[state.lines[line].src.componentId];
               const dstService = state.services[state.lines[line].dst.componentId];

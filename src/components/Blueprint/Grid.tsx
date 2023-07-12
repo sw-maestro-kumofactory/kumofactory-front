@@ -90,7 +90,6 @@ const Grid = () => {
         minScale={0.5}
         initialScale={1}
         maxScale={10}
-        defaultScale={1}
         doubleClick={{ disabled: true }}
         onTransformed={(e: any) => {
           setGridSrc();
@@ -151,31 +150,6 @@ const Grid = () => {
                     />
                   );
                 })}
-                {/* Temp Line */}
-                {/*{circles[dstPoint] && circles[dstPoint].x !== 0 && (*/}
-                {/*  <line*/}
-                {/*    key={'tempLine'}*/}
-                {/*    x1={circles[srcPoint].x}*/}
-                {/*    y1={circles[srcPoint].y}*/}
-                {/*    x2={circles[dstPoint].x}*/}
-                {/*    y2={circles[dstPoint].y}*/}
-                {/*    strokeWidth={2}*/}
-                {/*    stroke={'black'}*/}
-                {/*  />*/}
-                {/*)}*/}
-                {/* Registered Line */}
-                {/*{Object.keys(lines).map((key) => {*/}
-                {/*  return (*/}
-                {/*    <line*/}
-                {/*      key={key}*/}
-                {/*      x1={circles[lines[key].srcId].x}*/}
-                {/*      y1={circles[lines[key].srcId].y}*/}
-                {/*      x2={circles[lines[key].dstId].x}*/}
-                {/*      y2={circles[lines[key].dstId].y}*/}
-                {/*      stroke={'black'}*/}
-                {/*    />*/}
-                {/*  );*/}
-                {/*})}*/}
 
                 <g id='services'>
                   {Object.keys(services).map((key) => (
