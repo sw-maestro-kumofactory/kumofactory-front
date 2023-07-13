@@ -17,7 +17,7 @@ export const useUserSlice: StateCreator<
         state.id = v1().toString();
         return state;
       }),
-    setAccessToken: (token: string) =>
+    setAccessToken: (token: string | null) =>
       set((state) => {
         state.accessToken = token;
         return state;

@@ -1,7 +1,7 @@
 import { Coordinate, Point } from '@/src/types/Common';
 
 export interface CommonState {
-  circles: Record<string, Point>;
+  name: string;
   interval: Coordinate;
   gridSrc: Coordinate;
   blueprintSrc: Coordinate;
@@ -15,6 +15,8 @@ export interface CommonState {
     height: number;
   };
   CommonAction: {
+    setName: (e: React.SyntheticEvent) => void;
+    blueprintToJson: () => void;
     setBlueprintSrc: (x: number, y: number) => void;
     setGridSrc: () => void;
     setStdScale: () => void;

@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { accessTokenState } from '@/src/atoms/auth';
+
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 export const useLogin = () => {
-  const setAccessToken = useSetRecoilState(accessTokenState);
+  const setAccessToken = useAuthStore((state) => state.UserAction.setAccessToken);
 
   const login = (token: string) => {
+    setAccessToken(token);
     return 0;
   };
 

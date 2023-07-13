@@ -1,8 +1,8 @@
 export interface UserState {
   id: string;
-  accessToken: string;
+  accessToken: string | null;
   UserAction: {
-    setAccessToken: (token: string) => void;
+    setAccessToken: (token: string | null) => void;
     setId: () => void;
   };
 }

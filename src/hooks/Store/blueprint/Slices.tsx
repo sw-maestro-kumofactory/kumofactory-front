@@ -1,16 +1,13 @@
 import { StateCreator } from 'zustand';
 import { v1 } from 'uuid';
-import { namedTypes } from 'ast-types';
 
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
 import { CommonState } from '@/src/hooks/Store/blueprint/state/CommonState';
 import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
 import { LineState } from '@/src/hooks/Store/blueprint/state/LineState';
 import { IArea } from '@/src/types/Area';
-import { Point } from '@/src/types/Common';
 import { getQuadrant } from '@/src/utils/getQuadrant';
-
-import Line = namedTypes.Line;
+import { IBlueprintResponse } from '@/src/api/template';
 
 export type AllBluePrintStates = AreaState & CommonState & ServiceState & LineState;
 
@@ -198,7 +195,6 @@ export const useCommonSlice: StateCreator<
   [['zustand/devtools', never], ['zustand/immer', never]],
   CommonState
 > = (set, get) => ({
-  circles: {},
   interval: {
     x: 0,
     y: 0,
@@ -218,9 +214,50 @@ export const useCommonSlice: StateCreator<
     height: 0,
   },
   scale: 1,
+  name: 'My blueprint',
   oneByFourPoint: 20,
   stdScale: null,
   CommonAction: {
+    setName: (e: React.SyntheticEvent) => {
+      set((state) => {
+        state.name = e.target.value;
+        return state;
+      });
+    },
+    blueprintToJson: () => {
+      const json: IBlueprintResponse = {
+        name: '',
+        components: [],
+        links: [],
+      };
+      json['name'] = v1().toString();
+      json['components'] = [];
+      for (const service of Object.values(get().services)) {
+        json['components'].push({
+          id: service.id,
+          x: service.x,
+          y: service.y,
+          type: service.type,
+        });
+      }
+      json['links'] = [];
+      for (const line of Object.values(get().lines)) {
+        json['links'].push({
+          id: line.id,
+          src: {
+            x: line.src.x,
+            y: line.src.y,
+            componentId: line.src.componentId,
+          },
+          dst: {
+            x: line.dst.x,
+            y: line.dst.y,
+            componentId: line.dst.componentId,
+          },
+        });
+      }
+      return json;
+    },
     setStdScale: () =>
       set((state) => {
         const background = document.querySelector('#background')!.getBoundingClientRect();

@@ -1,7 +1,6 @@
 'use client';
 import { useEffect } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { namedTypes } from 'ast-types';
 
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -9,9 +8,8 @@ import Loading from '@/src/components/common/Loading';
 import { ExportButton } from '@/src/components/Blueprint/FloatingButton/Export/ExportButton';
 import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
-import Circle from '@/src/components/Blueprint/Circle/Circle';
-
-import Line = namedTypes.Line;
+import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
+import { postTemplateData } from '@/src/api/template';
 
 const Grid = () => {
   const areas = useBlueprintStore((state) => state.areas);
@@ -21,7 +19,6 @@ const Grid = () => {
   const isMoving = useBlueprintStore((state) => state.isMoving);
   const viewBox = useBlueprintStore((state) => state.viewBox);
   const lines = useBlueprintStore((state) => state.lines);
-  const circles = useBlueprintStore((state) => state.circles);
   const lineDrawingLocation = useBlueprintStore((state) => state.lineDrawingLocation);
   const lineDrawingMode = useBlueprintStore((state) => state.lineDrawingMode);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService } = useBlueprintStore(
@@ -37,6 +34,7 @@ const Grid = () => {
     setScale,
     setStdScale,
     clearComponent,
+    blueprintToJson,
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
   const {} = useBlueprintStore((state) => state.AreaAction);
@@ -77,9 +75,23 @@ const Grid = () => {
       setGridSrc();
     }
   }, [viewBox]);
+
   return (
     <div className='grid-wrapper w-full h-full overflow-hidden'>
       <ExportButton />
+      <BlueprintNameField name='1234' setName={() => {}} />
+      <div className='absolute right-40 top-28 select-none z-10'>
+        <button
+          onClick={() => {
+            const d = postTemplateData(blueprintToJson());
+            console.log(d);
+          }}
+          className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+        >
+          Send
+        </button>
+        <input type='file' id='fileInput' className='hidden' />
+      </div>
       {selectedServiceId && !isMoving && !lineDrawingMode && (
         <>
           {/*<Options serviceType={services[selectedServiceId].type} />*/}
@@ -123,19 +135,19 @@ const Grid = () => {
                     <pattern id='boldPattern' width='80' height='80' patternUnits='userSpaceOnUse'>
                       <path d='M 0 0 L 80 0 80 80 0 80 z' stroke='black' strokeWidth='1.5' fill='none' />
                     </pattern>
+                    <pattern id='dottedPattern' width='20' height='20' patternUnits='userSpaceOnUse'>
+                      <circle cx='1' cy='1' r='1' fill='gray' />
+                    </pattern>
                   </defs>
-                  <rect fill='url(#boldPattern)' width={1040} height={1360} className='cursor-move' />
-                  <rect fill='url(#grayPattern)' width={1040} height={1360} className='cursor-move' />
+                  {/*<rect fill='url(#boldPattern)' width={1040} height={1360} className='cursor-move' />*/}
+                  {/*<rect fill='url(#grayPattern)' width={1040} height={1360} className='cursor-move' />*/}
+                  <rect fill='url(#dottedPattern)' width={1040} height={1360} className='cursor-move' />
                 </g>
                 <g id='zone'>
                   {Object.keys(areas).map((key) => (
                     <AZ key={areas[key].id} Area={areas[key]} activate={selectedAreaId === areas[key].id} />
                   ))}
                 </g>
-                {Object.keys(circles).map((key) => {
-                  if (circles[key].x === 0) return null;
-                  return <Circle key={key} id={key} cx={circles[key].x} cy={circles[key].y} />;
-                })}
                 {Object.keys(lines).map((key) => {
                   return (
                     <line
@@ -150,7 +162,6 @@ const Grid = () => {
                     />
                   );
                 })}
-
                 <g id='services'>
                   {Object.keys(services).map((key) => (
                     <Service
