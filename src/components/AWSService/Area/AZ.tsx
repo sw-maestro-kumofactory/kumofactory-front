@@ -77,6 +77,7 @@ const AZ = ({ Area, activate }: IProps) => {
           />
         </>
       )}
+
       <rect
         x={Area.sx}
         y={Area.sy}

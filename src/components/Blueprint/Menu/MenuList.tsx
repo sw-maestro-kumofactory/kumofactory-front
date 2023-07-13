@@ -12,7 +12,7 @@ const MenuBar = () => {
   return (
     <div className=' overflow-x-hidden w-[380px] min-w-[380px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
       <Title title='REGION' />
-      <select className=' appearance-none w-80 h-8 mx-4 my-2 '>
+      <select className='appearance-none w-80 h-8 mx-4 my-2 '>
         {regionList.map((region) => (
           <option key={region} value={region}>
             {region}

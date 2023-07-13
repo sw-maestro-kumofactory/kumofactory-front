@@ -34,7 +34,7 @@ const Service = (props: IProps) => {
     >
       {serviceFactory.getSvg({ type: props.type })}
       {props.isActive && (
-        <path d='M0 0 L 0 80 L 80 80 L 80 0z' stroke='#195091' fill='transparent' fillOpacity='0.1' strokeWidth='4' />
+        <path d='M1 1 L 1 79 L 79 79 L 79 1z' stroke='#19509155' fill='transparent' fillOpacity='0.5' strokeWidth='3' />
       )}
     </svg>
   );

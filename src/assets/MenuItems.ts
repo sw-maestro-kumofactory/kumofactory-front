@@ -12,6 +12,10 @@ export const MenuItemList: itemType = {
       name: 'EC2',
       type: 'EC2',
     },
+    {
+      name: 'AutoScaling',
+      type: 'AutoScaling',
+    },
   ],
   Storage: [
     {
@@ -35,8 +39,8 @@ export const MenuItemList: itemType = {
   ],
   Network: [
     {
-      name: 'Route53',
-      type: 'Route53',
+      name: 'ROUTE53',
+      type: 'ROUTE53',
     },
     {
       name: 'CloudFront',
@@ -48,7 +52,11 @@ export const MenuItemList: itemType = {
     },
     {
       name: 'NAT',
-      type: 'NAT',
+      type: 'NAT_GATEWAY',
+    },
+    {
+      name: 'ELB',
+      type: 'ELB',
     },
   ],
   Security: [

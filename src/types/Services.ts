@@ -44,9 +44,9 @@ export interface S3 extends IComponent {
   options: S3Options;
 }
 
-export interface Route53Options {}
-export interface Route53 extends IComponent {
-  options?: Route53Options;
+export interface ROUTE53Options {}
+export interface ROUTE53 extends IComponent {
+  options?: ROUTE53Options;
 }
 
 export interface WAFOptions {}
@@ -81,26 +81,43 @@ export interface VPCOptions {}
 export interface VPC extends IComponent {
   options?: VPCOptions;
 }
-export type Services = EC2 | RDS | S3 | Route53 | WAF | ElastiCache | CloudFront | EFS | NAT | VPC;
+
+export interface ELBOptions {}
+export interface ELB extends IComponent {
+  options?: ELBOptions;
+}
+
+export interface AutoScalingOptions {}
+
+export interface AutoScaling extends IComponent {
+  options?: AutoScalingOptions;
+}
+
+export type Services = EC2 | RDS | S3 | ROUTE53 | WAF | ElastiCache | CloudFront | EFS | NAT | VPC | ELB | AutoScaling;
+
 export type ServiceOptions =
   | EC2Options
   | RDSOptions
   | S3Options
-  | Route53Options
+  | ROUTE53Options
   | WAFOptions
   | ElastiCacheOptions
   | CloudFrontOptions
   | EFSOptions
   | NATOptions
-  | VPCOptions;
+  | VPCOptions
+  | ELBOptions
+  | AutoScalingOptions;
 export type ServicesString =
   | 'EC2'
   | 'RDS'
   | 'S3'
-  | 'Route53'
+  | 'ROUTE53'
   | 'WAF'
   | 'ElastiCache'
   | 'CloudFront'
   | 'EFS'
-  | 'NAT'
-  | 'VPC';
+  | 'NAT_GATEWAY'
+  | 'VPC'
+  | 'ELB'
+  | 'AutoScaling';

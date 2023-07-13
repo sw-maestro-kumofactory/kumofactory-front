@@ -14,9 +14,9 @@ const MenuItems = ({ type, children }: IProps) => {
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
   const serviceFactory = new ServiceFactory();
   const items = MenuItemList[type];
-
+  console.log(items);
   return (
-    <div className='flex flex-wrap'>
+    <div className='flex flex-wrap '>
       {items &&
         items.map((item) => (
           <ItemButtonContainer
@@ -43,7 +43,7 @@ const MenuItems = ({ type, children }: IProps) => {
             >
               {serviceFactory.getSvg({ type: item.type })}
             </svg>
-            <div className='text-black'>{item.type.toString()}</div>
+            <div className='text-black'>{item.name.toString()}</div>
           </ItemButtonContainer>
         ))}
     </div>

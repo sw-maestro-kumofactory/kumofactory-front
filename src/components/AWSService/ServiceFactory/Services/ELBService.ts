@@ -1,10 +1,10 @@
-import { NAT } from '@/src/types/Services';
+import { ELB } from '@/src/types/Services';
 import { CommonInfo } from '@/src/components/AWSService/ServiceFactory/Services/CommonInfo';
 
-export const NATService = (): NAT => {
+export const ELBService = (): ELB => {
   return {
     ...CommonInfo,
-    type: 'NAT_GATEWAY',
+    type: 'ELB',
     options: {},
   };
 };

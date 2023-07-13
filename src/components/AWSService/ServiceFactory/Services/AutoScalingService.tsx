@@ -1,10 +1,10 @@
-import { NAT } from '@/src/types/Services';
+import { AutoScaling } from '@/src/types/Services';
 import { CommonInfo } from '@/src/components/AWSService/ServiceFactory/Services/CommonInfo';
 
-export const NATService = (): NAT => {
+export const AutoScalingService = (): AutoScaling => {
   return {
     ...CommonInfo,
-    type: 'NAT_GATEWAY',
+    type: 'AutoScaling',
     options: {},
   };
 };

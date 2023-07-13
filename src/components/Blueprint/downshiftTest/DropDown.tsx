@@ -7,12 +7,14 @@ interface IProps {
   title: string;
   children: React.ReactNode;
 }
+
 const DropDown = ({ title, children }: IProps) => {
   const [showDropdown, setShowDropdown] = useState(true);
+
   return (
     <div className='m-4 max-w-sm'>
       <div className='flex justify-between text-center'>
-        <label className={'text-2xl'}>{title}</label>
+        <label className='text-2xl'>{title}</label>
         <div>
           <FontAwesomeIcon
             className={`h-4 transition-transform duration-300 ${showDropdown ? 'transform rotate-180' : ''}`}
@@ -21,7 +23,9 @@ const DropDown = ({ title, children }: IProps) => {
           />
         </div>
       </div>
-      {showDropdown && <div className='mt-4 overflow-hidden transition-all duration-300'>{children}</div>}
+      <div className={`overflow-hidden transition-height duration-300 ${showDropdown ? 'h-auto' : 'h-0'}`}>
+        {children}
+      </div>
     </div>
   );
 };
