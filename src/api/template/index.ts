@@ -12,7 +12,6 @@ export const getTemplateData = async (): Promise<any> => {
   const { data } = await axiosInstance.get(`/api/blueprint/aws`, {}).then((res) => {
     return res;
   });
-  console.log(data);
   return data;
 };
 
@@ -20,6 +19,5 @@ export const postTemplateData = async (data: any): Promise<any> => {
   const { d } = await axiosInstance.post(`/api/blueprint/aws`, data).then((res) => {
     return res;
   });
-  console.log(d);
   return d;
 };

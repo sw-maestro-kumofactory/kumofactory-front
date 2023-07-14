@@ -1,6 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import axios from 'axios';
 
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -10,8 +11,12 @@ import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
 import { postTemplateData } from '@/src/api/template';
+import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 
-const Grid = () => {
+interface IProps {
+  id: string;
+}
+const Grid = ({ id }: IProps) => {
   const areas = useBlueprintStore((state) => state.areas);
   const selectedAreaId = useBlueprintStore((state) => state.selectedAreaId);
   const services = useBlueprintStore((state) => state.services);
@@ -35,14 +40,23 @@ const Grid = () => {
     setStdScale,
     clearComponent,
     blueprintToJson,
+    setIsEdit,
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
-  const {} = useBlueprintStore((state) => state.AreaAction);
-
+  const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
   // @ts-ignore
   const handleScaleChange = (e) => {
     setScale(e.instance.transformState.scale);
   };
+
+  useEffect(() => {
+    if (id !== 'empty') {
+      axios.get('/apiTest').then((res) => {
+        setTemplate({ data: res.data });
+      });
+    }
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
     const escKeyInput = (e: KeyboardEvent) => {
@@ -70,21 +84,28 @@ const Grid = () => {
 
   useEffect(() => {
     const component = document.getElementById('background');
+    // TODO Rendering Timing issue
     if (component !== null) {
       setStdScale();
       setGridSrc();
     }
-  }, [viewBox]);
+  }, [isLoading, viewBox]);
 
   return (
-    <div className='grid-wrapper w-full h-full overflow-hidden'>
+    <div
+      className='grid-wrapper w-full h-full overflow-hidden'
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsEdit(false);
+      }}
+    >
       <ExportButton />
-      <BlueprintNameField name='1234' setName={() => {}} />
+      <BlueprintNameField />
       <div className='absolute right-40 top-28 select-none z-10'>
         <button
           onClick={() => {
-            const d = postTemplateData(blueprintToJson());
-            console.log(d);
+            // const d = postTemplateData(blueprintToJson());
+            console.log(blueprintToJson());
           }}
           className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
         >
@@ -92,12 +113,6 @@ const Grid = () => {
         </button>
         <input type='file' id='fileInput' className='hidden' />
       </div>
-      {selectedServiceId && !isMoving && !lineDrawingMode && (
-        <>
-          {/*<Options serviceType={services[selectedServiceId].type} />*/}
-          <CreateLineContainer x={lineDrawingLocation.x} y={lineDrawingLocation.y} />
-        </>
-      )}
       <TransformWrapper
         minScale={0.5}
         initialScale={1}
@@ -109,7 +124,7 @@ const Grid = () => {
         }}
       >
         <TransformComponent>
-          {viewBox.width !== 0 ? (
+          {viewBox.width !== 0 && !isLoading ? (
             <div id='blueprint'>
               <svg
                 width={viewBox.width}
@@ -139,8 +154,6 @@ const Grid = () => {
                       <circle cx='1' cy='1' r='1' fill='gray' />
                     </pattern>
                   </defs>
-                  {/*<rect fill='url(#boldPattern)' width={1040} height={1360} className='cursor-move' />*/}
-                  {/*<rect fill='url(#grayPattern)' width={1040} height={1360} className='cursor-move' />*/}
                   <rect fill='url(#dottedPattern)' width={1040} height={1360} className='cursor-move' />
                 </g>
                 <g id='zone'>
@@ -164,30 +177,37 @@ const Grid = () => {
                 })}
                 <g id='services'>
                   {Object.keys(services).map((key) => (
-                    <Service
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        onMouseDownService(e, services[key]);
-                      }}
-                      onMouseEnter={(e) => {
-                        e.stopPropagation();
-                        onMouseEnterService(e, services[key]);
-                      }}
-                      onMouseLeave={(e) => {
-                        e.stopPropagation();
-                        onMouseLeaveService(e, services[key]);
-                      }}
-                      key={services[key].id}
-                      isActive={services[key].id === selectedServiceId}
-                      x={services[key].x}
-                      y={services[key].y}
-                      id={services[key].id}
-                      type={services[key].type}
-                      lines={services[key].lines}
-                    />
+                    <g key={services[key].id}>
+                      <Service
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        onMouseDown={(e) => {
+                          e.stopPropagation();
+                          onMouseDownService(e, services[key]);
+                        }}
+                        onMouseEnter={(e) => {
+                          e.stopPropagation();
+                          onMouseEnterService(e, services[key]);
+                        }}
+                        onMouseLeave={(e) => {
+                          e.stopPropagation();
+                          onMouseLeaveService(e, services[key]);
+                        }}
+                        key={services[key].id}
+                        isActive={services[key].id === selectedServiceId}
+                        x={services[key].x}
+                        y={services[key].y}
+                        id={services[key].id}
+                        type={services[key].type}
+                        lines={services[key].lines}
+                      />
+                      {selectedServiceId === services[key].id && !isMoving && !lineDrawingMode && (
+                        <foreignObject x={services[key].x + 90} y={services[key].y - 15} width={50} height={200}>
+                          <CreateLineContainer />
+                        </foreignObject>
+                      )}
+                    </g>
                   ))}
                 </g>
               </svg>

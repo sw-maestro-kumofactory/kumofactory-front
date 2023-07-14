@@ -10,7 +10,7 @@ export interface ServiceState {
     onMouseDownService: (e: React.MouseEvent, services: Services | null) => void;
     onMouseEnterService: (e: React.MouseEvent, services: Services | null) => void;
     onMouseLeaveService: (e: React.MouseEvent, services: Services | null) => void;
-    createService: (service: Services) => void;
+    createService: (service: Services, id: string) => void;
     setOptions: (service: IComponent) => void;
   };
 }

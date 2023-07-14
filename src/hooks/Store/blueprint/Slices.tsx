@@ -8,6 +8,8 @@ import { LineState } from '@/src/hooks/Store/blueprint/state/LineState';
 import { IArea } from '@/src/types/Area';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 import { IBlueprintResponse } from '@/src/api/template';
+import { Services } from '@/src/types/Services';
+import { Point } from '@/src/types/Line';
 
 export type AllBluePrintStates = AreaState & CommonState & ServiceState & LineState;
 
@@ -71,9 +73,8 @@ export const useServiceSlice: StateCreator<
         return state;
       });
     },
-    createService: (service) =>
+    createService: (service: Services, id: string) =>
       set((state) => {
-        const id = v1().toString();
         state.services[id] = {
           ...service,
           id,
@@ -126,6 +127,28 @@ export const useLineSlice: StateCreator<
           state.srcPoint = '';
           state.dstPoint = '';
         }
+        return state;
+      }),
+    createLine: (id: string, src: Point, dst: Point) =>
+      set((state) => {
+        state.lines[id] = {
+          id: id,
+          src: {
+            x: src.x,
+            y: src.y,
+            componentId: src.componentId,
+          },
+          dst: {
+            x: dst.x,
+            y: dst.y,
+            componentId: dst.componentId,
+          },
+        };
+        return state;
+      }),
+    setComponentLine: (lineId: string, componentId: string) =>
+      set((state) => {
+        state.services[componentId].lines.push(lineId);
         return state;
       }),
   },
@@ -217,10 +240,17 @@ export const useCommonSlice: StateCreator<
   name: 'My blueprint',
   oneByFourPoint: 20,
   stdScale: null,
+  isEdit: false,
   CommonAction: {
-    setName: (e: React.SyntheticEvent) => {
+    setName: (name: string) => {
       set((state) => {
-        state.name = e.target.value;
+        state.name = name;
+        return state;
+      });
+    },
+    setIsEdit: (flag: boolean) => {
+      set((state) => {
+        state.isEdit = flag;
         return state;
       });
     },

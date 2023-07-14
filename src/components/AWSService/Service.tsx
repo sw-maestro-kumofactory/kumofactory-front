@@ -23,6 +23,7 @@ const Service = (props: IProps) => {
       svgRef.current.setAttribute('y', props.y.toString());
     }
   }, [props.x, props.y]);
+
   return (
     <svg
       ref={svgRef}

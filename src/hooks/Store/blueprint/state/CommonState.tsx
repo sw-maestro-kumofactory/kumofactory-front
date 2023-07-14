@@ -1,7 +1,10 @@
+import { ChangeEvent } from 'react';
+
 import { Coordinate, Point } from '@/src/types/Common';
 
 export interface CommonState {
   name: string;
+  isEdit: boolean;
   interval: Coordinate;
   gridSrc: Coordinate;
   blueprintSrc: Coordinate;
@@ -15,7 +18,8 @@ export interface CommonState {
     height: number;
   };
   CommonAction: {
-    setName: (e: React.SyntheticEvent) => void;
+    setName: (name: string) => void;
+    setIsEdit: (flag: boolean) => void;
     blueprintToJson: () => void;
     setBlueprintSrc: (x: number, y: number) => void;
     setGridSrc: () => void;

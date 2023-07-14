@@ -1,4 +1,6 @@
 'use client';
+import { v1 } from 'uuid';
+
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { ServiceFactory } from '@/src/components/AWSService/ServiceFactory/ServiceFactory';
 import ItemButtonContainer from '@/src/components/common/Button/ItemButton';
@@ -14,7 +16,7 @@ const MenuItems = ({ type, children }: IProps) => {
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
   const serviceFactory = new ServiceFactory();
   const items = MenuItemList[type];
-  console.log(items);
+
   return (
     <div className='flex flex-wrap '>
       {items &&
@@ -31,7 +33,7 @@ const MenuItems = ({ type, children }: IProps) => {
                   sy: 50,
                 });
               } else {
-                createService(serviceFactory.createService({ type: item.type }));
+                createService(serviceFactory.createService({ type: item.type }), v1().toString());
               }
             }}
           >

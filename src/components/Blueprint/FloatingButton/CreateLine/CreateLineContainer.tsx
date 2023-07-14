@@ -4,20 +4,9 @@ import { faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
 
 import CreateLineButton from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineButton';
 
-interface IProps {
-  x: number;
-  y: number;
-}
-
-const CreateLineContainer = ({ x, y }: IProps) => {
+const CreateLineContainer = () => {
   return (
-    <div
-      style={{
-        top: y.toString() + 'px',
-        left: x.toString() + 'px',
-      }}
-      className={`flex flex-col absolute gap-y-4 text-2xl w-12 z-10`}
-    >
+    <div className={`flex flex-col absolute gap-y-4 text-2xl w-12 z-10`}>
       <CreateLineButton>
         <FontAwesomeIcon color={'white'} icon={faArrowUpLong} />
       </CreateLineButton>

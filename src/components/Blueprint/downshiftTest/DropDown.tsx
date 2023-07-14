@@ -12,7 +12,7 @@ const DropDown = ({ title, children }: IProps) => {
   const [showDropdown, setShowDropdown] = useState(true);
 
   return (
-    <div className='m-4 max-w-sm'>
+    <div className='m-3 max-w-sm'>
       <div className='flex justify-between text-center'>
         <label className='text-2xl'>{title}</label>
         <div>
