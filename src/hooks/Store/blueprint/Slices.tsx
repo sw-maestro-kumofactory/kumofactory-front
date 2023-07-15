@@ -242,6 +242,14 @@ export const useCommonSlice: StateCreator<
   stdScale: null,
   isEdit: false,
   CommonAction: {
+    initState: () => {
+      set((state) => {
+        state.services = {};
+        state.lines = {};
+        state.areas = {};
+        return state;
+      });
+    },
     setName: (name: string) => {
       set((state) => {
         state.name = name;

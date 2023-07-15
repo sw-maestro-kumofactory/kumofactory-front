@@ -8,11 +8,13 @@ export const useSetTemplate = () => {
   const createService = useBlueprintStore((state) => state.ServiceAction.createService);
   const createLine = useBlueprintStore((state) => state.LineAction.createLine);
   const setComponentLine = useBlueprintStore((state) => state.LineAction.setComponentLine);
+  const initState = useBlueprintStore((state) => state.CommonAction.initState);
   const setTemplate = ({ data }: { data: IBlueprintResponse }) => {
+    //add for initialize State
+    initState();
+
     const services = data.components;
     const lines = data.links;
-    console.log('services', services);
-    console.log('lines', lines);
 
     for (const service of services) {
       createService(

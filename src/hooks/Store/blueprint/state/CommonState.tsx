@@ -18,6 +18,7 @@ export interface CommonState {
     height: number;
   };
   CommonAction: {
+    initState: () => void;
     setName: (name: string) => void;
     setIsEdit: (flag: boolean) => void;
     blueprintToJson: () => void;

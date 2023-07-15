@@ -10,7 +10,6 @@ import { ExportButton } from '@/src/components/Blueprint/FloatingButton/Export/E
 import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
-import { postTemplateData } from '@/src/api/template';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 
 interface IProps {
@@ -24,7 +23,6 @@ const Grid = ({ id }: IProps) => {
   const isMoving = useBlueprintStore((state) => state.isMoving);
   const viewBox = useBlueprintStore((state) => state.viewBox);
   const lines = useBlueprintStore((state) => state.lines);
-  const lineDrawingLocation = useBlueprintStore((state) => state.lineDrawingLocation);
   const lineDrawingMode = useBlueprintStore((state) => state.lineDrawingMode);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService } = useBlueprintStore(
     (state) => state.ServiceAction,
@@ -53,6 +51,14 @@ const Grid = ({ id }: IProps) => {
     if (id !== 'empty') {
       axios.get('/apiTest').then((res) => {
         setTemplate({ data: res.data });
+      });
+    } else {
+      setTemplate({
+        data: {
+          name: '',
+          components: [],
+          links: [],
+        },
       });
     }
     setIsLoading(false);
@@ -84,7 +90,6 @@ const Grid = ({ id }: IProps) => {
 
   useEffect(() => {
     const component = document.getElementById('background');
-    // TODO Rendering Timing issue
     if (component !== null) {
       setStdScale();
       setGridSrc();
