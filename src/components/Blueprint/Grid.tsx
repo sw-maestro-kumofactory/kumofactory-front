@@ -26,6 +26,7 @@ const Grid = ({ id }: IProps) => {
   const isMoving = useBlueprintStore((state) => state.isMoving);
   const viewBox = useBlueprintStore((state) => state.viewBox);
   const lines = useBlueprintStore((state) => state.lines);
+  const selectedLineId = useBlueprintStore((state) => state.selectedLineId);
   const lineDrawingMode = useBlueprintStore((state) => state.lineDrawingMode);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService } = useBlueprintStore(
     (state) => state.ServiceAction,
@@ -43,7 +44,7 @@ const Grid = ({ id }: IProps) => {
     blueprintToJson,
     setIsEdit,
   } = useBlueprintStore((state) => state.CommonAction);
-  const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
+  const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
   const accessToken = useStore(useAuthStore, (state) => state.accessToken);
   // @ts-ignore
@@ -113,7 +114,7 @@ const Grid = ({ id }: IProps) => {
       <div className='absolute right-40 top-28 select-none z-10'>
         <button
           onClick={() => {
-            const d = postTemplateData(accessToken, blueprintToJson());
+            const d = postTemplateData(blueprintToJson());
             console.log(d);
           }}
           className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
@@ -179,8 +180,11 @@ const Grid = ({ id }: IProps) => {
                       y1={lines[key].src.y}
                       x2={lines[key].dst.x}
                       y2={lines[key].dst.y}
+                      onClick={(e) => {
+                        onClickLine(selectedLineId === key ? null : key);
+                      }}
                       strokeWidth={2}
-                      stroke={'black'}
+                      stroke={selectedLineId === key ? 'red' : 'black'}
                     />
                   );
                 })}

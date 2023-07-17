@@ -96,9 +96,15 @@ export const useLineSlice: StateCreator<
   dstPoint: '',
   curLineId: undefined,
   linkedServiceId: undefined,
+  selectedLineId: null,
   LineAction: {
     // flag === true => lineDrawing mode on
     // flag === false => lineDrawing mode off
+    onClickLine: (id) =>
+      set((state) => {
+        state.selectedLineId = id;
+        return state;
+      }),
     setLineDrawingMode: (flag: boolean) =>
       set((state) => {
         if (flag && state.selectedServiceId) {
@@ -480,9 +486,15 @@ export const useCommonSlice: StateCreator<
         } else if (state.selectedAreaId) {
           //   selectedArea 제거
           delete state.areas[state.selectedAreaId];
+        } else if (state.selectedLineId) {
+          //   selectedLine 제거
+          const line = state.lines[state.selectedLineId];
+          const srcService = state.services[line.src.componentId];
+          const dstService = state.services[line.dst.componentId];
+          srcService.lines = srcService.lines.filter((l) => l !== state.selectedLineId);
+          dstService.lines = dstService.lines.filter((l) => l !== state.selectedLineId);
+          delete state.lines[state.selectedLineId];
         }
-        // TODO line 선택, 제거할 수 있도록
-        // else if(state.selectedLineId) {
 
         // 모든 상태 null
         state.selectedServiceId = null;
@@ -490,6 +502,7 @@ export const useCommonSlice: StateCreator<
         state.isMoving = false;
         state.lineDrawingMode = false;
         state.linkedServiceId = undefined;
+        state.selectedLineId = null;
         return state;
       });
     },

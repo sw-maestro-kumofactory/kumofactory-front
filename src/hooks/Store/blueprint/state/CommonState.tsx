@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
 
 import { Coordinate, Point } from '@/src/types/Common';
+import { BlueprintResponse } from '@/src/types/Blueprint';
 
 export interface CommonState {
   name: string;
@@ -21,7 +22,7 @@ export interface CommonState {
     initState: () => void;
     setName: (name: string) => void;
     setIsEdit: (flag: boolean) => void;
-    blueprintToJson: () => void;
+    blueprintToJson: () => BlueprintResponse;
     setBlueprintSrc: (x: number, y: number) => void;
     setGridSrc: () => void;
     setStdScale: () => void;

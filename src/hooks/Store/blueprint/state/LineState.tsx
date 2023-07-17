@@ -7,9 +7,11 @@ export interface LineState {
   srcPoint: string;
   dstPoint: string;
   linkedServiceId: string | undefined;
+  selectedLineId: string | null;
   LineAction: {
     setLineDrawingMode: (flag: boolean) => void;
     createLine: (id: string, src: Point, dst: Point) => void;
     setComponentLine: (lineId: string, componentId: string) => void;
+    onClickLine: (id: string | null) => void;
   };
 }

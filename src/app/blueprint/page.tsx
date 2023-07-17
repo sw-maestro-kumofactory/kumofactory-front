@@ -61,16 +61,17 @@ const BluePrint = () => {
             <div className='w-1/4 ml-4 h-full flex items-center'>blueprint.name</div>
           </div>
           {/* UI */}
-          {userBlueprints.map((blueprint) => {
-            return (
-              <div key={blueprint.id} className='flex ml-4 items-center w-full h-16 '>
-                <Link className='w-3/4' href={`/blueprint/${blueprint.id}`}>
-                  <div>{blueprint.name}</div>
-                </Link>
-                <div className='w-1/4'>{blueprint.name}</div>
-              </div>
-            );
-          })}
+          {userBlueprints &&
+            userBlueprints.map((blueprint) => {
+              return (
+                <div key={blueprint.id} className='flex ml-4 items-center w-full h-16 '>
+                  <Link className='w-3/4' href={`/blueprint/${blueprint.id}`}>
+                    <div>{blueprint.name}</div>
+                  </Link>
+                  <div className='w-1/4'>{blueprint.name}</div>
+                </div>
+              );
+            })}
         </div>
       </div>
       <ModalContainer isShow={isOpen}>
