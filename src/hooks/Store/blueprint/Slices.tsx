@@ -464,14 +464,22 @@ export const useCommonSlice: StateCreator<
       set((state) => {
         if (state.selectedServiceId) {
           //   selectedService 제거
-          state.services = Object.fromEntries(
-            Object.entries(state.services).filter(([key, value]) => key !== state.selectedServiceId),
-          );
+          const currentService = state.services[state.selectedServiceId];
+          delete state.services[state.selectedServiceId];
+          for (const line of currentService.lines) {
+            const removedLine = state.lines[line];
+            if (removedLine.src.componentId === state.selectedServiceId) {
+              const dstService = state.services[removedLine.dst.componentId];
+              dstService.lines = dstService.lines.filter((l) => l !== line);
+            } else {
+              const srcService = state.services[removedLine.src.componentId];
+              srcService.lines = srcService.lines.filter((l) => l !== line);
+            }
+            delete state.lines[line];
+          }
         } else if (state.selectedAreaId) {
           //   selectedArea 제거
-          state.areas = Object.fromEntries(
-            Object.entries(state.areas).filter(([key, value]) => key !== state.selectedAreaId),
-          );
+          delete state.areas[state.selectedAreaId];
         }
         // TODO line 선택, 제거할 수 있도록
         // else if(state.selectedLineId) {
