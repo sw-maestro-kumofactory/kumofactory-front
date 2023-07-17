@@ -1,13 +1,13 @@
 'use client';
-import { useLogin } from '@/src/hooks/useLogin';
 import useGoogleAuth from '@/src/hooks/Auth/useGoogleAuth';
 import useGithubAuth from '@/src/hooks/Auth/useGithubAuth';
 import KakaoAuthButton from '@/src/components/Auth/Button/kakaoAuthButton';
 import GithubAuthButton from '@/src/components/Auth/Button/githubAuthButton';
 import GoogleAuthButton from '@/src/components/Auth/Button/googleAuthButton';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 const Login = () => {
-  const isLogin = false;
+  const isLogin = useAuthStore((state) => state.isLogin);
   const googleAuth = useGoogleAuth();
   const githubAuth = useGithubAuth();
 

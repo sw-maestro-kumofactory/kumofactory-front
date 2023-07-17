@@ -20,7 +20,7 @@ const MenuBar = () => {
         ))}
       </select>
       {Menus.map((menu) => (
-        <DropDown title={menu.title} key={menu.title}>
+        <DropDown title={menu.title} key={menu.title} absolute={false}>
           <MenuItems type={menu.title} />
         </DropDown>
       ))}

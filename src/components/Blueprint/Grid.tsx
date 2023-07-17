@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import axios from 'axios';
+import { useStore } from 'zustand';
 
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -11,6 +12,8 @@ import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
+import { postTemplateData } from '@/src/api/template';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface IProps {
   id: string;
@@ -42,6 +45,7 @@ const Grid = ({ id }: IProps) => {
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
+  const accessToken = useStore(useAuthStore, (state) => state.accessToken);
   // @ts-ignore
   const handleScaleChange = (e) => {
     setScale(e.instance.transformState.scale);
@@ -109,8 +113,8 @@ const Grid = ({ id }: IProps) => {
       <div className='absolute right-40 top-28 select-none z-10'>
         <button
           onClick={() => {
-            // const d = postTemplateData(blueprintToJson());
-            console.log(blueprintToJson());
+            const d = postTemplateData(accessToken, blueprintToJson());
+            console.log(d);
           }}
           className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
         >

@@ -13,6 +13,7 @@ interface CallbackProps {
 
 const ThirdPartyCallback = ({ type, callbackURL, authRequestFunction }: CallbackProps) => {
   const { setAccessToken, setId } = useAuthStore((state) => state.UserAction);
+
   const router = useRouter();
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code')!;
