@@ -1,6 +1,4 @@
 'use client';
-import { useState } from 'react';
-
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 export const useLogin = () => {
@@ -8,7 +6,6 @@ export const useLogin = () => {
 
   const login = (token: string) => {
     setAccessToken(token);
-    return 0;
   };
 
   const logout = () => {

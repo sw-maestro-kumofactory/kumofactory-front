@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { IBlueprintResponse } from '@/src/api/template';
+import { BlueprintResponse } from '@/src/api/template';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
 export const useSetTemplate = () => {
@@ -9,7 +9,7 @@ export const useSetTemplate = () => {
   const createLine = useBlueprintStore((state) => state.LineAction.createLine);
   const setComponentLine = useBlueprintStore((state) => state.LineAction.setComponentLine);
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
-  const setTemplate = ({ data }: { data: IBlueprintResponse }) => {
+  const setTemplate = ({ data }: { data: BlueprintResponse }) => {
     //add for initialize State
     initState();
 

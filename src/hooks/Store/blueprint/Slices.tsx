@@ -7,7 +7,7 @@ import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
 import { LineState } from '@/src/hooks/Store/blueprint/state/LineState';
 import { IArea } from '@/src/types/Area';
 import { getQuadrant } from '@/src/utils/getQuadrant';
-import { IBlueprintResponse } from '@/src/api/template';
+import { BlueprintResponse } from '@/src/types/Blueprint';
 import { Services } from '@/src/types/Services';
 import { Point } from '@/src/types/Line';
 
@@ -263,7 +263,7 @@ export const useCommonSlice: StateCreator<
       });
     },
     blueprintToJson: () => {
-      const json: IBlueprintResponse = {
+      const json: BlueprintResponse = {
         name: '',
         components: [],
         links: [],
