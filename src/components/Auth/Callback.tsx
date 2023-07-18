@@ -1,6 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useStore } from 'zustand';
 
 import Loading from '@/src/components/common/Loading';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
@@ -12,7 +13,7 @@ interface CallbackProps {
 }
 
 const ThirdPartyCallback = ({ type, callbackURL, authRequestFunction }: CallbackProps) => {
-  const { setAccessToken, setId } = useAuthStore((state) => state.UserAction);
+  const { setAccessToken, setId } = useStore(useAuthStore, (state) => state.UserAction);
 
   const router = useRouter();
   useEffect(() => {

@@ -1,4 +1,6 @@
 'use client';
+import { useStore } from 'zustand';
+
 import useGoogleAuth from '@/src/hooks/Auth/useGoogleAuth';
 import useGithubAuth from '@/src/hooks/Auth/useGithubAuth';
 import KakaoAuthButton from '@/src/components/Auth/Button/kakaoAuthButton';
@@ -7,14 +9,14 @@ import GoogleAuthButton from '@/src/components/Auth/Button/googleAuthButton';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 const Login = () => {
-  const isLogin = useAuthStore((state) => state.isLogin);
+  const isLogin = useStore(useAuthStore, (state) => state.isLogin);
   const googleAuth = useGoogleAuth();
   const githubAuth = useGithubAuth();
 
   return (
     <div className='flex flex-col h-full items-center justify-center gap-20'>
       {isLogin ? (
-        <>Login Success!</>
+        <>already logged in</>
       ) : (
         <>
           <div className='font-bold text-6xl text-[#195091]'>Login with</div>

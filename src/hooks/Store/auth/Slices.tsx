@@ -24,6 +24,7 @@ export const useUserSlice: StateCreator<
       set((state) => {
         state.accessToken = '';
         state.isLogin = false;
+        window.localStorage.removeItem('accessToken');
         delete authAxiosInstance.defaults.headers.common['Authorization'];
         return state;
       }),
@@ -31,6 +32,7 @@ export const useUserSlice: StateCreator<
       set((state) => {
         state.accessToken = token;
         state.isLogin = true;
+        if (token) window.localStorage.setItem('accessToken', token);
         authAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         return state;
       }),

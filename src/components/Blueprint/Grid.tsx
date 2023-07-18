@@ -12,7 +12,7 @@ import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
-import { postTemplateData } from '@/src/api/template';
+import { getTemplateListById, postTemplateData } from '@/src/api/template';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface IProps {
@@ -46,7 +46,6 @@ const Grid = ({ id }: IProps) => {
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
-  const accessToken = useStore(useAuthStore, (state) => state.accessToken);
   // @ts-ignore
   const handleScaleChange = (e) => {
     setScale(e.instance.transformState.scale);
@@ -54,9 +53,7 @@ const Grid = ({ id }: IProps) => {
 
   useEffect(() => {
     if (id !== 'empty') {
-      axios.get('/apiTest').then((res) => {
-        setTemplate({ data: res.data });
-      });
+      getTemplateListById(id);
     } else {
       setTemplate({
         data: {
@@ -181,6 +178,7 @@ const Grid = ({ id }: IProps) => {
                       x2={lines[key].dst.x}
                       y2={lines[key].dst.y}
                       onClick={(e) => {
+                        e.stopPropagation();
                         onClickLine(selectedLineId === key ? null : key);
                       }}
                       strokeWidth={2}
