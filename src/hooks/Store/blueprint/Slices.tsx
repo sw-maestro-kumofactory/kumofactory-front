@@ -102,7 +102,7 @@ export const useLineSlice: StateCreator<
     // flag === false => lineDrawing mode off
     onClickLine: (id) =>
       set((state) => {
-        state.selectedLineId = id;
+        if (!state.lineDrawingMode) state.selectedLineId = id;
         return state;
       }),
     setLineDrawingMode: (flag: boolean) =>
@@ -348,6 +348,7 @@ export const useCommonSlice: StateCreator<
           dir: -1,
         };
         state.draggable = false;
+        state.selectedLineId = null;
         return state;
       });
     },
