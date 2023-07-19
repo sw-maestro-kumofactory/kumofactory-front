@@ -11,7 +11,7 @@ export const getTemplateList = async (): Promise<any> => {
   return data;
 };
 
-export const getTemplateListById = async (id: number): Promise<any> => {
+export const getTemplateListById = async (id: number): Promise<BlueprintResponse> => {
   const { data } = await authAxiosInstance.get<BlueprintResponse>(`/api/blueprint/aws/${id}`);
   return data;
 };

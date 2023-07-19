@@ -16,9 +16,11 @@ export const postGoogleAuth = async (code: string | null): Promise<IResponse> =>
   return data;
 };
 
-export const getRefreshToken = async (): Promise<any> => {
-  const { data } = await commonAxiosInstance.get('/api/auth/refresh');
-  return data;
+export const getRefreshToken = async (): Promise<string | null> => {
+  // const { data } = await commonAxiosInstance.get('/api/auth/refresh');
+  const response = await commonAxiosInstance.get('/api/auth/refresh');
+  const accessToken = response.data.accessToken;
+  return accessToken;
 };
 
 // export const postGoogleRegister = () => {};
