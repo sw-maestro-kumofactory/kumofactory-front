@@ -39,13 +39,15 @@ const MenuItems = ({ type, children }: IProps) => {
           >
             <svg
               cursor='pointer'
+              width={64}
+              height={64}
               viewBox='0 0 80 80'
               xmlns='http://www.w3.org/2000/svg'
               className='service-svg animate-service'
             >
               {serviceFactory.getSvg({ type: item.type })}
             </svg>
-            <div className='text-black'>{item.name.toString()}</div>
+            <div className='text-black text-sm'>{item.name.toString()}</div>
           </ItemButtonContainer>
         ))}
     </div>

@@ -17,7 +17,7 @@ const Login = () => {
         <>Login Success!</>
       ) : (
         <>
-          <div className='font-bold text-6xl text-[#195091]'>Login with</div>
+          <div className='font-bold text-6xl text-[#195091] -mt-12'>Login with</div>
           <div className='flex gap-16'>
             <KakaoAuthButton onClick={() => {}} />
             <GithubAuthButton
