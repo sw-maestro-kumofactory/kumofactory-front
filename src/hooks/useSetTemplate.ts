@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { BlueprintResponse } from '@/src/api/template';
+import { BlueprintResponse } from '@/src/types/Blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
 export const useSetTemplate = () => {

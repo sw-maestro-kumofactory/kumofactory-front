@@ -9,16 +9,23 @@ import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { getTemplateList, getTemplateListById } from '@/src/api/template';
+import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 
 const BluePrint = () => {
-  const accessToken = useStore(useAuthStore, (state) => state.accessToken);
   const [isOpen, setIsOpen] = useState(false);
-  const userBlueprints = useStore(useAuthStore, (state) => state.userBlueprints);
+  const userBlueprints = useAuthStore((state) => state.userBlueprints);
+
+  const getTemplate = async () => {
+    try {
+      const res = await getTemplateList();
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
-    // getTemplateList(accessToken).then((res) => {
-    //   console.log(res);
-    // });
+    getTemplate();
   }, []);
 
   return (

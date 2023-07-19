@@ -12,12 +12,13 @@ import AZ from '@/src/components/AWSService/Area/AZ';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
-import { getTemplateListById, postTemplateData } from '@/src/api/template';
+import { getTemplateList, getTemplateListById, postTemplateData } from '@/src/api/template';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface IProps {
   id: string;
 }
+
 const Grid = ({ id }: IProps) => {
   const areas = useBlueprintStore((state) => state.areas);
   const selectedAreaId = useBlueprintStore((state) => state.selectedAreaId);
@@ -46,14 +47,20 @@ const Grid = ({ id }: IProps) => {
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
+
   // @ts-ignore
   const handleScaleChange = (e) => {
     setScale(e.instance.transformState.scale);
   };
 
+  const setTemplateById = async () => {
+    const data = await axios.get('/apiTest/blueprint');
+    setTemplate({ data: data.data });
+  };
+
   useEffect(() => {
     if (id !== 'empty') {
-      getTemplateListById(id);
+      setTemplateById();
     } else {
       setTemplate({
         data: {
