@@ -6,10 +6,14 @@ import CreateLineButton from '@/src/components/Blueprint/FloatingButton/CreateLi
 
 const CreateLineContainer = () => {
   return (
-    <div className={`flex flex-col absolute gap-y-4 text-2xl w-12 z-10`}>
-      <CreateLineButton>
-        <FontAwesomeIcon color={'white'} icon={faArrowUpLong} />
-      </CreateLineButton>
+    <div
+      className={`flex flex-col absolute text-2xl w-12 z-20`}
+      onClick={(e) => {
+        e.stopPropagation();
+        console.log(true);
+      }}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
       <CreateLineButton>
         <FontAwesomeIcon color={'white'} icon={faArrowUpLong} />
       </CreateLineButton>
