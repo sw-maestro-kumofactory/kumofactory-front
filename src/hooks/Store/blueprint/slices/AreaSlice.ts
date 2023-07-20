@@ -13,14 +13,14 @@ export const useAreaSlice: StateCreator<
 > = (set, get) => ({
   areas: {},
   selectedAreaId: null,
-  resizable: {
+  resizeState: {
     isResizable: false,
     dir: -1,
   },
   AreaAction: {
     setResizable: (flag: boolean, dir: number) => {
       set((state) => {
-        state.resizable = {
+        state.resizeState = {
           isResizable: flag,
           dir: dir,
         };
@@ -40,14 +40,14 @@ export const useAreaSlice: StateCreator<
     onMouseDownArea: (e, area) => {
       set((state) => {
         if (area) {
-          const newInterval = {
+          const newOffset = {
             x: e.clientX - area.sx * state.scale,
             y: e.clientY - area.sy * state.scale,
           };
-          state.draggable = true;
+          state.isDrag = true;
           state.selectedServiceId = null;
           state.selectedAreaId = area.id;
-          state.interval = newInterval;
+          state.offset = newOffset;
         } else {
           state.selectedAreaId = null;
         }

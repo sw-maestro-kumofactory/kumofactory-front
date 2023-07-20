@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
 const BlueprintNameField = () => {
-  const blueprintSrc = useBlueprintStore((state) => state.blueprintSrc);
+  const blueprintSrc = useBlueprintStore((state) => state.blueprintElementPosition);
   const name = useBlueprintStore((state) => state.name);
   const setName = useBlueprintStore((state) => state.CommonAction.setName);
   const isEdit = useBlueprintStore((state) => state.isEdit);

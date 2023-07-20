@@ -22,13 +22,13 @@ export const useLineSlice: StateCreator<
     // flag === false => lineDrawing mode off
     onClickLine: (id) =>
       set((state) => {
-        if (!state.lineDrawingMode) state.selectedLineId = id;
+        if (!state.isLineDrawing) state.selectedLineId = id;
         return state;
       }),
     setLineDrawingMode: (flag: boolean) =>
       set((state) => {
         if (flag && state.selectedServiceId) {
-          state.lineDrawingMode = true;
+          state.isLineDrawing = true;
           const lineId = v1().toString();
           state.lines[lineId] = {
             id: lineId,
@@ -49,7 +49,7 @@ export const useLineSlice: StateCreator<
             delete state.lines[state.curLineId];
             state.curLineId = undefined;
           }
-          state.lineDrawingMode = false;
+          state.isLineDrawing = false;
           state.srcPoint = '';
           state.dstPoint = '';
         }

@@ -6,13 +6,36 @@ import { BlueprintResponse } from '@/src/types/Blueprint';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
+// 그리드 내에서의 상대 좌표를 얻는다.
+const getGirdPoint = (
+  e: React.MouseEvent,
+  scale: number,
+  viewBox: { x: number; y: number; width: number; height: number },
+  blueprintSrc: { x: number; y: number },
+) => {
+  let x = viewBox.x;
+  let y = viewBox.y;
+  let relativeX = e.clientX - blueprintSrc.x;
+  let relativeY = e.clientY - blueprintSrc.y;
+
+  return {
+    x: x + relativeX * scale,
+    y: y + relativeY * scale,
+  };
+};
+
 export const useCommonSlice: StateCreator<
   AllBluePrintStates,
   [],
   [['zustand/devtools', never], ['zustand/immer', never]],
   CommonState
 > = (set, get) => ({
-  interval: {
+  name: 'My blueprint',
+  offset: {
+    x: 0,
+    y: 0,
+  },
+  svgOrigin: {
     x: 0,
     y: 0,
   },
@@ -20,21 +43,25 @@ export const useCommonSlice: StateCreator<
     x: 0,
     y: 0,
   },
-  blueprintSrc: {
+  blueprintElementPosition: {
     x: 0,
     y: 0,
   },
-  draggable: false,
+  isDrag: false,
   isMoving: false,
   viewBox: {
+    x: 0,
+    y: 0,
     width: 0,
     height: 0,
   },
   scale: 1,
-  name: 'My blueprint',
-  oneByFourPoint: 20,
-  stdScale: null,
+  quarterPoint: 20,
   isEdit: false,
+  viewBoxOriginSize: {
+    width: 0,
+    height: 0,
+  },
   CommonAction: {
     initState: () => {
       set((state) => {
@@ -90,18 +117,12 @@ export const useCommonSlice: StateCreator<
       }
       return json;
     },
-    setStdScale: () =>
-      set((state) => {
-        const background = document.querySelector('#background')!.getBoundingClientRect();
-        const tmpStdScale = 1040 / background.width;
-        state.scale = state.scale / tmpStdScale;
-        state.stdScale = tmpStdScale;
-        return state;
-      }),
     setViewBox: (width, height) =>
       set((state) => {
         state.viewBox.width = width;
         state.viewBox.height = height;
+        state.viewBoxOriginSize.width = width;
+        state.viewBoxOriginSize.height = height;
         return state;
       }),
     setGridSrc: () =>
@@ -113,54 +134,58 @@ export const useCommonSlice: StateCreator<
       }),
     setBlueprintSrc: (x, y) =>
       set(() => ({
-        blueprintSrc: {
+        blueprintElementPosition: {
           x: x,
           y: y,
         },
       })),
-    setScale: (scale: number) =>
-      set((state) => {
-        if (state.stdScale) {
-          const s = scale / state.stdScale;
-          state.scale = s;
-          state.oneByFourPoint = (90 * s) / 4;
-        }
-        return state;
-      }),
     onClickGrid: (e) => {
       set((state) => {
+        const mousePt = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
+        console.log(mousePt);
         state.selectedServiceId = null;
         state.selectedAreaId = null;
-        state.resizable = {
+        state.resizeState = {
           isResizable: false,
           dir: -1,
         };
-        state.draggable = false;
+        state.isDrag = false;
         state.selectedLineId = null;
         return state;
       });
     },
+    onMouseDown: (e) => {
+      set((state) => {
+        e.stopPropagation();
+        state.isMoving = true;
+
+        const newPoint = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
+        state.svgOrigin.x = newPoint.x;
+        state.svgOrigin.y = newPoint.y;
+
+        return state;
+      });
+    },
+    onMouseleave: (e) => {},
     onMouseUp: (e) => {
       set((state) => {
-        state.draggable = false;
+        state.isDrag = false;
         state.isMoving = false;
-        state.resizable.isResizable = false;
-        state.resizable.dir = -1;
-        if (state.selectedServiceId) {
-          //TODO re set line drawing location
-          state.lineDrawingLocation = {
-            x: state.services[state.selectedServiceId].x * state.scale + state.gridSrc.x + 100 * state.scale,
-            y: state.services[state.selectedServiceId].y * state.scale + state.gridSrc.y,
-          };
-        }
+        state.resizeState.isResizable = false;
+        state.resizeState.dir = -1;
         return state;
       });
     },
     onMouseMove: (e) => {
       set((state) => {
-        const gridMouseX = (e.clientX - state.gridSrc.x) / state.scale;
-        const gridMouseY = (e.clientY - state.gridSrc.y) / state.scale;
-        if (state.lineDrawingMode && state.curLineId) {
+        const { x: newPointX, y: newPointY } = getGirdPoint(
+          e,
+          state.scale,
+          state.viewBox,
+          state.blueprintElementPosition,
+        );
+
+        if (state.isLineDrawing && state.curLineId) {
           if (state.linkedServiceId) {
             const service = state.services[state.lines[state.curLineId].src.componentId];
             const linkedService = state.services[state.linkedServiceId];
@@ -170,28 +195,28 @@ export const useCommonSlice: StateCreator<
             state.lines[state.curLineId].dst.x = x;
             state.lines[state.curLineId].dst.y = y;
           } else {
-            state.lines[state.curLineId].dst.x = gridMouseX;
-            state.lines[state.curLineId].dst.y = gridMouseY;
+            state.lines[state.curLineId].dst.x = newPointX;
+            state.lines[state.curLineId].dst.y = newPointY;
           }
           // src의 좌표 움직이기
           const service = state.services[state.lines[state.curLineId].src.componentId];
-          const cx = gridMouseX - service.x - 40;
-          const cy = gridMouseY - service.y - 40;
+          const cx = newPointX - service.x - 40;
+          const cy = newPointY - service.y - 40;
           const { x, y } = getQuadrant(cx, cy, service.x + 40, service.y + 40);
           state.lines[state.curLineId].src.x = x;
           state.lines[state.curLineId].src.y = y;
         }
-        if (state.resizable.isResizable && state.selectedAreaId) {
+        if (state.resizeState.isResizable && state.selectedAreaId) {
           const area = state.areas[state.selectedAreaId];
           const calculatedSX = area.sx * state.scale;
           const calculatedSY = area.sy * state.scale;
           state.isMoving = true;
 
-          if (state.resizable.dir === 1) {
+          if (state.resizeState.dir === 1) {
             // 동
             const newWidth = (e.clientX - state.gridSrc.x - calculatedSX) / state.scale;
             if (newWidth > 0) state.areas[state.selectedAreaId].width = newWidth;
-          } else if (state.resizable.dir === 2) {
+          } else if (state.resizeState.dir === 2) {
             // 서
             const diff = (calculatedSX - e.clientX + state.gridSrc.x) / state.scale;
             const newWidth = area.width + diff;
@@ -200,11 +225,11 @@ export const useCommonSlice: StateCreator<
               state.areas[state.selectedAreaId].width = newWidth;
               state.areas[state.selectedAreaId].sx = newSx;
             }
-          } else if (state.resizable.dir === 3) {
+          } else if (state.resizeState.dir === 3) {
             // 남
             const newHeight = (e.clientY - state.gridSrc.y - calculatedSY) / state.scale;
             if (newHeight > 0) state.areas[state.selectedAreaId].height = newHeight;
-          } else if (state.resizable.dir === 4) {
+          } else if (state.resizeState.dir === 4) {
             // 북
             const diff = (calculatedSY - e.clientY + state.gridSrc.y) / state.scale;
             const newHeight = area.height + diff;
@@ -214,11 +239,10 @@ export const useCommonSlice: StateCreator<
               state.areas[state.selectedAreaId].sy = newSy;
             }
           }
-        } else if (state.draggable) {
+        } else if (state.isDrag) {
           state.isMoving = true;
-          const newX = Math.round((e.clientX - state.interval.x) / state.scale / 20) * 20;
-          const newY = Math.round((e.clientY - state.interval.y) / state.scale / 20) * 20;
-
+          const newX = Math.round((newPointX - state.offset.x) / 20) * 20;
+          const newY = Math.round((newPointY - state.offset.y) / 20) * 20;
           if (state.selectedServiceId) {
             const service = state.services[state.selectedServiceId];
 
@@ -250,8 +274,42 @@ export const useCommonSlice: StateCreator<
             state.areas[state.selectedAreaId].sx = newX;
             state.areas[state.selectedAreaId].sy = newY;
           }
+        } else if (state.isMoving) {
+          const curGridPoint = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
+          state.viewBox.x = state.viewBox.x - (curGridPoint.x - state.svgOrigin.x);
+          state.viewBox.y = state.viewBox.y - (curGridPoint.y - state.svgOrigin.y);
         }
 
+        return state;
+      });
+    },
+    onMouseWheel: (e) => {
+      set((state) => {
+        let scale = e.deltaY / 1000;
+        scale = Math.abs(scale) < 0.05 ? (0.05 * e.deltaY) / Math.abs(e.deltaY) : scale;
+        state.scale += scale;
+        if (state.scale >= 5) state.scale = 5;
+        if (state.scale <= 0.5) state.scale = 0.5;
+        const pt = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
+
+        let { x, y, width, height } = state.viewBox;
+
+        let [xPropW, yPropH] = [(pt.x - x) / width, (pt.y - y) / height];
+
+        let [newWidth, newHeight] = [
+          state.viewBoxOriginSize.width * state.scale,
+          state.viewBoxOriginSize.height * state.scale,
+        ];
+
+        let x2 = pt.x - xPropW * newWidth;
+        let y2 = pt.y - yPropH * newHeight;
+
+        state.viewBox = {
+          x: x2,
+          y: y2,
+          width: newWidth,
+          height: newHeight,
+        };
         return state;
       });
     },
@@ -289,7 +347,7 @@ export const useCommonSlice: StateCreator<
         state.selectedServiceId = null;
         state.selectedAreaId = null;
         state.isMoving = false;
-        state.lineDrawingMode = false;
+        state.isLineDrawing = false;
         state.linkedServiceId = undefined;
         state.selectedLineId = null;
         return state;
