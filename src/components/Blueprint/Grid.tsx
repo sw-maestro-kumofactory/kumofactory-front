@@ -142,7 +142,7 @@ const Grid = ({ id }: IProps) => {
                 <AZ key={areas[key].id} Area={areas[key]} activate={selectedAreaId === areas[key].id} />
               ))}
             </g>
-            <g id={'lines'}>
+            <g id='lines'>
               {Object.keys(lines).map((key) => {
                 return (
                   <line

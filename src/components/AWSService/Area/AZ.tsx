@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { IArea } from '@/src/types/Area';
+import { AreaStyle } from '@/src/assets/AreaStyle';
 
 interface IProps {
   Area: IArea;
@@ -13,14 +14,16 @@ const AZ = ({ Area, activate }: IProps) => {
   const setResizable = useBlueprintStore((state) => state.AreaAction.setResizable);
   const svgRef = useRef<SVGSVGElement>(null);
 
+  console.log(Area.type);
+
   useEffect(() => {
     if (svgRef.current) {
-      svgRef.current.setAttribute('x', Area.sx.toString());
-      svgRef.current.setAttribute('y', Area.sy.toString());
+      svgRef.current.setAttribute('x', Area.x.toString());
+      svgRef.current.setAttribute('y', Area.y.toString());
       svgRef.current.setAttribute('width', Area.width.toString());
       svgRef.current.setAttribute('height', Area.height.toString());
     }
-  }, [Area.sx, Area.sy, Area.width, Area.height]);
+  }, [Area.x, Area.y, Area.width, Area.height]);
 
   return (
     <svg
@@ -34,6 +37,14 @@ const AZ = ({ Area, activate }: IProps) => {
         onMouseDownArea(e, Area);
       }}
     >
+      <rect
+        fill={AreaStyle[Area.type].fill}
+        width={Area.width}
+        height={Area.height}
+        strokeWidth={2}
+        stroke={AreaStyle[Area.type].stroke}
+        strokeDasharray={10}
+      />
       {activate && (
         <>
           <line
@@ -90,16 +101,8 @@ const AZ = ({ Area, activate }: IProps) => {
           />
         </>
       )}
-      <rect
-        fill={'#00000011'}
-        width={Area.width}
-        height={Area.height}
-        strokeWidth={2}
-        stroke={'black'}
-        strokeDasharray={10}
-      />
       <text x='10' y='20'>
-        Availability zone
+        {Area.type}
       </text>
     </svg>
   );

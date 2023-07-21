@@ -28,7 +28,6 @@ export const useAreaSlice: StateCreator<
       });
     },
     createArea: (area: IArea) =>
-      // @ts-ignore
       set((state) => {
         state.selectedServiceId = null;
         const id = v1().toString();
@@ -36,13 +35,14 @@ export const useAreaSlice: StateCreator<
           ...area,
           id: id,
         };
+        return state;
       }),
     onMouseDownArea: (e, area) => {
       set((state) => {
         if (area) {
           const newOffset = {
-            x: (e.clientX - state.blueprintElementPosition.x) * state.scale - area.sx + state.viewBox.x,
-            y: (e.clientY - state.blueprintElementPosition.y) * state.scale - area.sy + state.viewBox.y,
+            x: (e.clientX - state.blueprintElementPosition.x) * state.scale - area.x + state.viewBox.x,
+            y: (e.clientY - state.blueprintElementPosition.y) * state.scale - area.y + state.viewBox.y,
           };
 
           state.isDrag = true;

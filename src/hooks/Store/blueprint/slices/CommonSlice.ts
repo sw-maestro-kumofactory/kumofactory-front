@@ -88,9 +88,10 @@ export const useCommonSlice: StateCreator<
         name: '',
         components: [],
         links: [],
+        areas: [],
       };
       json['name'] = v1().toString();
-      json['components'] = [];
+      // services
       for (const service of Object.values(get().services)) {
         json['components'].push({
           id: service.id,
@@ -99,7 +100,7 @@ export const useCommonSlice: StateCreator<
           type: service.type,
         });
       }
-      json['links'] = [];
+      // links
       for (const line of Object.values(get().lines)) {
         json['links'].push({
           id: line.id,
@@ -113,6 +114,17 @@ export const useCommonSlice: StateCreator<
             y: line.dst.y,
             componentId: line.dst.componentId,
           },
+        });
+      }
+      // areas
+      for (const area of Object.values(get().areas)) {
+        json['areas'].push({
+          id: area.id,
+          x: area.x,
+          y: area.y,
+          width: area.width,
+          height: area.height,
+          type: area.type,
         });
       }
       return json;
@@ -207,33 +219,33 @@ export const useCommonSlice: StateCreator<
         }
         if (state.resizeState.isResizable && state.selectedAreaId) {
           const area = state.areas[state.selectedAreaId];
-          const calculatedSX = area.sx * state.scale;
-          const calculatedSY = area.sy * state.scale;
+          const calculatedSX = area.x * state.scale;
+          const calculatedSY = area.y * state.scale;
           state.isMoving = true;
 
           if (state.resizeState.dir === 1) {
             // 동
-            const newWidth = newPointX - area.sx;
+            const newWidth = newPointX - area.x;
             if (newWidth > 0) state.areas[state.selectedAreaId].width = newWidth;
           } else if (state.resizeState.dir === 2) {
             // 서
-            const diff = area.sx - newPointX;
+            const diff = area.x - newPointX;
             const newWidth = area.width + diff;
             if (newWidth > 0) {
               state.areas[state.selectedAreaId].width = newWidth;
-              state.areas[state.selectedAreaId].sx = newPointX;
+              state.areas[state.selectedAreaId].x = newPointX;
             }
           } else if (state.resizeState.dir === 3) {
             // 남
-            const newHeight = newPointY - area.sy;
+            const newHeight = newPointY - area.y;
             if (newHeight > 0) state.areas[state.selectedAreaId].height = newHeight;
           } else if (state.resizeState.dir === 4) {
             // 북
-            const diff = area.sy - newPointY;
+            const diff = area.y - newPointY;
             const newHeight = area.height + diff;
             if (newHeight > 0) {
               state.areas[state.selectedAreaId].height = newHeight;
-              state.areas[state.selectedAreaId].sy = newPointY;
+              state.areas[state.selectedAreaId].y = newPointY;
             }
           }
         } else if (state.isDrag) {
@@ -268,8 +280,8 @@ export const useCommonSlice: StateCreator<
             service.x = newX;
             service.y = newY;
           } else if (state.selectedAreaId) {
-            state.areas[state.selectedAreaId].sx = newX;
-            state.areas[state.selectedAreaId].sy = newY;
+            state.areas[state.selectedAreaId].x = newX;
+            state.areas[state.selectedAreaId].y = newY;
           }
         } else if (state.isMoving) {
           state.viewBox.x = state.viewBox.x - (newPointX - state.svgOrigin.x);

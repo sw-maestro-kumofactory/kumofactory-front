@@ -6,10 +6,12 @@ import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { regionList } from '@/src/assets/RegionList';
 import { Menus } from '@/src/assets/Menus';
 import DropDown from '@/src/components/Blueprint/downshiftTest/DropDown';
-import MenuItems from '@/src/components/Blueprint/Menu/MenuItems';
+import ServiceItemWrapper from '@/src/components/Blueprint/Menu/ServiceItemWrapper';
 import { postTemplateData } from '@/src/api/template';
 import { ExportSvg } from '@/src/utils/ExportSvg';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { AreaItemList } from '@/src/assets/MenuItems';
+import AreaItemWrapper from '@/src/components/Blueprint/Menu/AreaItemWrapper';
 
 const Title = ({ title }: { title: string }) => (
   <div className='w-full h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
@@ -53,9 +55,14 @@ const MenuBar = () => {
           ))}
         </select>
       </DropDown>
+      <DropDown title={'Areas'} key={'Areas'} absolute={false}>
+        {AreaItemList.map((AreaItem) => (
+          <AreaItemWrapper key={AreaItem.name} type={AreaItem.type} name={AreaItem.name} />
+        ))}
+      </DropDown>
       {Menus.map((menu) => (
         <DropDown title={menu.title} key={menu.title} absolute={false}>
-          <MenuItems type={menu.title} />
+          <ServiceItemWrapper type={menu.title} />
         </DropDown>
       ))}
     </div>
