@@ -77,11 +77,11 @@ const AZ = ({ Area, activate }: IProps) => {
           />
         </>
       )}
-
       <rect
         x={Area.sx}
         y={Area.sy}
         fill={'#00000011'}
+        viewBox={`${Area.sx} ${Area.sy} ${Area.width} ${Area.height}`}
         width={Area.width}
         height={Area.height}
         strokeWidth={2}

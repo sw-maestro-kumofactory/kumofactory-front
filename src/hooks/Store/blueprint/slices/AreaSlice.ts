@@ -41,9 +41,10 @@ export const useAreaSlice: StateCreator<
       set((state) => {
         if (area) {
           const newOffset = {
-            x: e.clientX - area.sx * state.scale,
-            y: e.clientY - area.sy * state.scale,
+            x: (e.clientX - state.blueprintElementPosition.x) * state.scale - area.sx + state.viewBox.x,
+            y: (e.clientY - state.blueprintElementPosition.y) * state.scale - area.sy + state.viewBox.y,
           };
+
           state.isDrag = true;
           state.selectedServiceId = null;
           state.selectedAreaId = area.id;

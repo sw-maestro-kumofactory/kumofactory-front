@@ -142,7 +142,6 @@ export const useCommonSlice: StateCreator<
     onClickGrid: (e) => {
       set((state) => {
         const mousePt = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
-        console.log(mousePt);
         state.selectedServiceId = null;
         state.selectedAreaId = null;
         state.resizeState = {
@@ -214,29 +213,27 @@ export const useCommonSlice: StateCreator<
 
           if (state.resizeState.dir === 1) {
             // 동
-            const newWidth = (e.clientX - state.gridSrc.x - calculatedSX) / state.scale;
+            const newWidth = newPointX - area.sx;
             if (newWidth > 0) state.areas[state.selectedAreaId].width = newWidth;
           } else if (state.resizeState.dir === 2) {
             // 서
-            const diff = (calculatedSX - e.clientX + state.gridSrc.x) / state.scale;
+            const diff = area.sx - newPointX;
             const newWidth = area.width + diff;
-            const newSx = (e.clientX - state.gridSrc.x) / state.scale;
             if (newWidth > 0) {
               state.areas[state.selectedAreaId].width = newWidth;
-              state.areas[state.selectedAreaId].sx = newSx;
+              state.areas[state.selectedAreaId].sx = newPointX;
             }
           } else if (state.resizeState.dir === 3) {
             // 남
-            const newHeight = (e.clientY - state.gridSrc.y - calculatedSY) / state.scale;
+            const newHeight = newPointY - area.sy;
             if (newHeight > 0) state.areas[state.selectedAreaId].height = newHeight;
           } else if (state.resizeState.dir === 4) {
             // 북
-            const diff = (calculatedSY - e.clientY + state.gridSrc.y) / state.scale;
+            const diff = area.sy - newPointY;
             const newHeight = area.height + diff;
-            const newSy = (e.clientY - state.gridSrc.y) / state.scale;
             if (newHeight > 0) {
               state.areas[state.selectedAreaId].height = newHeight;
-              state.areas[state.selectedAreaId].sy = newSy;
+              state.areas[state.selectedAreaId].sy = newPointY;
             }
           }
         } else if (state.isDrag) {
@@ -275,9 +272,8 @@ export const useCommonSlice: StateCreator<
             state.areas[state.selectedAreaId].sy = newY;
           }
         } else if (state.isMoving) {
-          const curGridPoint = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
-          state.viewBox.x = state.viewBox.x - (curGridPoint.x - state.svgOrigin.x);
-          state.viewBox.y = state.viewBox.y - (curGridPoint.y - state.svgOrigin.y);
+          state.viewBox.x = state.viewBox.x - (newPointX - state.svgOrigin.x);
+          state.viewBox.y = state.viewBox.y - (newPointY - state.svgOrigin.y);
         }
 
         return state;
@@ -286,7 +282,7 @@ export const useCommonSlice: StateCreator<
     onMouseWheel: (e) => {
       set((state) => {
         let scale = e.deltaY / 1000;
-        scale = Math.abs(scale) < 0.05 ? (0.05 * e.deltaY) / Math.abs(e.deltaY) : scale;
+        if (e.deltaY !== 0) scale = Math.abs(scale) < 0.05 ? (0.05 * e.deltaY) / Math.abs(e.deltaY) : scale;
         state.scale += scale;
         if (state.scale >= 5) state.scale = 5;
         if (state.scale <= 0.5) state.scale = 0.5;
