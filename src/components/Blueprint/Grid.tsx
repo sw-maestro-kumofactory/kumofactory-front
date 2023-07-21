@@ -24,6 +24,7 @@ const Grid = ({ id }: IProps) => {
   const selectedLineId = useBlueprintStore((state) => state.selectedLineId);
   const lineDrawingMode = useBlueprintStore((state) => state.isLineDrawing);
   const viewBoxOriginSize = useBlueprintStore((state) => state.viewBoxOriginSize);
+  const scale = useBlueprintStore((state) => state.scale);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService } = useBlueprintStore(
     (state) => state.ServiceAction,
   );
@@ -41,6 +42,9 @@ const Grid = ({ id }: IProps) => {
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
+
+  console.log(viewBox.x, viewBox.y, viewBox.width, viewBox.height);
+  console.log('scale: ', scale);
 
   const onHandleMouseMove = (e: React.MouseEvent) => {
     if (selectedServiceId) e.stopPropagation();
@@ -108,8 +112,8 @@ const Grid = ({ id }: IProps) => {
         <div id='blueprint'>
           <svg
             className={'test'}
-            width={viewBoxOriginSize.width}
-            height={viewBoxOriginSize.height}
+            width='100%'
+            height='100%'
             viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
             onClick={onClickGrid}
             onMouseUp={onMouseUp}
@@ -120,20 +124,12 @@ const Grid = ({ id }: IProps) => {
           >
             <g id='background'>
               <defs>
-                <pattern id='grayPattern' width='80' height='80' patternUnits='userSpaceOnUse'>
-                  <path d='M -40 40 L 120 40' stroke='gray' strokeWidth='1' />
-                  <path d='M 40 -40 L 40 120' stroke='gray' strokeWidth='1' />
-                </pattern>
-                <pattern id='boldPattern' width='80' height='80' patternUnits='userSpaceOnUse'>
-                  <path d='M 0 0 L 80 0 80 80 0 80 z' stroke='black' strokeWidth='1.5' fill='none' />
-                </pattern>
                 <pattern id='dottedPattern' width='20' height='20' patternUnits='userSpaceOnUse'>
                   <circle cx='1' cy='1' r='1' fill='gray' />
                 </pattern>
               </defs>
               <rect
                 fill='url(#dottedPattern)'
-                viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
                 x={viewBox.x}
                 y={viewBox.y}
                 width='100%'
@@ -146,23 +142,25 @@ const Grid = ({ id }: IProps) => {
                 <AZ key={areas[key].id} Area={areas[key]} activate={selectedAreaId === areas[key].id} />
               ))}
             </g>
-            {Object.keys(lines).map((key) => {
-              return (
-                <line
-                  key={key}
-                  id={key}
-                  x1={lines[key].src.x}
-                  y1={lines[key].src.y}
-                  x2={lines[key].dst.x}
-                  y2={lines[key].dst.y}
-                  onClick={(e) => {
-                    onClickLine(selectedLineId === key ? null : key);
-                  }}
-                  strokeWidth={2}
-                  stroke={selectedLineId === key ? 'red' : 'black'}
-                />
-              );
-            })}
+            <g id={'lines'}>
+              {Object.keys(lines).map((key) => {
+                return (
+                  <line
+                    key={key}
+                    id={key}
+                    x1={lines[key].src.x}
+                    y1={lines[key].src.y}
+                    x2={lines[key].dst.x}
+                    y2={lines[key].dst.y}
+                    onClick={(e) => {
+                      onClickLine(selectedLineId === key ? null : key);
+                    }}
+                    strokeWidth={2}
+                    stroke={selectedLineId === key ? 'red' : 'black'}
+                  />
+                );
+              })}
+            </g>
             <g id='services'>
               {Object.keys(services).map((key) => (
                 <g key={services[key].id}>
