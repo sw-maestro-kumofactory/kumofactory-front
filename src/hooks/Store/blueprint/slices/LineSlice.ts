@@ -22,7 +22,9 @@ export const useLineSlice: StateCreator<
     // flag === false => lineDrawing mode off
     onClickLine: (id) =>
       set((state) => {
-        if (!state.isLineDrawing) state.selectedLineId = id;
+        if (!state.isLineDrawing) {
+          state.selectedLineId = id;
+        }
         return state;
       }),
     setLineDrawingMode: (flag: boolean) =>

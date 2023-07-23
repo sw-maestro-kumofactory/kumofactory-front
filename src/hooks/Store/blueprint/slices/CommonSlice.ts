@@ -50,8 +50,8 @@ export const useCommonSlice: StateCreator<
   isDrag: false,
   isMoving: false,
   viewBox: {
-    x: 0,
-    y: 0,
+    x: -150,
+    y: -150,
     width: 0,
     height: 0,
   },
@@ -219,37 +219,34 @@ export const useCommonSlice: StateCreator<
         }
         if (state.resizeState.isResizable && state.selectedAreaId) {
           const area = state.areas[state.selectedAreaId];
-          const calculatedSX = area.x * state.scale;
-          const calculatedSY = area.y * state.scale;
           state.isMoving = true;
 
           if (state.resizeState.dir === 1) {
             // 동
             const newWidth = newPointX - area.x;
-            if (newWidth > 0) state.areas[state.selectedAreaId].width = newWidth;
+            if (newWidth > 100) state.areas[state.selectedAreaId].width = newWidth;
           } else if (state.resizeState.dir === 2) {
             // 서
             const diff = area.x - newPointX;
             const newWidth = area.width + diff;
-            if (newWidth > 0) {
+            if (newWidth > 100) {
               state.areas[state.selectedAreaId].width = newWidth;
               state.areas[state.selectedAreaId].x = newPointX;
             }
           } else if (state.resizeState.dir === 3) {
             // 남
             const newHeight = newPointY - area.y;
-            if (newHeight > 0) state.areas[state.selectedAreaId].height = newHeight;
+            if (newHeight > 100) state.areas[state.selectedAreaId].height = newHeight;
           } else if (state.resizeState.dir === 4) {
             // 북
             const diff = area.y - newPointY;
             const newHeight = area.height + diff;
-            if (newHeight > 0) {
+            if (newHeight > 100) {
               state.areas[state.selectedAreaId].height = newHeight;
               state.areas[state.selectedAreaId].y = newPointY;
             }
           }
         } else if (state.isDrag) {
-          state.isMoving = true;
           const newX = Math.round((newPointX - state.offset.x) / 20) * 20;
           const newY = Math.round((newPointY - state.offset.y) / 20) * 20;
           if (state.selectedServiceId) {

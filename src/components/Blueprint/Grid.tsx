@@ -23,7 +23,6 @@ const Grid = ({ id }: IProps) => {
   const lines = useBlueprintStore((state) => state.lines);
   const selectedLineId = useBlueprintStore((state) => state.selectedLineId);
   const lineDrawingMode = useBlueprintStore((state) => state.isLineDrawing);
-  const viewBoxOriginSize = useBlueprintStore((state) => state.viewBoxOriginSize);
   const scale = useBlueprintStore((state) => state.scale);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService } = useBlueprintStore(
     (state) => state.ServiceAction,
@@ -43,9 +42,6 @@ const Grid = ({ id }: IProps) => {
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
 
-  console.log(viewBox.x, viewBox.y, viewBox.width, viewBox.height);
-  console.log('scale: ', scale);
-
   const onHandleMouseMove = (e: React.MouseEvent) => {
     if (selectedServiceId) e.stopPropagation();
     onMouseMove(e);
@@ -62,6 +58,7 @@ const Grid = ({ id }: IProps) => {
           name: '',
           components: [],
           links: [],
+          areas: [],
         },
       });
     }
@@ -153,6 +150,7 @@ const Grid = ({ id }: IProps) => {
                     x2={lines[key].dst.x}
                     y2={lines[key].dst.y}
                     onClick={(e) => {
+                      e.stopPropagation();
                       onClickLine(selectedLineId === key ? null : key);
                     }}
                     strokeWidth={2}

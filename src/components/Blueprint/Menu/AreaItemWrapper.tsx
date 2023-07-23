@@ -18,8 +18,8 @@ const AreaItemWrapper = ({ type, name }: IProps) => {
         onClick={() => {
           createArea({
             id: new Date().toString(),
-            width: 500,
-            height: 500,
+            width: 125,
+            height: 125,
             x: 50,
             y: 50,
             type,
