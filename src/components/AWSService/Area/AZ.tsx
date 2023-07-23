@@ -14,8 +14,6 @@ const AZ = ({ Area, activate }: IProps) => {
   const setResizable = useBlueprintStore((state) => state.AreaAction.setResizable);
   const svgRef = useRef<SVGSVGElement>(null);
 
-  console.log(Area.type);
-
   useEffect(() => {
     if (svgRef.current) {
       svgRef.current.setAttribute('x', Area.x.toString());
@@ -28,7 +26,7 @@ const AZ = ({ Area, activate }: IProps) => {
   return (
     <svg
       ref={svgRef}
-      viewBox={`-4 -4 ${Area.width + 8} ${Area.height + 8}`}
+      // viewBox={`-4 -4 ${Area.width + 8} ${Area.height + 8}`}
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -101,7 +99,7 @@ const AZ = ({ Area, activate }: IProps) => {
           />
         </>
       )}
-      <text x='10' y='20'>
+      <text className='text-xs select-none' x='0' y='10'>
         {Area.type}
       </text>
     </svg>
