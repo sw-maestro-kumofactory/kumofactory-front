@@ -15,7 +15,7 @@ const BlueprintNameField = () => {
         setIsEdit(false);
       }
     };
-    const field = document.querySelector('.Input-Wrapper');
+    const field = document.querySelector('.Input-Wrapper') as HTMLElement;
     field?.addEventListener('keydown', handleKeyboardEnter);
     return () => {
       field?.removeEventListener('keydown', handleKeyboardEnter);
