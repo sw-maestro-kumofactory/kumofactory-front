@@ -62,6 +62,7 @@ export const useCommonSlice: StateCreator<
     width: 0,
     height: 0,
   },
+  isShowOption: false,
   CommonAction: {
     initState: () => {
       set((state) => {
@@ -154,6 +155,7 @@ export const useCommonSlice: StateCreator<
     onClickGrid: (e) => {
       set((state) => {
         const mousePt = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
+        state.isShowOption = false;
         state.selectedServiceId = null;
         state.selectedAreaId = null;
         state.resizeState = {
@@ -169,7 +171,6 @@ export const useCommonSlice: StateCreator<
       set((state) => {
         e.stopPropagation();
         state.isMoving = true;
-
         const newPoint = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
         state.svgOrigin.x = newPoint.x;
         state.svgOrigin.y = newPoint.y;
@@ -349,6 +350,8 @@ export const useCommonSlice: StateCreator<
         }
 
         // 모든 상태 null
+        state.isShowOption = false;
+        state.doubleClickedServiceId = null;
         state.selectedServiceId = null;
         state.selectedAreaId = null;
         state.isMoving = false;

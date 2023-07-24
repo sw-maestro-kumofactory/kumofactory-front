@@ -10,8 +10,10 @@ import { useServiceSlice } from '@/src/hooks/Store/blueprint/slices/ServiceSlice
 import { useLineSlice } from '@/src/hooks/Store/blueprint/slices/LineSlice';
 import { useAreaSlice } from '@/src/hooks/Store/blueprint/slices/AreaSlice';
 import { useCommonSlice } from '@/src/hooks/Store/blueprint/slices/CommonSlice';
+import { OptionState } from '@/src/hooks/Store/blueprint/state/OptionState';
+import { useOptionSlice } from '@/src/hooks/Store/blueprint/slices/OptionSlice';
 
-export type AllBluePrintStates = AreaState & CommonState & ServiceState & LineState;
+export type AllBluePrintStates = AreaState & CommonState & ServiceState & LineState & OptionState;
 
 const useBlueprintStore = create<AllBluePrintStates>()(
   devtools(
@@ -20,6 +22,7 @@ const useBlueprintStore = create<AllBluePrintStates>()(
       ...useAreaSlice(...a),
       ...useLineSlice(...a),
       ...useCommonSlice(...a),
+      ...useOptionSlice(...a),
     })),
   ),
 );

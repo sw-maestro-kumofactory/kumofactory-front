@@ -5,7 +5,7 @@ import axios from 'axios';
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import Loading from '@/src/components/common/Loading';
-import AZ from '@/src/components/AWSService/Area/AZ';
+import Area from '@/src/components/AWSService/Area/Area';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
@@ -26,8 +26,8 @@ const Grid = ({ id }: IProps) => {
   const lines = useBlueprintStore((state) => state.lines);
   const selectedLineId = useBlueprintStore((state) => state.selectedLineId);
   const lineDrawingMode = useBlueprintStore((state) => state.isLineDrawing);
-  const scale = useBlueprintStore((state) => state.scale);
-  const { onMouseDownService, onMouseEnterService, onMouseLeaveService } = useBlueprintStore(
+  const isShowOption = useBlueprintStore((state) => state.isShowOption);
+  const { onMouseDownService, onMouseEnterService, onMouseLeaveService, onDoubleClickService } = useBlueprintStore(
     (state) => state.ServiceAction,
   );
   const {
@@ -44,6 +44,9 @@ const Grid = ({ id }: IProps) => {
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
+  const options = useBlueprintStore((state) => state.options);
+  console.log(options);
+  console.log(services);
 
 
   const onHandleMouseMove = (e: React.MouseEvent) => {
@@ -143,7 +146,7 @@ const Grid = ({ id }: IProps) => {
             </g>
             <g id='zone'>
               {Object.keys(areas).map((key) => (
-                <AZ key={areas[key].id} Area={areas[key]} activate={selectedAreaId === areas[key].id} />
+                <Area key={areas[key].id} Area={areas[key]} activate={selectedAreaId === areas[key].id} />
               ))}
             </g>
             <g id='lines'>
@@ -172,6 +175,7 @@ const Grid = ({ id }: IProps) => {
                   <Service
                     onClick={(e) => {
                       e.stopPropagation();
+                      onDoubleClickService(e, services[key]);
                     }}
                     onMouseDown={(e) => {
                       e.stopPropagation();
@@ -202,6 +206,7 @@ const Grid = ({ id }: IProps) => {
               ))}
             </g>
           </svg>
+          {isShowOption && <div className='h-fit w-80 absolute top-16 right-0 bg-amber-100'>Hi</div>}
         </div>
       ) : (
         <Loading />

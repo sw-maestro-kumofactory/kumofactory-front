@@ -9,6 +9,7 @@ export interface CommonState {
   blueprintElementPosition: Coordinate;
   isDrag: boolean;
   isMoving: boolean;
+  isShowOption: boolean;
   scale: number;
   quarterPoint: number;
   viewBox: {
