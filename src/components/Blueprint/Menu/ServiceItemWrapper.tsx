@@ -5,6 +5,7 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { ServiceFactory } from '@/src/components/AWSService/ServiceFactory/ServiceFactory';
 import ItemButtonContainer from '@/src/components/common/Button/ItemButton';
 import { MenuItemList } from '@/src/assets/MenuItems';
+import { OptionFactory } from '@/src/components/AWSService/OptionFactory/OptionFactory';
 
 interface IProps {
   type: string;
@@ -13,8 +14,9 @@ interface IProps {
 
 const ServiceItemWrapper = ({ type, children }: IProps) => {
   const createService = useBlueprintStore((state) => state.ServiceAction.createService);
-
+  const createOption = useBlueprintStore((state) => state.OptionAction.createOption);
   const serviceFactory = new ServiceFactory();
+  const optionFactory = new OptionFactory();
   const items = MenuItemList[type];
 
   return (
@@ -24,7 +26,9 @@ const ServiceItemWrapper = ({ type, children }: IProps) => {
           <ItemButtonContainer
             key={item.type}
             onClick={() => {
-              createService(serviceFactory.createService({ type: item.type }), v1().toString());
+              const id = v1().toString();
+              createService(serviceFactory.createService({ type: item.type }), id);
+              createOption(optionFactory.createOption(item.type, id));
             }}
           >
             <svg

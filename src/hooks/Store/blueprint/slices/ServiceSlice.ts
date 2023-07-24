@@ -1,8 +1,8 @@
 import { StateCreator } from 'zustand';
 
 import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
-import { Services } from '@/src/types/Services';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { IComponent } from '@/src/types/Services';
 
 export const useServiceSlice: StateCreator<
   AllBluePrintStates,
@@ -17,6 +17,7 @@ export const useServiceSlice: StateCreator<
     x: 0,
     y: 0,
   },
+  doubleClickedServiceId: null,
   ServiceAction: {
     onMouseEnterService: (event, service) => {
       set((state) => {
@@ -64,7 +65,16 @@ export const useServiceSlice: StateCreator<
         return state;
       });
     },
-    createService: (service: Services, id: string) =>
+    onDoubleClickService: (e, service) => {
+      set((state) => {
+        if (service && e.detail === 2) {
+          state.doubleClickedServiceId = service.id;
+          state.isShowOption = true;
+        }
+        return state;
+      });
+    },
+    createService: (service: IComponent, id: string) =>
       set((state) => {
         state.services[id] = {
           ...service,

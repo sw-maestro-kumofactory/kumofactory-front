@@ -9,7 +9,7 @@ interface IProps {
   activate: boolean;
 }
 
-const AZ = ({ Area, activate }: IProps) => {
+const Area = ({ Area, activate }: IProps) => {
   const onMouseDownArea = useBlueprintStore((state) => state.AreaAction.onMouseDownArea);
   const setResizable = useBlueprintStore((state) => state.AreaAction.setResizable);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -106,4 +106,4 @@ const AZ = ({ Area, activate }: IProps) => {
   );
 };
 
-export default AZ;
+export default Area;

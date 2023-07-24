@@ -10,90 +10,63 @@ export interface IComponent extends HasLine {
 }
 
 export interface EC2Options {
-  instanceType: string;
-  size: string;
-  securityGroup: {
-    IPVersion: string;
-    type: 'SSH' | 'FTP' | 'SFTP';
-    protocol: 'HTTP' | 'HTTPS' | 'TCP' | 'UDP';
-    port: number;
-  };
-  vpc: string;
-  platform: string;
+  instanceType: string; // ex) t2.micro -> type, size로 분류
+  machineImage: string; // amazon linux 2023 으로 고정되어 있어서 일단 "" 로 보내면 됨
+  subnetType: AccessScope;
+  availabilityZone: AvailabilityZone;
+  instanceName: string;
+  securityGroupType: AccessScope;
+  id: string; // instance name id : "TestInstance" 임
 }
 
-export interface EC2 extends IComponent {
-  options: EC2Options;
+export enum AccessScope {
+  Public,
+  Private,
+  Database,
+}
+
+export enum AvailabilityZone {
+  AP_NORTHEAST_2A,
+  AP_NORTHEAST_2C,
 }
 
 export interface RDSOptions {
-  instanceType: string;
-  engine: string;
-  size: string;
-}
-
-export interface RDS extends IComponent {
-  options: RDSOptions;
+  id: string;
 }
 
 export interface S3Options {
-  bucketName: string;
+  id: string;
 }
 
-export interface S3 extends IComponent {
-  options: S3Options;
+export interface ROUTE53Options {
+  id: string;
+}
+export interface WAFOptions {
+  id: string;
+}
+export interface ElastiCacheOptions {
+  id: string;
 }
 
-export interface ROUTE53Options {}
-export interface ROUTE53 extends IComponent {
-  options?: ROUTE53Options;
+export interface CloudFrontOptions {
+  id: string;
 }
 
-export interface WAFOptions {}
-export interface WAF extends IComponent {
-  options?: WAFOptions;
+export interface EFSOptions {
+  id: string;
 }
 
-export interface ElastiCacheOptions {}
-
-export interface ElastiCache extends IComponent {
-  options?: ElastiCacheOptions;
+export interface NATOptions {
+  id: string;
 }
 
-export interface CloudFrontOptions {}
-
-export interface CloudFront extends IComponent {
-  options?: CloudFrontOptions;
+export interface ELBOptions {
+  id: string;
 }
 
-export interface EFSOptions {}
-
-export interface EFS extends IComponent {
-  options?: EFSOptions;
+export interface AutoScalingOptions {
+  id: string;
 }
-
-export interface NATOptions {}
-export interface NAT extends IComponent {
-  options?: NATOptions;
-}
-
-export interface VPCOptions {}
-export interface VPC extends IComponent {
-  options?: VPCOptions;
-}
-
-export interface ELBOptions {}
-export interface ELB extends IComponent {
-  options?: ELBOptions;
-}
-
-export interface AutoScalingOptions {}
-
-export interface AutoScaling extends IComponent {
-  options?: AutoScalingOptions;
-}
-
-export type Services = EC2 | RDS | S3 | ROUTE53 | WAF | ElastiCache | CloudFront | EFS | NAT | VPC | ELB | AutoScaling;
 
 export type ServiceOptions =
   | EC2Options
@@ -105,9 +78,9 @@ export type ServiceOptions =
   | CloudFrontOptions
   | EFSOptions
   | NATOptions
-  | VPCOptions
   | ELBOptions
   | AutoScalingOptions;
+
 export type ServicesString =
   | 'EC2'
   | 'RDS'
@@ -118,6 +91,5 @@ export type ServicesString =
   | 'CloudFront'
   | 'EFS'
   | 'NAT_GATEWAY'
-  | 'VPC'
   | 'ELB'
   | 'AutoScaling';
