@@ -9,16 +9,23 @@ import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { getTemplateList, getTemplateListById } from '@/src/api/template';
+import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 
 const BluePrint = () => {
-  const accessToken = useStore(useAuthStore, (state) => state.accessToken);
   const [isOpen, setIsOpen] = useState(false);
-  const userBlueprints = useStore(useAuthStore, (state) => state.userBlueprints);
-  console.log(userBlueprints);
+  const userBlueprints = useAuthStore((state) => state.userBlueprints);
+
+  const getTemplate = async () => {
+    try {
+      const res = await getTemplateList();
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
-    // getTemplateList(accessToken).then((res) => {
-    //   console.log(res);
-    // });
+    getTemplate();
   }, []);
 
   return (
@@ -55,7 +62,7 @@ const BluePrint = () => {
         </div>
         <div className='flex h-5/6 w-full overflow-y-scroll overflow-x-hidden px-4'>
           <div className='flex items-center w-full h-16 '>
-            <Link className='w-3/4 mr-4 h-full flex items-center' href={`/blueprint/testId`}>
+            <Link className='w-3/4 mr-4 h-full flex items-center' href={`/blueprint/9`}>
               <div>blueprint.name</div>
             </Link>
             <div className='w-1/4 ml-4 h-full flex items-center'>blueprint.name</div>

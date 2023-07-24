@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import Loading from '@/src/components/common/Loading';
-import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import { useLogin } from '@/src/hooks/Auth/useLogin';
 
 interface CallbackProps {
   type: 'github' | 'google' | 'kakao';
@@ -12,21 +12,20 @@ interface CallbackProps {
 }
 
 const ThirdPartyCallback = ({ type, callbackURL, authRequestFunction }: CallbackProps) => {
-  const { setAccessToken, setId } = useAuthStore((state) => state.UserAction);
-
+  const { Login } = useLogin();
   const router = useRouter();
+
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code')!;
-    const fetchData = () => {
-      authRequestFunction(code)
-        .then((res) => {
-          setId();
-          setAccessToken(res.accessToken);
-          router.push('/');
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+    const fetchData = async () => {
+      try {
+        const res = await authRequestFunction(code);
+        const newToken = res.accessToken;
+        Login(newToken);
+        router.push('/');
+      } catch (e) {
+        console.error('component/auth/Callback.tsx', e);
+      }
     };
     fetchData();
   }, []);

@@ -6,12 +6,12 @@ export const postTemplateData = async (body: BlueprintResponse): Promise<any> =>
   return data;
 };
 
-export const getTemplateList = async (token: string | null): Promise<any> => {
+export const getTemplateList = async (): Promise<any> => {
   const { data } = await authAxiosInstance.get<BlueprintInfo[]>(`/api/blueprint/aws/list`);
   return data;
 };
 
-export const getTemplateListById = async (token: string | null, id: number): Promise<any> => {
+export const getTemplateListById = async (id: number): Promise<BlueprintResponse> => {
   const { data } = await authAxiosInstance.get<BlueprintResponse>(`/api/blueprint/aws/${id}`);
   return data;
 };

@@ -1,12 +1,6 @@
-'use client';
 import Link from 'next/link';
-import { useStore } from 'zustand';
-
-import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 const Home = () => {
-  const accessToken = useStore(useAuthStore, (state) => state.accessToken);
-  console.log('Home: ', accessToken);
   return (
     <div className='w-full h-full flex flex-col flex-wrap items-center justify-center'>
       <div className='md:text-8xl sm:text-6xl mb-16 text-center '>
