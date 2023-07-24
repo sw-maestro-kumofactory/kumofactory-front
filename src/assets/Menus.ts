@@ -2,11 +2,6 @@ import { MenuInterface } from '@/src/types/Menu';
 
 export const Menus: MenuInterface[] = [
   {
-    title: 'Area',
-    icon: 'area',
-    Component: null,
-  },
-  {
     title: 'Compute',
     icon: 'compute',
     Component: null,

@@ -1,12 +1,6 @@
-import { itemType } from '@/src/types/MenuItems';
+import { AreaItemInterface, ServiceItemType } from '@/src/types/MenuItems';
 
-export const MenuItemList: itemType = {
-  Area: [
-    {
-      name: 'AZ',
-      type: 'AvailableZone',
-    },
-  ],
+export const MenuItemList: ServiceItemType = {
   Compute: [
     {
       name: 'EC2',
@@ -46,10 +40,7 @@ export const MenuItemList: itemType = {
       name: 'CloudFront',
       type: 'CloudFront',
     },
-    {
-      name: 'VPC',
-      type: 'VPC',
-    },
+
     {
       name: 'NAT',
       type: 'NAT_GATEWAY',
@@ -66,3 +57,22 @@ export const MenuItemList: itemType = {
     },
   ],
 };
+
+export const AreaItemList: AreaItemInterface[] = [
+  {
+    name: 'VPC',
+    type: 'VPC',
+  },
+  {
+    name: 'PublicSubnet',
+    type: 'PublicSubnet',
+  },
+  {
+    name: 'PrivateSubnet',
+    type: 'PrivateSubnet',
+  },
+  {
+    name: 'AZ',
+    type: 'AvailableZone',
+  },
+];

@@ -5,7 +5,7 @@ interface IProps {
 const ItemButtonContainer = ({ children, onClick }: IProps) => {
   return (
     <div
-      className='flex flex-col items-center justify-center text-white text-lg font-bold w-20 cursor-pointer rounded-2xl mt-4 mx-4 select-none'
+      className='flex flex-col items-center justify-center text-white w-20 cursor-pointer rounded-2xl mt-4 select-none mr-1'
       onClick={onClick}
     >
       {children}

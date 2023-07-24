@@ -11,9 +11,9 @@ interface IProps {
   children?: React.ReactNode;
 }
 
-const MenuItems = ({ type, children }: IProps) => {
+const ServiceItemWrapper = ({ type, children }: IProps) => {
   const createService = useBlueprintStore((state) => state.ServiceAction.createService);
-  const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
+
   const serviceFactory = new ServiceFactory();
   const items = MenuItemList[type];
 
@@ -24,32 +24,24 @@ const MenuItems = ({ type, children }: IProps) => {
           <ItemButtonContainer
             key={item.type}
             onClick={() => {
-              if (type === 'Area') {
-                createArea({
-                  id: new Date().toString(),
-                  width: 500,
-                  height: 500,
-                  sx: 50,
-                  sy: 50,
-                });
-              } else {
-                createService(serviceFactory.createService({ type: item.type }), v1().toString());
-              }
+              createService(serviceFactory.createService({ type: item.type }), v1().toString());
             }}
           >
             <svg
               cursor='pointer'
+              width={64}
+              height={64}
               viewBox='0 0 80 80'
               xmlns='http://www.w3.org/2000/svg'
               className='service-svg animate-service'
             >
               {serviceFactory.getSvg({ type: item.type })}
             </svg>
-            <div className='text-black'>{item.name.toString()}</div>
+            <div className='text-black text-sm'>{item.name.toString()}</div>
           </ItemButtonContainer>
         ))}
     </div>
   );
 };
 
-export default MenuItems;
+export default ServiceItemWrapper;

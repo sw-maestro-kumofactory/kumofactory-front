@@ -1,8 +1,14 @@
 import { ServicesString } from '@/src/types/Services';
+import { AreaString } from '@/src/types/Area';
 
-interface itemInterface {
+interface ServiceItemInterface {
   name: string;
   type: ServicesString;
 }
 
-export type itemType = Record<string, itemInterface[]>;
+export interface AreaItemInterface {
+  name: string;
+  type: AreaString;
+}
+
+export type ServiceItemType = Record<string, ServiceItemInterface[]>;

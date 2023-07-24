@@ -16,7 +16,7 @@ export const Header = () => {
   }, []);
 
   return (
-    <div className='fixed flex justify-between w-full text-2xl text-white bg-[#195091] h-20 p-4 select-none items-center'>
+    <div className='fixed flex justify-between w-full text-lg text-white bg-[#195091] h-16 p-4 select-none items-center'>
       <Link className='px-4 py-2 rounded-2xl' href='/'>
         Kumo Factory
       </Link>

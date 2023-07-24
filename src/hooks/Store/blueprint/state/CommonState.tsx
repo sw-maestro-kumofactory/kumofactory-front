@@ -1,20 +1,27 @@
-import { ChangeEvent } from 'react';
-
 import { Coordinate, Point } from '@/src/types/Common';
 import { BlueprintResponse } from '@/src/types/Blueprint';
 
 export interface CommonState {
   name: string;
   isEdit: boolean;
-  interval: Coordinate;
+  offset: Coordinate;
   gridSrc: Coordinate;
-  blueprintSrc: Coordinate;
-  draggable: boolean;
+  blueprintElementPosition: Coordinate;
+  isDrag: boolean;
   isMoving: boolean;
   scale: number;
-  stdScale: number | null;
-  oneByFourPoint: number;
+  quarterPoint: number;
   viewBox: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  svgOrigin: {
+    x: number;
+    y: number;
+  };
+  viewBoxOriginSize: {
     width: number;
     height: number;
   };
@@ -25,12 +32,13 @@ export interface CommonState {
     blueprintToJson: () => BlueprintResponse;
     setBlueprintSrc: (x: number, y: number) => void;
     setGridSrc: () => void;
-    setStdScale: () => void;
     setViewBox: (width: number, height: number) => void;
-    setScale: (scale: number) => void;
-    onMouseUp: (e: React.MouseEvent) => void;
-    onClickGrid: (e: React.MouseEvent) => void;
-    onMouseMove: (e: React.MouseEvent) => void;
     clearComponent: () => void;
+    onMouseDown: (e: React.MouseEvent) => void;
+    onMouseUp: (e: React.MouseEvent) => void;
+    onMouseleave: (e: React.MouseEvent) => void;
+    onMouseMove: (e: React.MouseEvent) => void;
+    onMouseWheel: (e: React.WheelEvent) => void;
+    onClickGrid: (e: React.MouseEvent) => void;
   };
 }

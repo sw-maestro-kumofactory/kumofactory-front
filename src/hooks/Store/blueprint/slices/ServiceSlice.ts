@@ -1,0 +1,77 @@
+import { StateCreator } from 'zustand';
+
+import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
+import { Services } from '@/src/types/Services';
+import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
+
+export const useServiceSlice: StateCreator<
+  AllBluePrintStates,
+  [],
+  [['zustand/devtools', never], ['zustand/immer', never]],
+  ServiceState
+> = (set, get) => ({
+  services: {},
+  selectedServiceId: null,
+  isLineDrawing: false,
+  lineDrawingLocation: {
+    x: 0,
+    y: 0,
+  },
+  ServiceAction: {
+    onMouseEnterService: (event, service) => {
+      set((state) => {
+        if (state.isLineDrawing) {
+          state.linkedServiceId = service!.id;
+        }
+        return state;
+      });
+    },
+    onMouseLeaveService: (e, service) => {
+      set((state) => {
+        if (state.isLineDrawing) {
+          state.linkedServiceId = undefined;
+        }
+        return state;
+      });
+    },
+    onMouseDownService: (e, service) => {
+      set((state) => {
+        if (service) {
+          if (state.isLineDrawing) {
+            if (state.linkedServiceId && state.curLineId) {
+              state.lines[state.curLineId].dst.componentId = state.linkedServiceId;
+              state.services[state.linkedServiceId].lines.push(state.curLineId);
+              state.services[state.lines[state.curLineId].src.componentId].lines.push(state.curLineId);
+            }
+            state.curLineId = undefined;
+          }
+          const newOffset = {
+            x: (e.clientX - state.blueprintElementPosition.x) * state.scale - service.x + state.viewBox.x,
+            y: (e.clientY - state.blueprintElementPosition.y) * state.scale - service.y + state.viewBox.y,
+          };
+          state.isDrag = true;
+          state.selectedAreaId = null;
+          state.selectedServiceId = service.id;
+          state.offset = newOffset;
+          state.lineDrawingLocation = {
+            x: service.x * state.scale + state.gridSrc.x + 100 * state.scale,
+            y: service.y * state.scale + state.gridSrc.y,
+          };
+
+          state.linkedServiceId = undefined;
+          state.isLineDrawing = false;
+        }
+        return state;
+      });
+    },
+    createService: (service: Services, id: string) =>
+      set((state) => {
+        state.services[id] = {
+          ...service,
+          id,
+        };
+        return state;
+      }),
+    setOptions: (service) => {},
+  },
+});

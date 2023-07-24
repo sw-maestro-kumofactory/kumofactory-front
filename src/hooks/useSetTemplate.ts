@@ -9,12 +9,14 @@ export const useSetTemplate = () => {
   const createLine = useBlueprintStore((state) => state.LineAction.createLine);
   const setComponentLine = useBlueprintStore((state) => state.LineAction.setComponentLine);
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
+  const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
   const setTemplate = ({ data }: { data: BlueprintResponse }) => {
     //add for initialize State
     initState();
 
     const services = data.components;
     const lines = data.links;
+    const areas = data.areas;
 
     for (const service of services) {
       createService(
@@ -33,6 +35,10 @@ export const useSetTemplate = () => {
       createLine(line.id, line.src, line.dst);
       setComponentLine(line.id, line.src.componentId);
       setComponentLine(line.id, line.dst.componentId);
+    }
+
+    for (const area of areas) {
+      createArea({ id: area.id, x: area.x, y: area.y, width: area.width, height: area.height, type: area.type });
     }
   };
 

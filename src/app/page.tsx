@@ -12,7 +12,6 @@ const Home = () => {
       <Link className='text-4xl font-bold text-gray-500 hover:text-gray-400 transition' href='/blueprint'>
         Build Your Own Architecture!
       </Link>
-      {/*)}*/}
     </div>
   );
 };
