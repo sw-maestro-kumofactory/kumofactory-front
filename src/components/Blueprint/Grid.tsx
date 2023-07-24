@@ -44,10 +44,6 @@ const Grid = ({ id }: IProps) => {
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
-  const options = useBlueprintStore((state) => state.options);
-  console.log(options);
-  console.log(services);
-
 
   const onHandleMouseMove = (e: React.MouseEvent) => {
     if (selectedServiceId) e.stopPropagation();
