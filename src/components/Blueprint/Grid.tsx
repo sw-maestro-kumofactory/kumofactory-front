@@ -210,7 +210,7 @@ const Grid = ({ id }: IProps) => {
                     lines={services[key].lines}
                   />
                   {selectedServiceId === services[key].id && !isMoving && !lineDrawingMode && (
-                    <foreignObject x={services[key].x + 90} y={services[key].y + 15} width={50} height={200}>
+                    <foreignObject x={services[key].x + 90} y={services[key].y + 15} width={50} height={50}>
                       <CreateLineContainer />
                     </foreignObject>
                   )}
