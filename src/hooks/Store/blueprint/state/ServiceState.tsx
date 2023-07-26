@@ -1,4 +1,4 @@
-import { IComponent } from '@/src/types/Services';
+import { IComponent, ServiceOptions } from '@/src/types/Services';
 import { Coordinate } from '@/src/types/Common';
 
 export interface ServiceState {
@@ -13,6 +13,6 @@ export interface ServiceState {
     onMouseLeaveService: (e: React.MouseEvent, services: IComponent | null) => void;
     onDoubleClickService: (e: React.MouseEvent, services: IComponent | null) => void;
     createService: (service: IComponent, id: string) => void;
-    setOptions: (service: IComponent) => void;
+    setOption: (id: string, options: ServiceOptions) => void;
   };
 }

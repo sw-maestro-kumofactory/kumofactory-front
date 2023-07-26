@@ -19,6 +19,18 @@ export interface EC2Options {
   id: string; // instance name id : "TestInstance" 임
 }
 
+export type EC2OptionsKeys = keyof EC2Options;
+
+export const EC2OptionKeyList = [
+  'instanceType',
+  'machineImage',
+  'subnetType',
+  'availabilityZone',
+  'instanceName',
+  'securityGroupType',
+  'id',
+];
+
 export enum AccessScope {
   Public,
   Private,
@@ -28,6 +40,24 @@ export enum AccessScope {
 export enum AvailabilityZone {
   AP_NORTHEAST_2A,
   AP_NORTHEAST_2C,
+}
+
+export enum InstanceType {
+  T2Micro = 't2.micro',
+  T2Small = 't2.small',
+  T2Medium = 't2.medium',
+  T2Large = 't2.large',
+  T2XLarge = 't2.xlarge',
+  T22XLarge = 't2.2xlarge',
+  M5Large = 'm5.large',
+  M5XLarge = 'm5.xlarge',
+  M52XLarge = 'm5.2xlarge',
+  M54XLarge = 'm5.4xlarge',
+  M58XLarge = 'm5.8xlarge',
+  M512XLarge = 'm5.12xlarge',
+  M516XLarge = 'm5.16xlarge',
+  M524XLarge = 'm5.24xlarge',
+  M5Metal = 'm5.metal',
 }
 
 export interface RDSOptions {

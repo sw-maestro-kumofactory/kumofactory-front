@@ -11,6 +11,8 @@ import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import { getTemplateList, getTemplateListById, postTemplateData } from '@/src/api/template';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import { EC2OptionComponent } from '@/src/components/AWSService/OptionFactory/Options/EC2Option';
+import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 
 interface IProps {
   id: string;
@@ -27,6 +29,7 @@ const Grid = ({ id }: IProps) => {
   const selectedLineId = useBlueprintStore((state) => state.selectedLineId);
   const lineDrawingMode = useBlueprintStore((state) => state.isLineDrawing);
   const isShowOption = useBlueprintStore((state) => state.isShowOption);
+  const doubleClickedServiceId = useBlueprintStore((state) => state.doubleClickedServiceId);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService, onDoubleClickService } = useBlueprintStore(
     (state) => state.ServiceAction,
   );
@@ -55,6 +58,29 @@ const Grid = ({ id }: IProps) => {
     setTemplate({ data: data.data });
   };
 
+  const handleResize = () => {
+    const component = document.querySelector('.grid-wrapper')!;
+    const box = component.getBoundingClientRect();
+    setBlueprintSrc(box.x, box.y);
+    const { width, height } = component?.getBoundingClientRect() || { width: 0, height: 0 };
+    setViewBox(width, height);
+  };
+
+  const onKeyDownESC = (e: KeyboardEvent) => {
+    e.stopPropagation();
+
+    // Check if the current target (element that triggered the event) has the className "test"
+    const isSvgTestElement = (e.target as HTMLElement).classList.contains('test');
+
+    if (e.key === 'Escape' && isSvgTestElement) {
+      // Add your event handling logic for the "Escape" key here
+      console.log('ESC key pressed on the SVG element with className "test"');
+      setLineDrawingMode(false);
+    } else if (e.key === 'Backspace' || e.key === 'Delete') {
+      clearComponent();
+    }
+  };
+
   useEffect(() => {
     if (id !== 'empty') {
       setTemplateById();
@@ -72,26 +98,12 @@ const Grid = ({ id }: IProps) => {
   }, []);
 
   useEffect(() => {
-    const escKeyInput = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setLineDrawingMode(false);
-      } else if (e.key === 'Backspace' || e.key === 'Delete') {
-        clearComponent();
-      }
-    };
-    const handleResize = () => {
-      const component = document.querySelector('.grid-wrapper')!;
-      const box = component.getBoundingClientRect();
-      setBlueprintSrc(box.x, box.y);
-      const { width, height } = component?.getBoundingClientRect() || { width: 0, height: 0 };
-      setViewBox(width, height);
-    };
     handleResize();
     window.addEventListener('resize', handleResize);
-    window.addEventListener('keydown', escKeyInput);
+    window.addEventListener('keydown', onKeyDownESC);
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('keydown', escKeyInput);
+      window.removeEventListener('keydown', onKeyDownESC);
     };
   }, []);
 
@@ -101,6 +113,10 @@ const Grid = ({ id }: IProps) => {
       setGridSrc();
     }
   }, [isLoading, viewBox]);
+
+  useEffect(() => {
+    handleResize();
+  }, [isShowOption]);
 
   return (
     <div
@@ -160,7 +176,7 @@ const Grid = ({ id }: IProps) => {
                       onClickLine(selectedLineId === key ? null : key);
                     }}
                     strokeWidth={2}
-                    stroke={selectedLineId === key ? 'red' : 'black'}
+                    stroke={selectedLineId === key ? 'red' : '#595959'}
                   />
                 );
               })}
@@ -202,7 +218,9 @@ const Grid = ({ id }: IProps) => {
               ))}
             </g>
           </svg>
-          {isShowOption && <div className='h-fit w-80 absolute top-16 right-0 bg-amber-100'>Hi</div>}
+          {isShowOption && doubleClickedServiceId && (
+            <OptionContainer id={doubleClickedServiceId} type={services[doubleClickedServiceId].type} />
+          )}
         </div>
       ) : (
         <Loading />
