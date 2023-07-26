@@ -17,10 +17,6 @@ const Templates = () => {
             New BluePrint
           </Link>
         </div>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
       </div>
     </div>
   );

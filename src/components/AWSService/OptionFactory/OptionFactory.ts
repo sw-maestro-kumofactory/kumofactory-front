@@ -79,3 +79,5 @@ export class OptionFactory implements IFactory {
     }
   }
 }
+
+export const OptionFactoryInstance = new OptionFactory();

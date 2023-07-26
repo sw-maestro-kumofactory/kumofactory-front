@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 
 import { IComponent, ServicesString } from '@/src/types/Services';
 import { ServiceFactory } from '@/src/components/AWSService/ServiceFactory/ServiceFactory';
+import { ServiceFactoryInstance } from '@/src/components/AWSService/ServiceFactory/ServiceFactory';
 
 interface IProps extends IComponent {
   onMouseDown: (e: any) => void;
@@ -15,7 +16,6 @@ interface IProps extends IComponent {
 
 const Service = (props: IProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const serviceFactory = new ServiceFactory();
 
   useEffect(() => {
     if (svgRef.current) {
@@ -33,7 +33,7 @@ const Service = (props: IProps) => {
       onMouseLeave={props.onMouseLeave}
       cursor='pointer'
     >
-      {serviceFactory.getSvg({ type: props.type })}
+      {ServiceFactoryInstance.getSvg({ type: props.type })}
       {props.isActive && (
         <path d='M1 1 L 1 79 L 79 79 L 79 1z' stroke='#19509155' fill='transparent' fillOpacity='0.5' strokeWidth='3' />
       )}
