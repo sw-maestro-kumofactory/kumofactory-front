@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand';
 
 import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import { IComponent } from '@/src/types/Services';
+import { IComponent, ServiceOptions, ServicesString } from '@/src/types/Services';
 
 export const useServiceSlice: StateCreator<
   AllBluePrintStates,
@@ -58,7 +58,8 @@ export const useServiceSlice: StateCreator<
             x: service.x * state.scale + state.gridSrc.x + 100 * state.scale,
             y: service.y * state.scale + state.gridSrc.y,
           };
-
+          state.doubleClickedServiceId = null;
+          state.isShowOption = false;
           state.linkedServiceId = undefined;
           state.isLineDrawing = false;
         }
@@ -82,6 +83,11 @@ export const useServiceSlice: StateCreator<
         };
         return state;
       }),
-    setOptions: (service) => {},
+    setOption: (id: string, options: ServiceOptions) => {
+      set((state) => {
+        state.options[id] = options;
+        return state;
+      });
+    },
   },
 });

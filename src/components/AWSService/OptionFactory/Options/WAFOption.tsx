@@ -4,3 +4,6 @@ import { CommonInfo } from '@/src/components/AWSService/ServiceFactory/CommonInf
 export const WAFOption = (id: string): WAFOptions => {
   return { id: id };
 };
+export const WAFOptionComponent = ({ id }: { id: string }) => {
+  return <></>;
+};

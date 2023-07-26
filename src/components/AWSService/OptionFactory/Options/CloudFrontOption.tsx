@@ -3,3 +3,7 @@ import { CommonOptions } from '@/src/components/AWSService/OptionFactory/CommonO
 export const CloudFrontOption = (id: string): CloudFrontOptions => {
   return { id: id };
 };
+
+export const CloudFrontOptionComponent = ({ id }: { id: string }) => {
+  return <></>;
+};

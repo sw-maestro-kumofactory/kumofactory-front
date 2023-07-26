@@ -132,8 +132,8 @@ export const useCommonSlice: StateCreator<
     },
     setViewBox: (width, height) =>
       set((state) => {
-        state.viewBox.width = width;
-        state.viewBox.height = height;
+        state.viewBox.width = width * state.scale;
+        state.viewBox.height = height * state.scale;
         state.viewBoxOriginSize.width = width;
         state.viewBoxOriginSize.height = height;
         return state;
@@ -153,6 +153,7 @@ export const useCommonSlice: StateCreator<
         },
       })),
     onClickGrid: (e) => {
+      e.stopPropagation();
       set((state) => {
         const mousePt = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
         state.isShowOption = false;

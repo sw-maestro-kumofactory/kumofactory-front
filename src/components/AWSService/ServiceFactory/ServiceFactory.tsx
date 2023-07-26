@@ -55,3 +55,5 @@ export class ServiceFactory implements IFactory {
     }
   }
 }
+
+export const ServiceFactoryInstance = new ServiceFactory();

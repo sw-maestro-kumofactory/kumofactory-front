@@ -5,3 +5,7 @@ export const AutoScalingOption = (id: string): AutoScalingOptions => {
     id: id,
   };
 };
+
+export const AutoScalingOptionComponent = ({ id }: { id: string }) => {
+  return <></>;
+};
