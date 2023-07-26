@@ -44,7 +44,8 @@ export const useAreaSlice: StateCreator<
             x: (e.clientX - state.blueprintElementPosition.x) * state.scale - area.x + state.viewBox.x,
             y: (e.clientY - state.blueprintElementPosition.y) * state.scale - area.y + state.viewBox.y,
           };
-
+          state.isShowOption = false;
+          state.doubleClickedServiceId = null;
           state.isDrag = true;
           state.selectedServiceId = null;
           state.selectedAreaId = area.id;
