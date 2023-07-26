@@ -25,7 +25,6 @@ export const useSetTemplate = () => {
           type: service.type,
           x: service.x,
           y: service.y,
-          options: {},
           lines: [],
         },
         service.id,

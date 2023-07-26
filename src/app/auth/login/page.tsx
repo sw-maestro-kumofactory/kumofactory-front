@@ -6,10 +6,10 @@ import useGithubAuth from '@/src/hooks/Auth/useGithubAuth';
 import KakaoAuthButton from '@/src/components/Auth/Button/kakaoAuthButton';
 import GithubAuthButton from '@/src/components/Auth/Button/githubAuthButton';
 import GoogleAuthButton from '@/src/components/Auth/Button/googleAuthButton';
-import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import { useLogin } from '@/src/hooks/Auth/useLogin';
 
 const Login = () => {
-  const isLogin = useStore(useAuthStore, (state) => state.isLogin);
+  const { isLogin } = useLogin();
   const googleAuth = useGoogleAuth();
   const githubAuth = useGithubAuth();
 
