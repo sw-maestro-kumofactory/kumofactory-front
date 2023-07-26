@@ -25,7 +25,7 @@ export const getRefreshToken = async (): Promise<string | null> => {
 
 export const logout = async () => {
   const response = await authAxiosInstance.get('/api/auth/logout');
-  console.log(response);
+  return response;
 };
 
 // export const postGoogleRegister = () => {};

@@ -118,16 +118,16 @@ export const useCommonSlice: StateCreator<
         });
       }
       // areas
-      for (const area of Object.values(get().areas)) {
-        json['areas'].push({
-          id: area.id,
-          x: area.x,
-          y: area.y,
-          width: area.width,
-          height: area.height,
-          type: area.type,
-        });
-      }
+      // for (const area of Object.values(get().areas)) {
+      //   json['areas'].push({
+      //     id: area.id,
+      //     x: area.x,
+      //     y: area.y,
+      //     width: area.width,
+      //     height: area.height,
+      //     type: area.type,
+      //   });
+      // }
       return json;
     },
     setViewBox: (width, height) =>
@@ -275,6 +275,30 @@ export const useCommonSlice: StateCreator<
               dst.x = dstX;
               dst.y = dstY;
             });
+            // 특정 영역에 포함되어 있는지?(시작점을 기준으로 할 것이고, 끝점은 상관없음)
+            for (let areaKey in state.areas) {
+              const curArea = state.areas[areaKey];
+              if (
+                newX >= curArea.x &&
+                newX <= curArea.x + curArea.width &&
+                newY >= curArea.y &&
+                newY <= curArea.y + curArea.height
+              ) {
+                // 영역에 포함되어 있다면
+                // 1. 기존 영역에서 제거
+                const currentOption = state.options[state.selectedServiceId];
+
+                // const prevArea = state.areas[service.areaId];
+                // if (prevArea) {
+                //   const prevAreaServices = prevArea.services.filter((serviceId) => serviceId !== service.id);
+                //   state.areas[service.areaId].services = prevAreaServices;
+                // }
+                // // 2. 새로운 영역에 추가
+                // state.services[state.selectedServiceId].areaId = curArea.id;
+                // state.areas[curArea.id].services.push(service.id);
+                // break;
+              }
+            }
 
             service.x = newX;
             service.y = newY;

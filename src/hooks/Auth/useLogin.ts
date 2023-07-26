@@ -27,7 +27,7 @@ export const useLogin = () => {
             originRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
             return await axios(originRequest);
           } catch (err) {
-            Logout();
+            await Logout();
             alert('로그인이 필요합니다.');
             window.location.href = '/';
           }
@@ -43,6 +43,7 @@ export const useLogin = () => {
   };
 
   const Logout = async () => {
+    console.log('logout');
     try {
       setAccessToken(null);
       await logout();
