@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import { authAxiosInstance } from '@/src/api';
-import { getRefreshToken } from '@/src/api/auth';
+import { getRefreshToken, logout } from '@/src/api/auth';
 
 export const useLogin = () => {
   const { accessToken, isLogin, setAccessToken } = useLoginStore();
@@ -42,9 +42,14 @@ export const useLogin = () => {
     authAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   };
 
-  const Logout = () => {
-    setAccessToken(null);
-    delete authAxiosInstance.defaults.headers.common['Authorization'];
+  const Logout = async () => {
+    try {
+      setAccessToken(null);
+      await logout();
+      delete authAxiosInstance.defaults.headers.common['Authorization'];
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { commonAxiosInstance } from '@/src/api';
+import { authAxiosInstance, commonAxiosInstance } from '@/src/api';
 
 interface IResponse {
   token: string;
@@ -21,6 +21,11 @@ export const getRefreshToken = async (): Promise<string | null> => {
   const response = await commonAxiosInstance.get('/api/auth/refresh');
   const accessToken = response.data.accessToken;
   return accessToken;
+};
+
+export const logout = async () => {
+  const response = await authAxiosInstance.get('/api/auth/logout');
+  console.log(response);
 };
 
 // export const postGoogleRegister = () => {};
