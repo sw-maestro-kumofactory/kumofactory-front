@@ -13,7 +13,7 @@ const Area = ({ Area, activate }: IProps) => {
   const onMouseDownArea = useBlueprintStore((state) => state.AreaAction.onMouseDownArea);
   const setResizable = useBlueprintStore((state) => state.AreaAction.setResizable);
   const svgRef = useRef<SVGSVGElement>(null);
-  console.log(Area);
+
   useEffect(() => {
     if (svgRef.current) {
       svgRef.current.setAttribute('x', Area.x.toString());

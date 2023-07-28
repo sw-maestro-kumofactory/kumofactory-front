@@ -1,7 +1,7 @@
 ---
-name: testA
+name: test
 about: "테스트 및 테스트 코드 (Write Test code.)"
-title: "testA: "
+title: "test: "
 labels: ''
 assignees: ''
 
