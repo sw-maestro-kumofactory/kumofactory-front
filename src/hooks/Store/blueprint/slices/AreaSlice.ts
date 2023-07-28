@@ -2,8 +2,9 @@ import { StateCreator } from 'zustand';
 import { v1 } from 'uuid';
 
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
-import { IArea } from '@/src/types/Area';
+import { AreaTypes, IArea } from '@/src/types/Area';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { AccessScope, AvailabilityZone } from '@/src/types/Services';
 
 export const useAreaSlice: StateCreator<
   AllBluePrintStates,
@@ -27,13 +28,14 @@ export const useAreaSlice: StateCreator<
         return state;
       });
     },
-    createArea: (area: IArea) =>
+    createArea: (area: IArea, type: AreaTypes) =>
       set((state) => {
         state.selectedServiceId = null;
         const id = v1().toString();
         state.areas[id] = {
           ...area,
           id: id,
+          type: type,
         };
         return state;
       }),

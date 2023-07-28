@@ -1,5 +1,5 @@
-import { ServicesString } from '@/src/types/Services';
-import { AreaString } from '@/src/types/Area';
+import { AccessScope, AvailabilityZone, ServicesString } from '@/src/types/Services';
+import { Areas, AreaTypes } from '@/src/types/Area';
 
 interface ServiceItemInterface {
   name: string;
@@ -8,7 +8,7 @@ interface ServiceItemInterface {
 
 export interface AreaItemInterface {
   name: string;
-  type: AreaString;
+  type: AccessScope | AvailabilityZone | 'VPC';
 }
 
 export type ServiceItemType = Record<string, ServiceItemInterface[]>;

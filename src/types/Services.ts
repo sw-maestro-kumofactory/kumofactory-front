@@ -19,46 +19,62 @@ export interface EC2Options {
   id: string; // instance name id : "TestInstance" 임
 }
 
-export type EC2OptionsKeys = keyof EC2Options;
+const AccessScope = {
+  Public: 'Public',
+  Private: 'Private',
+  Database: 'Database',
+} as const;
 
-export const EC2OptionKeyList = [
-  'instanceType',
-  'machineImage',
-  'subnetType',
-  'availabilityZone',
-  'instanceName',
-  'securityGroupType',
-  'id',
+export type AccessScope = (typeof AccessScope)[keyof typeof AccessScope] | null;
+
+export const AccessScopeList = [AccessScope.Public, AccessScope.Private, AccessScope.Database];
+
+const AvailabilityZone = {
+  AP_NORTHEAST_2A: 'ap-northeast-2a',
+  AP_NORTHEAST_2C: 'ap-northeast-2c',
+} as const;
+
+export type AvailabilityZone = (typeof AvailabilityZone)[keyof typeof AvailabilityZone] | null;
+
+export const AvailabilityZoneList = [AvailabilityZone.AP_NORTHEAST_2A, AvailabilityZone.AP_NORTHEAST_2C];
+
+const InstanceType = {
+  T3Micro: 't3.micro',
+  T3Small: 't3.small',
+  T3Medium: 't3.medium',
+  T3Large: 't3.large',
+  T3XLarge: 't3.xlarge',
+  T32XLarge: 't3.2xlarge',
+  M5Large: 'm5.large',
+  M5XLarge: 'm5.xlarge',
+  M52XLarge: 'm5.2xlarge',
+  M54XLarge: 'm5.4xlarge',
+  M58XLarge: 'm5.8xlarge',
+  M512XLarge: 'm5.12xlarge',
+  M516XLarge: 'm5.16xlarge',
+  M524XLarge: 'm5.24xlarge',
+  M5Metal: 'm5.metal',
+} as const;
+
+export type InstanceType = (typeof InstanceType)[keyof typeof InstanceType];
+
+export const InstanceTypeList = [
+  InstanceType.T3Micro,
+  InstanceType.T3Small,
+  InstanceType.T3Medium,
+  InstanceType.T3Large,
+  InstanceType.T3XLarge,
+  InstanceType.T32XLarge,
+  InstanceType.M5Large,
+  InstanceType.M5XLarge,
+  InstanceType.M52XLarge,
+  InstanceType.M54XLarge,
+  InstanceType.M58XLarge,
+  InstanceType.M512XLarge,
+  InstanceType.M516XLarge,
+  InstanceType.M524XLarge,
+  InstanceType.M5Metal,
 ];
-
-export enum AccessScope {
-  Public,
-  Private,
-  Database,
-}
-
-export enum AvailabilityZone {
-  AP_NORTHEAST_2A,
-  AP_NORTHEAST_2C,
-}
-
-export enum InstanceType {
-  T2Micro = 't2.micro',
-  T2Small = 't2.small',
-  T2Medium = 't2.medium',
-  T2Large = 't2.large',
-  T2XLarge = 't2.xlarge',
-  T22XLarge = 't2.2xlarge',
-  M5Large = 'm5.large',
-  M5XLarge = 'm5.xlarge',
-  M52XLarge = 'm5.2xlarge',
-  M54XLarge = 'm5.4xlarge',
-  M58XLarge = 'm5.8xlarge',
-  M512XLarge = 'm5.12xlarge',
-  M516XLarge = 'm5.16xlarge',
-  M524XLarge = 'm5.24xlarge',
-  M5Metal = 'm5.metal',
-}
 
 export interface RDSOptions {
   id: string;
@@ -91,7 +107,14 @@ export interface NATOptions {
 }
 
 export interface ELBOptions {
-  id: string;
+  id: string; // load balancer id
+  port: number; // for listener
+  targetGroupPort: number; // for target group
+  targetGroupId: string;
+  targetGroupName: string;
+  healthCheckPath: string; // url for health check ex) "/"
+  name: string; // loadBalancerName
+  listenerId: string; // listener id
 }
 
 export interface AutoScalingOptions {
