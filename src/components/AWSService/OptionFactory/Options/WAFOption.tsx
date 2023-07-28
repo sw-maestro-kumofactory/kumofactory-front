@@ -5,5 +5,5 @@ export const WAFOption = (id: string): WAFOptions => {
   return { id: id };
 };
 export const WAFOptionComponent = ({ id }: { id: string }) => {
-  return <></>;
+  return <>WAFOptionComponent</>;
 };

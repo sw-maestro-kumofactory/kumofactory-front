@@ -5,6 +5,7 @@ import { CommonState } from '@/src/hooks/Store/blueprint/state/CommonState';
 import { BlueprintResponse } from '@/src/types/Blueprint';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { AccessScope, AccessScopeList, AvailabilityZone, AvailabilityZoneList, EC2Options } from '@/src/types/Services';
 
 // 그리드 내에서의 상대 좌표를 얻는다.
 const getGirdPoint = (
@@ -155,7 +156,6 @@ export const useCommonSlice: StateCreator<
     onClickGrid: (e) => {
       e.stopPropagation();
       set((state) => {
-        const mousePt = getGirdPoint(e, state.scale, state.viewBox, state.blueprintElementPosition);
         state.isShowOption = false;
         state.selectedServiceId = null;
         state.selectedAreaId = null;
@@ -182,6 +182,32 @@ export const useCommonSlice: StateCreator<
     onMouseleave: (e) => {},
     onMouseUp: (e) => {
       set((state) => {
+        let subnetFlag = false;
+        let azFlag = false;
+        if (state.isDrag && state.selectedServiceId) {
+          const currentService = state.services[state.selectedServiceId!];
+          const currentOption = state.options[state.selectedServiceId!] as EC2Options;
+          for (let areaId in state.areas) {
+            const curArea = state.areas[areaId];
+            if (
+              currentService.x >= curArea.x &&
+              currentService.x + 80 <= curArea.x + curArea.width &&
+              currentService.y >= curArea.y &&
+              currentService.y + 80 <= curArea.y + curArea.height
+            ) {
+              if (AccessScopeList.includes(curArea.type)) {
+                subnetFlag = true;
+                currentOption['subnetType'] = curArea.type;
+              } else if (AvailabilityZoneList.includes(curArea.type)) {
+                azFlag = true;
+                currentOption['availabilityZone'] = curArea.type;
+              } else if (curArea.type === 'VPC') {
+              }
+            }
+          }
+          currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
+          currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
+        }
         state.isDrag = false;
         state.isMoving = false;
         state.resizeState.isResizable = false;
@@ -275,28 +301,18 @@ export const useCommonSlice: StateCreator<
               dst.x = dstX;
               dst.y = dstY;
             });
-            // 특정 영역에 포함되어 있는지?(시작점을 기준으로 할 것이고, 끝점은 상관없음)
-            for (let areaKey in state.areas) {
-              const curArea = state.areas[areaKey];
-              if (
-                newX >= curArea.x &&
-                newX <= curArea.x + curArea.width &&
-                newY >= curArea.y &&
-                newY <= curArea.y + curArea.height
-              ) {
-                // 영역에 포함되어 있다면
-                // 1. 기존 영역에서 제거
-                const currentOption = state.options[state.selectedServiceId];
-
-                // const prevArea = state.areas[service.areaId];
-                // if (prevArea) {
-                //   const prevAreaServices = prevArea.services.filter((serviceId) => serviceId !== service.id);
-                //   state.areas[service.areaId].services = prevAreaServices;
-                // }
-                // // 2. 새로운 영역에 추가
-                // state.services[state.selectedServiceId].areaId = curArea.id;
-                // state.areas[curArea.id].services.push(service.id);
-                // break;
+            // 특정 영역에 포함되어 있는지?(시작점을 기준으로 할 것이고 완전히 포함되어야 함.)
+            if (state.services[state.selectedServiceId].type === 'EC2') {
+              for (let areaKey in state.areas) {
+                const curArea = state.areas[areaKey];
+                if (
+                  newX >= curArea.x &&
+                  newX <= curArea.x + curArea.width &&
+                  newY >= curArea.y &&
+                  newY <= curArea.y + curArea.height
+                ) {
+                  const currentOption = state.options[state.selectedServiceId];
+                }
               }
             }
 
@@ -362,7 +378,16 @@ export const useCommonSlice: StateCreator<
             delete state.lines[line];
           }
         } else if (state.selectedAreaId) {
-          //   selectedArea 제거
+          if (state.areas[state.selectedAreaId].type === 'ap-northeast-2a') state.azCount['2a'] -= 1;
+          else if (state.areas[state.selectedAreaId].type === 'ap-northeast-2c') state.azCount['2c'] -= 1;
+          else if (state.areas[state.selectedAreaId].type === 'Public') {
+            state.subnetCount.public -= 1;
+          } else if (state.areas[state.selectedAreaId].type === 'Private') {
+            state.subnetCount.private -= 1;
+          } else if (state.areas[state.selectedAreaId].type === 'Database') {
+            state.subnetCount.database -= 1;
+          }
+
           delete state.areas[state.selectedAreaId];
         } else if (state.selectedLineId) {
           //   selectedLine 제거

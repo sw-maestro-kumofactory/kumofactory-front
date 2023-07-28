@@ -1,5 +1,5 @@
 'use client';
-import { AccessScope, EC2Options, InstanceType } from '@/src/types/Services';
+import { AccessScope, AccessScopeList, EC2Options, InstanceType, InstanceTypeList } from '@/src/types/Services';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useInput from '@/src/hooks/useInput';
@@ -8,11 +8,11 @@ export const EC2Option = (id: string): EC2Options => {
   return {
     instanceType: 't2.micro',
     machineImage: '',
-    subnetType: 0,
-    availabilityZone: 0,
+    subnetType: null,
+    availabilityZone: null,
     instanceName: id,
     id: id,
-    securityGroupType: 0,
+    securityGroupType: null,
   };
 };
 
@@ -21,17 +21,18 @@ const AttributeName = ({ text }: { text: string }) => {
 };
 
 export const EC2OptionComponent = ({ id }: { id: string }) => {
-  const selectedOptions = useBlueprintStore((state) => state.options[id]) as EC2Options;
+  const options = useBlueprintStore((state) => state.options);
+  const selectedOptions = options[id] as EC2Options;
   const setOption = useBlueprintStore((state) => state.ServiceAction.setOption);
-  const instanceTypes = Object.keys(InstanceType);
-  const securityGroupTypes = Object.keys(AccessScope);
+  const instanceTypes = InstanceTypeList;
+  const securityGroupTypes = AccessScopeList;
   const { value: instanceType, onHandleChange: handleInstanceTypeChange } = useInput<string>(
     selectedOptions?.instanceType,
   );
   const { value: instanceName, onHandleChange: handleInstanceNameChange } = useInput<string>(
     selectedOptions?.instanceName,
   );
-  const { value: securityGroupType, onHandleChange: handleSecurityGroupTypeChange } = useInput<AccessScope>(
+  const { value: securityGroupType, onHandleChange: handleSecurityGroupTypeChange } = useInput<string | null>(
     selectedOptions?.securityGroupType,
   );
 
@@ -44,15 +45,12 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
         setOption(id, {
           instanceType: instanceType,
           machineImage: '',
-          subnetType: 0,
-          availabilityZone: 0,
+          subnetType: null,
+          availabilityZone: null,
           instanceName: instanceName,
           id: id,
           securityGroupType: securityGroupType,
         } as EC2Options);
-        console.log('InstanceType : ', instanceType);
-        console.log('InstanceName : ', instanceName);
-        console.log('SecurityGroupType : ', securityGroupType);
       }}
     >
       <AttributeName text='Instance Type' />
@@ -66,13 +64,13 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
       <AttributeName text={'Machine Image'} />
       <input value='amazon linux 2023' disabled />
       <AttributeName text={'Subnet Type'} />
-      <input />
+      <input value={selectedOptions.subnetType ? selectedOptions.subnetType : ''} disabled />
       <AttributeName text={'Availability Zone'} />
-      <input />
+      <input value={selectedOptions.availabilityZone ? selectedOptions.availabilityZone : ''} disabled />
       <AttributeName text={'Instance Name'} />
       <input type='text' value={instanceName} onChange={handleInstanceNameChange} />
       <AttributeName text={'Security Group Type'} />
-      <select value={securityGroupType} onChange={handleSecurityGroupTypeChange}>
+      <select value={securityGroupType ? securityGroupType : ''} onChange={handleSecurityGroupTypeChange}>
         {securityGroupTypes.map((securityGroupType) => (
           <option key={securityGroupType} value={securityGroupType}>
             {securityGroupType}

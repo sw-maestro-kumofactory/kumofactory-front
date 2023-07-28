@@ -65,14 +65,18 @@ export const AreaItemList: AreaItemInterface[] = [
   },
   {
     name: 'PublicSubnet',
-    type: 'PublicSubnet',
+    type: 'Public',
   },
   {
     name: 'PrivateSubnet',
-    type: 'PrivateSubnet',
+    type: 'Private',
+  },
+  {
+    name: 'DatabaseSubnet',
+    type: 'Database',
   },
   {
     name: 'AZ',
-    type: 'AvailableZone',
+    type: 'AZ',
   },
 ];

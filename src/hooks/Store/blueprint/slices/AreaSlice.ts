@@ -2,8 +2,9 @@ import { StateCreator } from 'zustand';
 import { v1 } from 'uuid';
 
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
-import { IArea } from '@/src/types/Area';
+import { AreaTypes, IArea } from '@/src/types/Area';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { AccessScope, AvailabilityZone, AvailabilityZoneList } from '@/src/types/Services';
 
 export const useAreaSlice: StateCreator<
   AllBluePrintStates,
@@ -13,6 +14,15 @@ export const useAreaSlice: StateCreator<
 > = (set, get) => ({
   areas: {},
   selectedAreaId: null,
+  azCount: {
+    '2a': 0,
+    '2c': 0,
+  },
+  subnetCount: {
+    public: 0,
+    private: 0,
+    database: 0,
+  },
   resizeState: {
     isResizable: false,
     dir: -1,
@@ -27,13 +37,26 @@ export const useAreaSlice: StateCreator<
         return state;
       });
     },
-    createArea: (area: IArea) =>
+    createArea: (area: IArea, type: AreaTypes) =>
       set((state) => {
         state.selectedServiceId = null;
+        state.doubleClickedServiceId = null;
+        if (type === 'ap-northeast-2a') {
+          state.azCount['2a'] += 1;
+        } else if (type === 'ap-northeast-2c') {
+          state.azCount['2c'] += 1;
+        } else if (type === 'Public') {
+          state.subnetCount.public += 1;
+        } else if (type === 'Private') {
+          state.subnetCount.private += 1;
+        } else if (type === 'Database') {
+          state.subnetCount.database += 1;
+        }
         const id = v1().toString();
         state.areas[id] = {
           ...area,
           id: id,
+          type: type,
         };
         return state;
       }),

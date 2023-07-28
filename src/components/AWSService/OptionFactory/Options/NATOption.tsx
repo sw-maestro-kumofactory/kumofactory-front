@@ -5,5 +5,5 @@ export const NATOption = (id: string): NATOptions => {
 };
 
 export const NATOptionComponent = ({ id }: { id: string }) => {
-  return <></>;
+  return <>NATOptionComponent</>;
 };

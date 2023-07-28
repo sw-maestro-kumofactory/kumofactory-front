@@ -7,5 +7,5 @@ export const AutoScalingOption = (id: string): AutoScalingOptions => {
 };
 
 export const AutoScalingOptionComponent = ({ id }: { id: string }) => {
-  return <></>;
+  return <div>AutoScalingOptionComponent</div>;
 };
