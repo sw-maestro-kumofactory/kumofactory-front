@@ -72,7 +72,11 @@ export const AreaItemList: AreaItemInterface[] = [
     type: 'Private',
   },
   {
+    name: 'DatabaseSubnet',
+    type: 'Database',
+  },
+  {
     name: 'AZ',
-    type: 'ap-northeast-2a',
+    type: 'AZ',
   },
 ];

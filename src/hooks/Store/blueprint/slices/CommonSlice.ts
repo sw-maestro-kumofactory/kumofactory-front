@@ -182,6 +182,8 @@ export const useCommonSlice: StateCreator<
     onMouseleave: (e) => {},
     onMouseUp: (e) => {
       set((state) => {
+        let subnetFlag = false;
+        let azFlag = false;
         if (state.isDrag && state.selectedServiceId) {
           const currentService = state.services[state.selectedServiceId!];
           const currentOption = state.options[state.selectedServiceId!] as EC2Options;
@@ -189,18 +191,22 @@ export const useCommonSlice: StateCreator<
             const curArea = state.areas[areaId];
             if (
               currentService.x >= curArea.x &&
-              currentService.x <= curArea.x + curArea.width &&
+              currentService.x + 80 <= curArea.x + curArea.width &&
               currentService.y >= curArea.y &&
-              currentService.y <= curArea.y + curArea.height
+              currentService.y + 80 <= curArea.y + curArea.height
             ) {
               if (AccessScopeList.includes(curArea.type)) {
+                subnetFlag = true;
                 currentOption['subnetType'] = curArea.type;
               } else if (AvailabilityZoneList.includes(curArea.type)) {
+                azFlag = true;
                 currentOption['availabilityZone'] = curArea.type;
               } else if (curArea.type === 'VPC') {
               }
             }
           }
+          currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
+          currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
         }
         state.isDrag = false;
         state.isMoving = false;
@@ -372,7 +378,16 @@ export const useCommonSlice: StateCreator<
             delete state.lines[line];
           }
         } else if (state.selectedAreaId) {
-          //   selectedArea 제거
+          if (state.areas[state.selectedAreaId].type === 'ap-northeast-2a') state.azCount['2a'] -= 1;
+          else if (state.areas[state.selectedAreaId].type === 'ap-northeast-2c') state.azCount['2c'] -= 1;
+          else if (state.areas[state.selectedAreaId].type === 'Public') {
+            state.subnetCount.public -= 1;
+          } else if (state.areas[state.selectedAreaId].type === 'Private') {
+            state.subnetCount.private -= 1;
+          } else if (state.areas[state.selectedAreaId].type === 'Database') {
+            state.subnetCount.database -= 1;
+          }
+
           delete state.areas[state.selectedAreaId];
         } else if (state.selectedLineId) {
           //   selectedLine 제거

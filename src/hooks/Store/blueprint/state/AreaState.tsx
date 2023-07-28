@@ -3,6 +3,15 @@ import { AreaTypes, IArea } from '@/src/types/Area';
 export interface AreaState {
   areas: Record<string, IArea>;
   selectedAreaId: string | null;
+  azCount: {
+    '2a': number;
+    '2c': number;
+  };
+  subnetCount: {
+    public: number;
+    private: number;
+    database: number;
+  };
   resizeState: {
     isResizable: boolean;
     dir: number;
