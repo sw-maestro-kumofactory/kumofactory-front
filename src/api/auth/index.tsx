@@ -17,7 +17,6 @@ export const postGoogleAuth = async (code: string | null): Promise<IResponse> =>
 };
 
 export const getRefreshToken = async (): Promise<string | null> => {
-  // const { data } = await commonAxiosInstance.get('/api/auth/refresh');
   const response = await commonAxiosInstance.get('/api/auth/refresh');
   const accessToken = response.data.accessToken;
   return accessToken;

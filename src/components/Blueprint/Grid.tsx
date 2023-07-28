@@ -69,12 +69,12 @@ const Grid = ({ id }: IProps) => {
   const onKeyDownESC = (e: KeyboardEvent) => {
     e.stopPropagation();
 
-    // Check if the current target (element that triggered the event) has the className "test"
+    // Check if the current target (element that triggered the event) has the className "testA"
     const isSvgTestElement = (e.target as HTMLElement).classList.contains('test');
 
     if (e.key === 'Escape' && isSvgTestElement) {
       // Add your event handling logic for the "Escape" key here
-      console.log('ESC key pressed on the SVG element with className "test"');
+      console.log('ESC key pressed on the SVG element with className "testA"');
       setLineDrawingMode(false);
     } else if (e.key === 'Backspace' || e.key === 'Delete') {
       clearComponent();
@@ -130,7 +130,7 @@ const Grid = ({ id }: IProps) => {
       {viewBox.width !== 0 && !isLoading ? (
         <div id='blueprint'>
           <svg
-            className={'test'}
+            className={'testA'}
             width='100%'
             height='100%'
             viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}

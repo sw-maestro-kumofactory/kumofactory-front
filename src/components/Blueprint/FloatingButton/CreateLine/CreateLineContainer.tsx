@@ -10,7 +10,6 @@ const CreateLineContainer = () => {
       className={`flex flex-col absolute text-2xl w-12 z-20`}
       onClick={(e) => {
         e.stopPropagation();
-        console.log(true);
       }}
       onMouseDown={(e) => e.stopPropagation()}
     >

@@ -5,5 +5,5 @@ export const EFSOption = (id: string): EFSOptions => {
 };
 
 export const EFSOptionComponent = ({ id }: { id: string }) => {
-  return <></>;
+  return <>EFSOptionComponent</>;
 };

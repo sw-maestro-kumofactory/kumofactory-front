@@ -7,5 +7,5 @@ export const RDSOption = (id: string): RDSOptions => {
 };
 
 export const RDSOptionComponent = ({ id }: { id: string }) => {
-  return <></>;
+  return <>RDSOptionComponent</>;
 };

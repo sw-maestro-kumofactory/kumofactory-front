@@ -5,5 +5,5 @@ export const CloudFrontOption = (id: string): CloudFrontOptions => {
 };
 
 export const CloudFrontOptionComponent = ({ id }: { id: string }) => {
-  return <></>;
+  return <div>CloudFrontOptionComponent</div>;
 };
