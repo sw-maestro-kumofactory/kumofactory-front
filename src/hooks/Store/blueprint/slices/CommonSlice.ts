@@ -32,6 +32,7 @@ export const useCommonSlice: StateCreator<
   CommonState
 > = (set, get) => ({
   name: 'My blueprint',
+  currentBlueprintId: null,
   offset: {
     x: 0,
     y: 0,
@@ -70,6 +71,12 @@ export const useCommonSlice: StateCreator<
         state.services = {};
         state.lines = {};
         state.areas = {};
+        return state;
+      });
+    },
+    setBlueprintId: (id: string | null) => {
+      set((state) => {
+        state.currentBlueprintId = id;
         return state;
       });
     },
@@ -205,8 +212,10 @@ export const useCommonSlice: StateCreator<
               }
             }
           }
-          currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
-          currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
+          if (state.services[state.selectedServiceId!].type === 'EC2') {
+            currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
+            currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
+          }
         }
         state.isDrag = false;
         state.isMoving = false;

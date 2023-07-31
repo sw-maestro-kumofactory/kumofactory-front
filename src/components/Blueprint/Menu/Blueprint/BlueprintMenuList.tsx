@@ -6,18 +6,18 @@ import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { regionList } from '@/src/assets/RegionList';
 import { Menus } from '@/src/assets/Menus';
 import DropDown from '@/src/components/Blueprint/downshiftTest/DropDown';
-import ServiceItemWrapper from '@/src/components/Blueprint/Menu/ServiceItemWrapper';
+import ServiceItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/ServiceItemWrapper';
 import { postTemplateData } from '@/src/api/template';
 import { ExportSvg } from '@/src/utils/ExportSvg';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { AreaItemList } from '@/src/assets/MenuItems';
-import AreaItemWrapper from '@/src/components/Blueprint/Menu/AreaItemWrapper';
+import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
 
 const Title = ({ title }: { title: string }) => (
   <div className='w-full h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
 );
 
-const MenuBar = () => {
+const BlueprintMenuList = () => {
   const blueprintToJson = useBlueprintStore((state) => state.CommonAction.blueprintToJson);
   return (
     <div className='overflow-x-hidden w-[294px] min-w-[294px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
@@ -70,4 +70,4 @@ const MenuBar = () => {
   );
 };
 
-export default MenuBar;
+export default BlueprintMenuList;
