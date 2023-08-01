@@ -5,7 +5,7 @@ import { useState } from 'react';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import useInput from '@/src/hooks/useInput';
 
-const EV = () => {
+const EnvironmentVariableComponent = () => {
   const EnvironmentVariables = useDeployStore((state) => state.environmentVariables);
   const setEnvironmentVariables = useDeployStore((state) => state.DeployAction.setEnvironmentVariables);
   const updateEnvironmentVariables = useDeployStore((state) => state.DeployAction.updateEnvironmentVariables);
@@ -101,4 +101,4 @@ const EV = () => {
   );
 };
 
-export default EV;
+export default EnvironmentVariableComponent;

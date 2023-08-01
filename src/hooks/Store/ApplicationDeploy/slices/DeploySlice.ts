@@ -15,7 +15,7 @@ export const useOptionSlice: StateCreator<
     user: '',
     branch: '',
   },
-  EnvironmentVariables: [],
+  environmentVariables: [],
   DeployAction: {
     setTargetInstanceId: (targetInstanceId: string) => {
       set((state) => ({ ...state, targetInstanceId }));
@@ -24,7 +24,20 @@ export const useOptionSlice: StateCreator<
       set((state) => {
         return {
           ...state,
-          EnvironmentVariables: [...state.EnvironmentVariables, environmentVariables],
+          environmentVariables: [...state.environmentVariables, environmentVariables],
+        };
+      });
+    },
+    updateEnvironmentVariables: (environmentVariables: EnvironmentVariables, index: number) => {
+      set((state) => {
+        return {
+          ...state,
+          environmentVariables: state.environmentVariables.map((item, i) => {
+            if (i === index) {
+              return environmentVariables;
+            }
+            return item;
+          }),
         };
       });
     },
@@ -32,7 +45,7 @@ export const useOptionSlice: StateCreator<
       set((state) => {
         return {
           ...state,
-          EnvironmentVariables: state.EnvironmentVariables.filter((item) => item.key !== key),
+          environmentVariables: state.environmentVariables.filter((item) => item.key !== key),
         };
       });
     },

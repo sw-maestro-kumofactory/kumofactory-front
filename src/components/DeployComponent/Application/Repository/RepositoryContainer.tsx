@@ -1,26 +1,34 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 import Repository from '@/src/components/DeployComponent/Application/Repository/Repository';
+import { PersonalRepo } from '@/src/types/Deploy';
+import { getUserRepositories } from '@/src/api/deploy';
 
 interface IProps {
-  // InstanceId: string; -> 전역으로 관리하기
+  isUser?: boolean;
+  id: string;
+  repoInfo: PersonalRepo[];
 }
 
-const RepositoryContainer = () => {
-  const [repos, setRepos] = useState([]);
-
+const RepositoryContainer = ({ id, repoInfo }: IProps) => {
   return (
-    <div className='w-full pb-8'>
-      <div className='flex items-center p-8 gap-x-4 h-12 bg-blue-100 w-full rounded-t-xl'>
-        <div>userImage</div>
-        <div>UserName</div>
+    <div className='w-full h-3/5 pb-8 '>
+      <div className='flex items-center py-8 px-4 gap-x-4 h-12 bg-blue-100 w-full rounded-t-xl'>
+        <Image
+          src='https://avatars.githubusercontent.com/u/59858440?v=4'
+          className='rounded-full'
+          width='30'
+          height='30'
+          alt={'GRAVATAR'}
+        />
+        <div>{id}</div>
       </div>
-      <div className='bg-white rounded-b-xl'>
-        <Repository id='1' />
-        <Repository id='2' />
-        <Repository id='3' />
-        <Repository id='4' />
+      <div className='bg-white h-4/5 rounded-b-xl overflow-y-scroll'>
+        {repoInfo.map((repo, index) => (
+          <Repository key={repo.fullName} id={repo.name} name={repo.name} />
+        ))}
       </div>
     </div>
   );
