@@ -210,6 +210,25 @@ export const useCommonSlice: StateCreator<
                 currentOption['availabilityZone'] = curArea.type;
               } else if (curArea.type === 'VPC') {
               }
+            } else if ((state.isDrag, state.selectedAreaId)) {
+              for (let serviceId in state.services) {
+                const curService = state.services[serviceId];
+                if (
+                  curService.x >= curArea.x &&
+                  curService.x + 80 <= curArea.x + curArea.width &&
+                  curService.y >= curArea.y &&
+                  curService.y + 80 <= curArea.y + curArea.height
+                ) {
+                  if (AccessScopeList.includes(curArea.type)) {
+                    subnetFlag = true;
+                    currentOption['subnetType'] = curArea.type;
+                  } else if (AvailabilityZoneList.includes(curArea.type)) {
+                    azFlag = true;
+                    currentOption['availabilityZone'] = curArea.type;
+                  } else if (curArea.type === 'VPC') {
+                  }
+                }
+              }
             }
           }
           if (state.services[state.selectedServiceId!].type === 'EC2') {
