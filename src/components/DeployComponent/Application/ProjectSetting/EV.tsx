@@ -1,5 +1,4 @@
 'use client';
-import { ChangeEvent, useCallback } from 'react';
 
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import useInput from '@/src/hooks/useInput';
@@ -11,7 +10,7 @@ const EV = () => {
   const { value: key, setValue: setKey, onHandleChange: onKeyChange } = useInput<string>('');
   const { value: value, setValue, onHandleChange: onValueChange } = useInput<string>('');
 
-  const handleAddEnvironmentVariables = (e: MouseEvent) => {
+  const handleAddEnvironmentVariables = (e: React.MouseEvent) => {
     e.preventDefault();
     const newVariable = {
       key: key,
