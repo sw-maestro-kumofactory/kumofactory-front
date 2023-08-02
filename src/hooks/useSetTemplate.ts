@@ -36,9 +36,9 @@ export const useSetTemplate = () => {
       setComponentLine(line.id, line.dst.componentId);
     }
 
-    for (const area of areas) {
-      createArea({ id: area.id, x: area.x, y: area.y, width: area.width, height: area.height, type: area.type });
-    }
+    // for (const area of areas) {
+    //   createArea({ id: area.id, x: area.x, y: area.y, width: area.width, height: area.height, type: area.type });
+    // }
   };
 
   return { isLoading, setIsLoading, setTemplate };

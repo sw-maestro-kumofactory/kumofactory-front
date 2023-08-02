@@ -32,6 +32,7 @@ export const useCommonSlice: StateCreator<
   CommonState
 > = (set, get) => ({
   name: 'My blueprint',
+  currentBlueprintId: null,
   offset: {
     x: 0,
     y: 0,
@@ -70,6 +71,12 @@ export const useCommonSlice: StateCreator<
         state.services = {};
         state.lines = {};
         state.areas = {};
+        return state;
+      });
+    },
+    setBlueprintId: (id: string | null) => {
+      set((state) => {
+        state.currentBlueprintId = id;
         return state;
       });
     },
@@ -203,10 +210,31 @@ export const useCommonSlice: StateCreator<
                 currentOption['availabilityZone'] = curArea.type;
               } else if (curArea.type === 'VPC') {
               }
+            } else if ((state.isDrag, state.selectedAreaId)) {
+              for (let serviceId in state.services) {
+                const curService = state.services[serviceId];
+                if (
+                  curService.x >= curArea.x &&
+                  curService.x + 80 <= curArea.x + curArea.width &&
+                  curService.y >= curArea.y &&
+                  curService.y + 80 <= curArea.y + curArea.height
+                ) {
+                  if (AccessScopeList.includes(curArea.type)) {
+                    subnetFlag = true;
+                    currentOption['subnetType'] = curArea.type;
+                  } else if (AvailabilityZoneList.includes(curArea.type)) {
+                    azFlag = true;
+                    currentOption['availabilityZone'] = curArea.type;
+                  } else if (curArea.type === 'VPC') {
+                  }
+                }
+              }
             }
           }
-          currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
-          currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
+          if (state.services[state.selectedServiceId!].type === 'EC2') {
+            currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
+            currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
+          }
         }
         state.isDrag = false;
         state.isMoving = false;

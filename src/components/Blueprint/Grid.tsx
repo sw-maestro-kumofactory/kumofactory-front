@@ -80,17 +80,20 @@ const Grid = ({ id }: IProps) => {
   };
 
   useEffect(() => {
-    if (id !== 'empty') {
-      setTemplateById();
-    } else {
-      setTemplate({
-        data: {
-          name: '',
-          components: [],
-          links: [],
-          areas: [],
-        },
-      });
+    // 초기화 되는걸 막기 위해서
+    if (!services) {
+      if (id !== 'empty') {
+        setTemplateById();
+      } else {
+        setTemplate({
+          data: {
+            name: '',
+            components: [],
+            links: [],
+            areas: [],
+          },
+        });
+      }
     }
     setIsLoading(false);
   }, []);
