@@ -16,8 +16,12 @@ const EC2Info = ({ option, active }: IProps) => {
   const [showOptions, setShowOptions] = useState(true);
   const [disableEvent, setDisableEvent] = useState(false);
   const setTargetInstanceId = useDeployStore((state) => state.DeployAction.setTargetInstanceId);
+  const setTargetInstanceName = useDeployStore((state) => state.DeployAction.setTargetInstanceName);
   const onClickArea = () => {
-    if (!disableEvent) setTargetInstanceId(showOptions ? '' : option.id);
+    if (!disableEvent) {
+      setTargetInstanceId(showOptions ? '' : option.id);
+      setTargetInstanceName(showOptions ? '' : option.instanceName);
+    }
   };
 
   useEffect(() => {

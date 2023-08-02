@@ -13,21 +13,26 @@ interface IProps {
 const Setting = ({ id }: IProps) => {
   const router = useRouter();
   const environmentVariables = useDeployStore((state) => state.environmentVariables);
-  const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
+  const targetInstanceName = useDeployStore((state) => state.targetInstanceName);
+  const [language, setLanguage] = useState<string>('');
   const [curBranch, setCurBranch] = useState<string>('');
   const [branches, setBranches] = useState<string[]>([]);
 
-  const onClickDeployButton = () => {
+  const onClickDeployButton = async () => {
     const data: DeployRequest = {
       targetInstance: 'i-02b5064a1e36be086',
       user: 'higeuni',
       repo: id,
-      language: 'node',
+      language: language,
       branch: curBranch,
       env: environmentVariables,
     };
-    const d = postDeploy(data);
-    console.log(d);
+    try {
+      const d = postDeploy(data);
+      alert('deploy Success!');
+    } catch (e) {
+      alert('deploy Fail!');
+    }
   };
 
   const getBranchList = async () => {
@@ -55,7 +60,7 @@ const Setting = ({ id }: IProps) => {
         </div>
       </div>
       <div className='text-lg pb-4'>Current Repository : {id}</div>
-      <div className='text-lg pb-4'>Current Target Instance : {targetInstanceId}</div>
+      <div className='text-lg pb-4'>Current Target Instance : {targetInstanceName}</div>
       <div className='text-lg pb-4'>Select Branch to deploy</div>
       <select
         className='w-1/2 h-8 border border-gray-300 rounded-md'
@@ -70,6 +75,27 @@ const Setting = ({ id }: IProps) => {
           </option>
         ))}
       </select>
+      <div className='text-lg py-4'>Select Framework</div>
+      <div className='flex gap-x-4'>
+        <div
+          className='cursor-pointer'
+          onClick={() => {
+            setLanguage('java');
+          }}
+        >
+          <input type='radio' name='language' value='java' id='java' />
+          <label htmlFor='java'>Java</label>
+        </div>
+        <div
+          className='cursor-pointer'
+          onClick={() => {
+            setLanguage('node');
+          }}
+        >
+          <input type='radio' name='language' value='node' id='node' />
+          <label htmlFor='node'>Express</label>
+        </div>
+      </div>
       <EnvironmentVariableComponent />
     </div>
   );

@@ -10,6 +10,7 @@ export const useOptionSlice: StateCreator<
   DeployState
 > = (set, get) => ({
   targetInstanceId: null,
+  targetInstanceName: null,
   repo: {
     name: '',
     user: '',
@@ -19,6 +20,9 @@ export const useOptionSlice: StateCreator<
   DeployAction: {
     setTargetInstanceId: (targetInstanceId: string) => {
       set((state) => ({ ...state, targetInstanceId }));
+    },
+    setTargetInstanceName: (targetInstanceName: string) => {
+      set((state) => ({ ...state, targetInstanceName }));
     },
     setEnvironmentVariables: (environmentVariables: EnvironmentVariables) => {
       set((state) => {
