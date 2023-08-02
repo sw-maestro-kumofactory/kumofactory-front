@@ -62,21 +62,21 @@ export const AreaItemList: AreaItemInterface[] = [
   {
     name: 'VPC',
     type: 'VPC',
+    scope: null,
   },
   {
-    name: 'PublicSubnet',
-    type: 'Public',
+    name: 'Public Subnet',
+    type: 'Subnet',
+    scope: 'Public',
   },
   {
-    name: 'PrivateSubnet',
-    type: 'Private',
-  },
-  {
-    name: 'DatabaseSubnet',
-    type: 'Database',
+    name: 'Private Subnet',
+    type: 'Subnet',
+    scope: 'Private',
   },
   {
     name: 'AZ',
     type: 'AZ',
+    scope: null,
   },
 ];

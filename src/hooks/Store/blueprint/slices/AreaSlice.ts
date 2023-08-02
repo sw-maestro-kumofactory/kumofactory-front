@@ -39,18 +39,23 @@ export const useAreaSlice: StateCreator<
     },
     createArea: (area: IArea, type: AreaTypes) =>
       set((state) => {
+        console.log(area);
         state.selectedServiceId = null;
         state.doubleClickedServiceId = null;
-        if (type === 'ap-northeast-2a') {
-          state.azCount['2a'] += 1;
-        } else if (type === 'ap-northeast-2c') {
-          state.azCount['2c'] += 1;
-        } else if (type === 'Public') {
-          state.subnetCount.public += 1;
-        } else if (type === 'Private') {
-          state.subnetCount.private += 1;
-        } else if (type === 'Database') {
-          state.subnetCount.database += 1;
+        if (type === 'AZ') {
+          if (area.az === 'ap-northeast-2a') {
+            state.azCount['2a'] += 1;
+          } else if (area.az === 'ap-northeast-2c') {
+            state.azCount['2c'] += 1;
+          }
+        } else if (type === 'Subnet') {
+          if (area.scope === 'Public') {
+            state.subnetCount.public += 1;
+          } else if (area.scope === 'Private') {
+            state.subnetCount.private += 1;
+          } else if (area.scope === 'Database') {
+            state.subnetCount.database += 1;
+          }
         }
         const id = v1().toString();
         state.areas[id] = {

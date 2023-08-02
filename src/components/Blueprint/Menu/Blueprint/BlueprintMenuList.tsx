@@ -58,7 +58,7 @@ const BlueprintMenuList = () => {
       </DropDown>
       <DropDown title={'Areas'} key={'Areas'} absolute={false}>
         {AreaItemList.map((AreaItem) => (
-          <AreaItemWrapper key={AreaItem.name} type={AreaItem.type} name={AreaItem.name} />
+          <AreaItemWrapper key={AreaItem.name} type={AreaItem.type} name={AreaItem.name} scope={AreaItem.scope} />
         ))}
       </DropDown>
       {Menus.map((menu) => (

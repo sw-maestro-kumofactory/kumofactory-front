@@ -8,13 +8,13 @@ export const AreaStyle: { [key: string]: IAreaStyle } = {
     fill: 'transparent',
     stroke: '#568837',
   },
-  'ap-northeast-2a': {
+  AZ: {
     fill: 'transparent',
     stroke: '#000000',
   },
-  'ap-northeast-2c': {
-    fill: 'transparent',
-    stroke: '#000000',
+  Subnet: {
+    fill: '#D6F0B6',
+    stroke: 'transparent',
   },
   Public: {
     fill: '#D6F0B6',

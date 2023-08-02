@@ -7,9 +7,11 @@ export interface IArea {
   x: number; // left top x
   y: number; // left top y
   type: AreaTypes;
+  scope: AccessScope | null;
+  az: AvailabilityZone | null;
 }
 
-export type AreaTypes = Exclude<AccessScope | 'VPC' | AvailabilityZone, null>;
+export type AreaTypes = 'Subnet' | 'VPC' | 'AZ';
 
 export interface CommonAreaOptions {
   id: string;

@@ -9,8 +9,9 @@ interface ServiceItemInterface {
 export interface AreaItemInterface {
   name: string;
   type: AreaItemType;
+  scope: AccessScope | null;
 }
 
-export type AreaItemType = 'VPC' | 'AZ' | 'Public' | 'Private' | 'Database';
+export type AreaItemType = 'VPC' | 'AZ' | 'Subnet';
 
 export type ServiceItemType = Record<string, ServiceItemInterface[]>;

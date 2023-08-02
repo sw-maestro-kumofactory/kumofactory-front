@@ -20,43 +20,12 @@ const BluePrint = () => {
 
   const getTemplate = async () => {
     try {
-      // const res = await getTemplateList();
+      const res = await getTemplateList();
       // const res = await axios.get('/apiTest/blueprint');
-      // const data = res.data;
-      setUserBlueprints([
-        {
-          id: 1234,
-          name: '!2345',
-          createdAt: Date().toString(),
-        },
-        {
-          id: 12345,
-          name: '!235',
-          createdAt: Date().toString(),
-        },
-        {
-          id: 12346,
-          name: '!345',
-          createdAt: Date().toString(),
-        },
-        {
-          id: 12347,
-          name: '!234',
-          createdAt: Date().toString(),
-        },
-        {
-          id: 12348,
-          name: '2345',
-          createdAt: Date().toString(),
-        },
-        {
-          id: 12349,
-          name: '!235',
-          createdAt: Date().toString(),
-        },
-      ]);
-    } catch (e) {
-      console.log(e);
+      const data = res.data;
+      setUserBlueprints(data);
+    } catch (err) {
+      console.log(err);
     }
   };
 

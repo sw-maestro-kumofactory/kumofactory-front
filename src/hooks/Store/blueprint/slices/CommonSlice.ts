@@ -6,6 +6,8 @@ import { BlueprintResponse } from '@/src/types/Blueprint';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { AccessScope, AccessScopeList, AvailabilityZone, AvailabilityZoneList, EC2Options } from '@/src/types/Services';
+import { EC2 } from '@/src/types/Services/EC2';
+import service from '@/src/components/AWSService/Service';
 
 // 그리드 내에서의 상대 좌표를 얻는다.
 const getGirdPoint = (
@@ -126,16 +128,18 @@ export const useCommonSlice: StateCreator<
         });
       }
       // areas
-      // for (const area of Object.values(get().areas)) {
-      //   json['areas'].push({
-      //     id: area.id,
-      //     x: area.x,
-      //     y: area.y,
-      //     width: area.width,
-      //     height: area.height,
-      //     type: area.type,
-      //   });
-      // }
+      for (const area of Object.values(get().areas)) {
+        json['areas'].push({
+          id: area.id,
+          x: area.x,
+          y: area.y,
+          width: area.width,
+          height: area.height,
+          type: area.type,
+          scope: area.scope,
+          az: area.az,
+        });
+      }
       return json;
     },
     setViewBox: (width, height) =>
@@ -189,53 +193,138 @@ export const useCommonSlice: StateCreator<
     onMouseleave: (e) => {},
     onMouseUp: (e) => {
       set((state) => {
-        let subnetFlag = false;
-        let azFlag = false;
-        if (state.isDrag && state.selectedServiceId) {
-          const currentService = state.services[state.selectedServiceId!];
-          const currentOption = state.options[state.selectedServiceId!] as EC2Options;
-          for (let areaId in state.areas) {
-            const curArea = state.areas[areaId];
+        for (let areaId in state.areas) {
+          const currentArea = state.areas[areaId];
+          let containRDS = false;
+          for (let serviceId in state.services) {
+            const currentService = state.services[serviceId];
+            const currentOption = state.options[serviceId] as EC2Options;
             if (
-              currentService.x >= curArea.x &&
-              currentService.x + 80 <= curArea.x + curArea.width &&
-              currentService.y >= curArea.y &&
-              currentService.y + 80 <= curArea.y + curArea.height
+              currentService.x >= currentArea.x &&
+              currentService.x + 80 <= currentArea.x + currentArea.width &&
+              currentService.y >= currentArea.y &&
+              currentService.y + 80 <= currentArea.y + currentArea.height
             ) {
-              if (AccessScopeList.includes(curArea.type)) {
-                subnetFlag = true;
-                currentOption['subnetType'] = curArea.type;
-              } else if (AvailabilityZoneList.includes(curArea.type)) {
-                azFlag = true;
-                currentOption['availabilityZone'] = curArea.type;
-              } else if (curArea.type === 'VPC') {
-              }
-            } else if ((state.isDrag, state.selectedAreaId)) {
-              for (let serviceId in state.services) {
-                const curService = state.services[serviceId];
-                if (
-                  curService.x >= curArea.x &&
-                  curService.x + 80 <= curArea.x + curArea.width &&
-                  curService.y >= curArea.y &&
-                  curService.y + 80 <= curArea.y + curArea.height
-                ) {
-                  if (AccessScopeList.includes(curArea.type)) {
-                    subnetFlag = true;
-                    currentOption['subnetType'] = curArea.type;
-                  } else if (AvailabilityZoneList.includes(curArea.type)) {
-                    azFlag = true;
-                    currentOption['availabilityZone'] = curArea.type;
-                  } else if (curArea.type === 'VPC') {
+              if (currentArea.type === 'Subnet') {
+                if (currentArea.scope === 'Private') {
+                  if (currentService.type === 'RDS') {
+                    containRDS = true;
+                    currentArea.scope = 'Database';
+                    state.subnetCount['database'] += 1;
+                    state.subnetCount['private'] -= 1;
+                    currentOption['subnetType'] = 'Database';
+                  } else {
+                    currentOption['subnetType'] = 'Private';
                   }
+                } else if (currentArea.scope === 'Database') {
+                  if (currentService.type !== 'RDS') {
+                    currentArea.scope = 'Private';
+                    state.subnetCount['database'] -= 1;
+                    state.subnetCount['private'] += 1;
+                    currentOption['subnetType'] = 'Private';
+                  } else {
+                    containRDS = true;
+                    currentOption['subnetType'] = 'Database';
+                  }
+                } else {
+                  currentOption['subnetType'] = 'Public';
                 }
+              } else if (currentArea.type === 'AZ') {
+                currentOption['availabilityZone'] = currentArea.az;
               }
             }
           }
-          if (state.services[state.selectedServiceId!].type === 'EC2') {
-            currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
-            currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
+          if (currentArea.type === 'Subnet' && currentArea.scope === 'Database' && !containRDS) {
+            currentArea.scope = 'Private';
+            state.subnetCount['database'] -= 1;
+            state.subnetCount['private'] += 1;
           }
         }
+        //
+        // if (state.isDrag && state.selectedServiceId) {
+        //   let subnetFlag = false;
+        //   let azFlag = false;
+        //   // 해당 서비스가 어떤 영역에 속하는지 확인하는 코드
+        //   const currentService = state.services[state.selectedServiceId!];
+        //   const currentOption = state.options[state.selectedServiceId!] as EC2Options;
+        //   for (let areaId in state.areas) {
+        //     const curArea = state.areas[areaId];
+        //     if (
+        //       currentService.x >= curArea.x &&
+        //       currentService.x + 80 <= curArea.x + curArea.width &&
+        //       currentService.y >= curArea.y &&
+        //       currentService.y + 80 <= curArea.y + curArea.height
+        //     ) {
+        //       if (curArea.type === 'Subnet') {
+        //         subnetFlag = true;
+        //         if (curArea.scope === 'Private')
+        //           if (currentService.type === 'RDS') {
+        //             curArea.scope = 'Database';
+        //             state.subnetCount['database'] += 1;
+        //             state.subnetCount['private'] -= 1;
+        //           } else {
+        //             curArea.scope = 'Private';
+        //           }
+        //         else if (curArea.scope === 'Database') {
+        //           if (currentService.type !== 'RDS') {
+        //             curArea.scope = 'Private';
+        //             state.subnetCount['database'] -= 1;
+        //             state.subnetCount['private'] += 1;
+        //           }
+        //         }
+        //         currentOption['subnetType'] = curArea.scope;
+        //       } else if (curArea.type === 'AZ') {
+        //         azFlag = true;
+        //         currentOption['availabilityZone'] = curArea.az;
+        //       }
+        //     }
+        //   }
+        //   if (state.services[state.selectedServiceId!].type === 'EC2') {
+        //     currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
+        //     currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
+        //   }
+        // }
+        //
+        // // 영역을 움직였을 때
+        // if (state.isDrag && state.selectedAreaId) {
+        //   const curArea = state.areas[state.selectedAreaId];
+        //   for (let serviceId in state.services) {
+        //     const curService = state.services[serviceId];
+        //     const curOption = state.options[serviceId] as EC2Options;
+        //     if (
+        //       curService.x >= curArea.x &&
+        //       curService.x + 80 <= curArea.x + curArea.width &&
+        //       curService.y >= curArea.y &&
+        //       curService.y + 80 <= curArea.y + curArea.height
+        //     ) {
+        //       if (curArea.type === 'Subnet') {
+        //         if (curArea.scope === 'Private')
+        //           if (curService.type === 'RDS') {
+        //             curArea.scope = 'Database';
+        //             state.subnetCount['database'] += 1;
+        //             state.subnetCount['private'] -= 1;
+        //             curOption['subnetType'] = 'Database';
+        //           } else {
+        //             curArea.scope = 'Private';
+        //             curOption['subnetType'] = 'Private';
+        //           }
+        //         else if (curArea.scope === 'Database') {
+        //           if (curService.type !== 'RDS') {
+        //             curArea.scope = 'Private';
+        //             state.subnetCount['database'] -= 1;
+        //             state.subnetCount['private'] += 1;
+        //             curOption['subnetType'] = 'Private';
+        //           }
+        //         } else {
+        //           curOption['subnetType'] = 'Public';
+        //         }
+        //       } else if (curArea.type === 'AZ') {
+        //         curOption['availabilityZone'] = curArea.az;
+        //       }
+        //     }
+        //   }
+        // }
+
         state.isDrag = false;
         state.isMoving = false;
         state.resizeState.isResizable = false;
@@ -406,16 +495,15 @@ export const useCommonSlice: StateCreator<
             delete state.lines[line];
           }
         } else if (state.selectedAreaId) {
-          if (state.areas[state.selectedAreaId].type === 'ap-northeast-2a') state.azCount['2a'] -= 1;
-          else if (state.areas[state.selectedAreaId].type === 'ap-northeast-2c') state.azCount['2c'] -= 1;
-          else if (state.areas[state.selectedAreaId].type === 'Public') {
-            state.subnetCount.public -= 1;
-          } else if (state.areas[state.selectedAreaId].type === 'Private') {
-            state.subnetCount.private -= 1;
-          } else if (state.areas[state.selectedAreaId].type === 'Database') {
-            state.subnetCount.database -= 1;
+          const curArea = state.areas[state.selectedAreaId];
+          if (curArea.type === 'AZ') {
+            if (curArea.az === 'ap-northeast-2a') state.azCount['2a'] -= 1;
+            else if (curArea.az === 'ap-northeast-2c') state.azCount['2c'] -= 1;
+          } else if (curArea.type === 'Subnet') {
+            if (curArea.scope === 'Public') state.subnetCount.public -= 1;
+            else if (curArea.scope === 'Private') state.subnetCount.private -= 1;
+            else if (curArea.scope === 'Database') state.subnetCount.database -= 1;
           }
-
           delete state.areas[state.selectedAreaId];
         } else if (state.selectedLineId) {
           //   selectedLine 제거

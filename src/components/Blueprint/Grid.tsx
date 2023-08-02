@@ -13,6 +13,7 @@ import { getTemplateList, getTemplateListById, postTemplateData } from '@/src/ap
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { EC2OptionComponent } from '@/src/components/AWSService/OptionFactory/Options/EC2Option';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
+import { AreaTypes, IArea } from '@/src/types/Area';
 
 interface IProps {
   id: string;
@@ -47,6 +48,10 @@ const Grid = ({ id }: IProps) => {
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
+
+  const typeOrder: AreaTypes[] = ['VPC', 'AZ', 'Subnet'];
+
+  const sortedAreas = typeOrder.flatMap((type) => Object.values(areas).filter((area) => area.type === type));
 
   const onHandleMouseMove = (e: React.MouseEvent) => {
     if (selectedServiceId) e.stopPropagation();
@@ -158,8 +163,13 @@ const Grid = ({ id }: IProps) => {
               />
             </g>
             <g id='zone'>
-              {Object.keys(areas).map((key) => (
-                <Area key={areas[key].id} Area={areas[key]} activate={selectedAreaId === areas[key].id} />
+              {sortedAreas.map((area) => (
+                <Area
+                  key={area.id}
+                  area={area}
+                  activate={selectedAreaId === area.id}
+                  styleKey={area.type === 'Subnet' ? area.scope! : area.type}
+                />
               ))}
             </g>
             <g id='lines'>
@@ -215,6 +225,9 @@ const Grid = ({ id }: IProps) => {
                       <CreateLineContainer />
                     </foreignObject>
                   )}
+                  <foreignObject x={services[key].x - 40} y={services[key].y + 80} width={160} height={24}>
+                    <div className='flex justify-center select-none'>{services[key].type}</div>
+                  </foreignObject>
                 </g>
               ))}
             </g>
