@@ -84,6 +84,7 @@ export const useServiceSlice: StateCreator<
         return state;
       }),
     setOption: (id: string, options: ServiceOptions) => {
+      console.log(options);
       set((state) => {
         state.options[id] = options;
         return state;

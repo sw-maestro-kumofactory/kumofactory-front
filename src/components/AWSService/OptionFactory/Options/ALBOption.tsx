@@ -6,7 +6,7 @@ import { ELBOptions } from '@/src/types/Services';
 import useInput from '@/src/hooks/useInput';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
-export const NLBOption = (id: string): ELBOptions => {
+export const ALBOption = (id: string): ELBOptions => {
   return {
     id: id,
     port: 0,
@@ -23,7 +23,7 @@ const AttributeName = ({ text }: { text: string }) => {
   return <div className='text-[#7f7f7f] hover:text-black my-4'>{text}</div>;
 };
 
-export const NLBOptionComponent = (id: string) => {
+export const ALBOptionComponent = (id: string) => {
   const options = useBlueprintStore((state) => state.options);
   const setOption = useBlueprintStore((state) => state.ServiceAction.setOption);
   const selectedOptions = options[id] as ELBOptions;

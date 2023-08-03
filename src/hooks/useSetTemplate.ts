@@ -17,7 +17,6 @@ export const useSetTemplate = () => {
     const services = data.components;
     const lines = data.links;
     const areas = data.areas;
-
     for (const service of services) {
       createService(
         {
@@ -26,6 +25,7 @@ export const useSetTemplate = () => {
           x: service.x,
           y: service.y,
           lines: [],
+          option: {},
         },
         service.id,
       );

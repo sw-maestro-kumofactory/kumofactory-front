@@ -19,6 +19,7 @@ import {
   AutoScalingOptionComponent,
 } from '@/src/components/AWSService/OptionFactory/Options/AutoScalingOption';
 import { ServiceOptions, ServicesString } from '@/src/types/Services';
+import { ALBOption, ALBOptionComponent } from '@/src/components/AWSService/OptionFactory/Options/ALBOption';
 
 interface IFactory {
   createOption: (type: ServicesString, id: string) => ServiceOptions;
@@ -48,6 +49,10 @@ export class OptionFactory implements IFactory {
         return NATOption(id);
       case 'ELB':
         return ELBOption(id);
+      case 'NLB':
+        return ELBOption(id);
+      case 'ALB':
+        return ALBOption(id);
       case 'AutoScaling':
         return AutoScalingOption(id);
     }
@@ -74,6 +79,10 @@ export class OptionFactory implements IFactory {
         return NATOptionComponent({ id: id });
       case 'ELB':
         return ELBOptionComponent({ id: id });
+      case 'ALB':
+        return ALBOptionComponent(id);
+      case 'NLB':
+        return ALBOptionComponent(id);
       case 'AutoScaling':
         return AutoScalingOptionComponent({ id: id });
     }

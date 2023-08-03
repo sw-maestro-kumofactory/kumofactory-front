@@ -19,6 +19,8 @@ const Title = ({ title }: { title: string }) => (
 
 const BlueprintMenuList = () => {
   const blueprintToJson = useBlueprintStore((state) => state.CommonAction.blueprintToJson);
+  const options = useBlueprintStore((state) => state.options);
+  console.log(options);
   return (
     <div className='overflow-x-hidden w-[294px] min-w-[294px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
       <Title title='Actions' />
@@ -27,8 +29,11 @@ const BlueprintMenuList = () => {
           className='px-4 py-2 w-fit flex gap-2 items-center border-[#195091] border-solid border-2 rounded-xl cursor-pointer'
           onClick={async () => {
             try {
-              // await postTemplateData(blueprintToJson());
-              console.log(blueprintToJson());
+              const body = blueprintToJson();
+              body.components.map((component, index) => {
+                component.option = options[component.id];
+              });
+              await postTemplateData(body);
             } catch (e) {
               alert('Invalid Blueprint');
               console.log(e);

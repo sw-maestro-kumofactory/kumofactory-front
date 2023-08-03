@@ -46,8 +46,12 @@ export const MenuItemList: ServiceItemType = {
       type: 'NAT_GATEWAY',
     },
     {
-      name: 'ELB',
-      type: 'ELB',
+      name: 'ALB',
+      type: 'ALB',
+    },
+    {
+      name: 'NLB',
+      type: 'NLB',
     },
   ],
   Security: [

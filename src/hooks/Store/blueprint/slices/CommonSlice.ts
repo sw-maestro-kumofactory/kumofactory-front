@@ -6,8 +6,6 @@ import { BlueprintResponse } from '@/src/types/Blueprint';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { AccessScope, AccessScopeList, AvailabilityZone, AvailabilityZoneList, EC2Options } from '@/src/types/Services';
-import { EC2 } from '@/src/types/Services/EC2';
-import service from '@/src/components/AWSService/Service';
 
 // 그리드 내에서의 상대 좌표를 얻는다.
 const getGirdPoint = (
@@ -109,6 +107,7 @@ export const useCommonSlice: StateCreator<
           x: service.x,
           y: service.y,
           type: service.type,
+          option: {},
         });
       }
       // links
@@ -240,90 +239,6 @@ export const useCommonSlice: StateCreator<
             state.subnetCount['private'] += 1;
           }
         }
-        //
-        // if (state.isDrag && state.selectedServiceId) {
-        //   let subnetFlag = false;
-        //   let azFlag = false;
-        //   // 해당 서비스가 어떤 영역에 속하는지 확인하는 코드
-        //   const currentService = state.services[state.selectedServiceId!];
-        //   const currentOption = state.options[state.selectedServiceId!] as EC2Options;
-        //   for (let areaId in state.areas) {
-        //     const curArea = state.areas[areaId];
-        //     if (
-        //       currentService.x >= curArea.x &&
-        //       currentService.x + 80 <= curArea.x + curArea.width &&
-        //       currentService.y >= curArea.y &&
-        //       currentService.y + 80 <= curArea.y + curArea.height
-        //     ) {
-        //       if (curArea.type === 'Subnet') {
-        //         subnetFlag = true;
-        //         if (curArea.scope === 'Private')
-        //           if (currentService.type === 'RDS') {
-        //             curArea.scope = 'Database';
-        //             state.subnetCount['database'] += 1;
-        //             state.subnetCount['private'] -= 1;
-        //           } else {
-        //             curArea.scope = 'Private';
-        //           }
-        //         else if (curArea.scope === 'Database') {
-        //           if (currentService.type !== 'RDS') {
-        //             curArea.scope = 'Private';
-        //             state.subnetCount['database'] -= 1;
-        //             state.subnetCount['private'] += 1;
-        //           }
-        //         }
-        //         currentOption['subnetType'] = curArea.scope;
-        //       } else if (curArea.type === 'AZ') {
-        //         azFlag = true;
-        //         currentOption['availabilityZone'] = curArea.az;
-        //       }
-        //     }
-        //   }
-        //   if (state.services[state.selectedServiceId!].type === 'EC2') {
-        //     currentOption['subnetType'] = subnetFlag ? currentOption['subnetType'] : null;
-        //     currentOption['availabilityZone'] = azFlag ? currentOption['availabilityZone'] : null;
-        //   }
-        // }
-        //
-        // // 영역을 움직였을 때
-        // if (state.isDrag && state.selectedAreaId) {
-        //   const curArea = state.areas[state.selectedAreaId];
-        //   for (let serviceId in state.services) {
-        //     const curService = state.services[serviceId];
-        //     const curOption = state.options[serviceId] as EC2Options;
-        //     if (
-        //       curService.x >= curArea.x &&
-        //       curService.x + 80 <= curArea.x + curArea.width &&
-        //       curService.y >= curArea.y &&
-        //       curService.y + 80 <= curArea.y + curArea.height
-        //     ) {
-        //       if (curArea.type === 'Subnet') {
-        //         if (curArea.scope === 'Private')
-        //           if (curService.type === 'RDS') {
-        //             curArea.scope = 'Database';
-        //             state.subnetCount['database'] += 1;
-        //             state.subnetCount['private'] -= 1;
-        //             curOption['subnetType'] = 'Database';
-        //           } else {
-        //             curArea.scope = 'Private';
-        //             curOption['subnetType'] = 'Private';
-        //           }
-        //         else if (curArea.scope === 'Database') {
-        //           if (curService.type !== 'RDS') {
-        //             curArea.scope = 'Private';
-        //             state.subnetCount['database'] -= 1;
-        //             state.subnetCount['private'] += 1;
-        //             curOption['subnetType'] = 'Private';
-        //           }
-        //         } else {
-        //           curOption['subnetType'] = 'Public';
-        //         }
-        //       } else if (curArea.type === 'AZ') {
-        //         curOption['availabilityZone'] = curArea.az;
-        //       }
-        //     }
-        //   }
-        // }
 
         state.isDrag = false;
         state.isMoving = false;

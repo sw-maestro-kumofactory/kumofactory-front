@@ -4,4 +4,5 @@ export const CommonInfo = {
   y: 0,
   lines: [],
   linkedPoints: [],
+  option: {},
 };

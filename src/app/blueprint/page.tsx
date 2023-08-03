@@ -17,13 +17,11 @@ const BluePrint = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
   const setUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.setUserBlueprints);
-
   const getTemplate = async () => {
     try {
       const res = await getTemplateList();
       // const res = await axios.get('/apiTest/blueprint');
-      const data = res.data;
-      setUserBlueprints(data);
+      setUserBlueprints(res);
     } catch (err) {
       console.log(err);
     }
@@ -57,7 +55,7 @@ const BluePrint = () => {
         </div>
         {userBlueprints &&
           userBlueprints.map((blueprint) => {
-            return <Card key={blueprint.id} id={blueprint.id} name={blueprint.name} />;
+            return <Card key={blueprint.id} index={blueprint.id} id={blueprint.name} name={blueprint.name} />;
           })}
         <ModalContainer isShow={isOpen}>
           <Templates />

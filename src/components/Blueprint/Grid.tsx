@@ -58,7 +58,9 @@ const Grid = ({ id }: IProps) => {
     onMouseMove(e);
   };
 
-  const setTemplateById = async () => {
+  const setTemplateById = async (id: number) => {
+    // const data = await getTemplateListById(id);
+    // console.log(data);
     const data = await axios.get('/apiTest/blueprint');
     setTemplate({ data: data.data });
   };
@@ -88,11 +90,12 @@ const Grid = ({ id }: IProps) => {
     // 초기화 되는걸 막기 위해서
     if (!services) {
       if (id !== 'empty') {
-        setTemplateById();
+        setTemplateById(1);
       } else {
         setTemplate({
           data: {
             name: '',
+            uuid: '',
             components: [],
             links: [],
             areas: [],

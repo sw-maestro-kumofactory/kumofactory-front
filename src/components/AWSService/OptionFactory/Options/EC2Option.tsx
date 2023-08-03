@@ -1,4 +1,6 @@
 'use client';
+import { useEffect } from 'react';
+
 import { AccessScope, AccessScopeList, EC2Options, InstanceType, InstanceTypeList } from '@/src/types/Services';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -26,33 +28,52 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
   const setOption = useBlueprintStore((state) => state.ServiceAction.setOption);
   const instanceTypes = InstanceTypeList;
   const securityGroupTypes = AccessScopeList;
-  const { value: instanceType, onHandleChange: handleInstanceTypeChange } = useInput<string>(
-    selectedOptions?.instanceType,
-  );
-  const { value: instanceName, onHandleChange: handleInstanceNameChange } = useInput<string>(
-    selectedOptions?.instanceName,
-  );
-  const { value: securityGroupType, onHandleChange: handleSecurityGroupTypeChange } = useInput<string | null>(
-    selectedOptions?.securityGroupType,
-  );
+  const {
+    value: instanceType,
+    valueRef: instanceTypeRef,
+    onHandleChange: handleInstanceTypeChange,
+  } = useInput<string>(selectedOptions?.instanceType);
+  const {
+    value: instanceName,
+    valueRef: instanceNameRef,
+    onHandleChange: handleInstanceNameChange,
+  } = useInput<string>(selectedOptions?.instanceName);
+  const {
+    value: securityGroupType,
+    valueRef: securityGroupTypeRef,
+    onHandleChange: handleSecurityGroupTypeChange,
+  } = useInput<string | null>(selectedOptions?.securityGroupType);
+
+  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setOption(id, {
+      id: id,
+      instanceType: instanceType,
+      machineImage: '',
+      subnetType: null,
+      availabilityZone: null,
+      instanceName: instanceName,
+      securityGroupType: securityGroupType,
+    } as EC2Options);
+  };
+
+  useEffect(() => {
+    return () =>
+      setOption(id, {
+        id: id,
+        instanceType: instanceTypeRef.current,
+        machineImage: '',
+        subnetType: null,
+        availabilityZone: null,
+        instanceName: instanceNameRef.current,
+        securityGroupType: securityGroupTypeRef.current,
+      } as EC2Options);
+  }, []);
 
   if (!selectedOptions) return <></>;
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        setOption(id, {
-          instanceType: instanceType,
-          machineImage: '',
-          subnetType: null,
-          availabilityZone: null,
-          instanceName: instanceName,
-          id: id,
-          securityGroupType: securityGroupType,
-        } as EC2Options);
-      }}
-    >
+    <form onSubmit={handleOnSubmit}>
       <AttributeName text='Instance Type' />
       <select value={instanceType} onChange={handleInstanceTypeChange}>
         {instanceTypes.map((instanceType) => (

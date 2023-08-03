@@ -3,15 +3,18 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import Blueprint from '@/public/blueprint.svg';
+import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
 interface IProps {
   name: string;
-  id: number;
+  index: number;
+  id: string;
   svg?: string;
 }
 
-const Card = ({ id, name }: IProps) => {
+const Card = ({ index, id, name }: IProps) => {
   const [isHover, setIsHover] = useState(false);
+
   return (
     <div className='w-1/3 h-2/5 p-4'>
       <div
