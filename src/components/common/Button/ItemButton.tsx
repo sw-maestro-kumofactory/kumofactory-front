@@ -1,11 +1,12 @@
 interface IProps {
   onClick?: (e: any) => void;
+  type: string;
   children: React.ReactNode;
 }
-const ItemButtonContainer = ({ children, onClick }: IProps) => {
+const ItemButtonContainer = ({ children, type, onClick }: IProps) => {
   return (
     <div
-      className='flex flex-col items-center justify-center text-white w-20 cursor-pointer rounded-2xl mt-4 select-none mr-1'
+      className={`flex flex-col items-center justify-center text-white w-20 cursor-pointer rounded-2xl mt-4 select-none mr-1 ${type}`}
       onClick={onClick}
     >
       {children}

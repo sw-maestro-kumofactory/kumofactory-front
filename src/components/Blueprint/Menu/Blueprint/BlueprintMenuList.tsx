@@ -20,7 +20,6 @@ const Title = ({ title }: { title: string }) => (
 const BlueprintMenuList = () => {
   const blueprintToJson = useBlueprintStore((state) => state.CommonAction.blueprintToJson);
   const options = useBlueprintStore((state) => state.options);
-  console.log(options);
   return (
     <div className='overflow-x-hidden w-[294px] min-w-[294px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
       <Title title='Actions' />
