@@ -1,5 +1,8 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
+import Image from 'next/image';
 
 import { AccessScope, AccessScopeList, EC2Options, InstanceType, InstanceTypeList } from '@/src/types/Services';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
@@ -23,7 +26,9 @@ const AttributeName = ({ text }: { text: string }) => {
 };
 
 export const EC2OptionComponent = ({ id }: { id: string }) => {
+  const [isHover, setIsHover] = useState(false);
   const options = useBlueprintStore((state) => state.options);
+  const [top, setTop] = useState(0);
   const selectedOptions = options[id] as EC2Options;
   const setOption = useBlueprintStore((state) => state.ServiceAction.setOption);
   const instanceTypes = InstanceTypeList;
@@ -43,6 +48,17 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
     valueRef: securityGroupTypeRef,
     onHandleChange: handleSecurityGroupTypeChange,
   } = useInput<string | null>(selectedOptions?.securityGroupType);
+
+  const mouseEnter = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setTop(e.clientY + 20);
+    setIsHover(true);
+  };
+
+  const mouseLeave = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsHover(false);
+  };
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -75,13 +91,29 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
   return (
     <form onSubmit={handleOnSubmit}>
       <AttributeName text='Instance Type' />
-      <select value={instanceType} onChange={handleInstanceTypeChange}>
-        {instanceTypes.map((instanceType) => (
-          <option key={instanceType} value={instanceType}>
-            {instanceType}
-          </option>
-        ))}
-      </select>
+      <div className='flex align-middle'>
+        <select value={instanceType} onChange={handleInstanceTypeChange}>
+          {instanceTypes.map((instanceType) => (
+            <option key={instanceType} value={instanceType}>
+              {instanceType}
+            </option>
+          ))}
+        </select>
+        <div className='flex items-center ml-8 w-8 h-8' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
+          <FontAwesomeIcon icon={faCircleQuestion} />
+        </div>
+        {isHover && (
+          <Image
+            width={500}
+            height={500}
+            style={{ top: `${top}px` }}
+            className='fixed bg-opacity-0 top-40 right-4'
+            src={'/typelist.png'}
+            alt={'typelist'}
+          />
+        )}
+      </div>
+
       <AttributeName text={'Machine Image'} />
       <input value='amazon linux 2023' disabled />
       <AttributeName text={'Subnet Type'} />
