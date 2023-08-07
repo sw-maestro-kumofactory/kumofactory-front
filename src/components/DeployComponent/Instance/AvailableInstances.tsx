@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from 'react';
 
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import EC2Info from '@/src/components/DeployComponent/Instances/EC2Info';
+import EC2Info from '@/src/components/DeployComponent/Instance/EC2Info';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
+import { EC2Options } from '@/src/types/Services';
 
 const AvailableInstances = () => {
   const services = useBlueprintStore((state) => state.services);
@@ -27,7 +28,9 @@ const AvailableInstances = () => {
     <div className='w-full h-fit'>
       <div>
         {ec2List.map((ec2) => {
-          return <EC2Info key={ec2} option={options[ec2]} active={targetInstanceId === options[ec2].id} />;
+          return (
+            <EC2Info key={ec2} option={options[ec2] as EC2Options} active={targetInstanceId === options[ec2].id} />
+          );
         })}
       </div>
       <div>

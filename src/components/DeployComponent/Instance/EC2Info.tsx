@@ -5,9 +5,10 @@ import { usePathname } from 'next/navigation';
 
 import { ServiceOptions } from '@/src/types/Services';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
+import { EC2Options } from '@/src/types/Services';
 
 interface IProps {
-  option: ServiceOptions;
+  option: EC2Options;
   active: boolean;
 }
 
@@ -17,10 +18,12 @@ const EC2Info = ({ option, active }: IProps) => {
   const [disableEvent, setDisableEvent] = useState(false);
   const setTargetInstanceId = useDeployStore((state) => state.DeployAction.setTargetInstanceId);
   const setTargetInstanceName = useDeployStore((state) => state.DeployAction.setTargetInstanceName);
+  const setTargetInstanceType = useDeployStore((state) => state.DeployAction.setTargetInstanceType);
   const onClickArea = () => {
     if (!disableEvent) {
       setTargetInstanceId(showOptions ? '' : option.id);
       setTargetInstanceName(showOptions ? '' : option.instanceName);
+      setTargetInstanceType(showOptions ? '' : 'EC2');
     }
   };
 
