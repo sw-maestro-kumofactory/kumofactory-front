@@ -14,6 +14,7 @@ import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { EC2OptionComponent } from '@/src/components/AWSService/OptionFactory/Options/EC2Option';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 import { AreaTypes, IArea } from '@/src/types/Area';
+import DeployButton from '@/src/components/Blueprint/FloatingButton/DeployButton';
 
 interface IProps {
   id: string;
@@ -59,8 +60,6 @@ const Grid = ({ id }: IProps) => {
   };
 
   const setTemplateById = async (id: number) => {
-    // const data = await getTemplateListById(id);
-    // console.log(data);
     const data = await axios.get('/apiTest/blueprint');
     setTemplate({ data: data.data });
   };
@@ -84,6 +83,11 @@ const Grid = ({ id }: IProps) => {
     } else if (e.key === 'Backspace' || e.key === 'Delete') {
       clearComponent();
     }
+  };
+
+  const handleOnClickDeployButton = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log('deploy');
   };
 
   useEffect(() => {
@@ -135,6 +139,7 @@ const Grid = ({ id }: IProps) => {
         setIsEdit(false);
       }}
     >
+      <DeployButton onClick={handleOnClickDeployButton} />
       {!isLoading && <BlueprintNameField />}
       {viewBox.width !== 0 && !isLoading ? (
         <div id='blueprint'>
