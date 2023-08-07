@@ -78,16 +78,16 @@ const Setting = ({ id }: IProps) => {
       <div className='text-lg py-4'>Select Framework</div>
       <div className='flex gap-x-4'>
         <div
-          className='cursor-pointer'
+          className='cursor-pointer flex gap-x-1'
           onClick={() => {
             setLanguage('java');
           }}
         >
           <input type='radio' name='language' value='java' id='java' />
-          <label htmlFor='java'>Java</label>
+          <label htmlFor='java'>Spring</label>
         </div>
         <div
-          className='cursor-pointer'
+          className='cursor-pointer flex gap-x-1'
           onClick={() => {
             setLanguage('node');
           }}
