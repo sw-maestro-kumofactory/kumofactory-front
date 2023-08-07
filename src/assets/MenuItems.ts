@@ -24,7 +24,7 @@ export const MenuItemList: ServiceItemType = {
   Database: [
     {
       name: 'RDS',
-      type: 'RDS',
+      type: 'RDS_MYSQL',
     },
     {
       name: 'ElastiCache',

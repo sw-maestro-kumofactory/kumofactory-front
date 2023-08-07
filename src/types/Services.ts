@@ -191,7 +191,7 @@ export type ServiceOptions =
 
 export type ServicesString =
   | 'EC2'
-  | 'RDS'
+  | 'RDS_MYSQL'
   | 'S3'
   | 'ROUTE53'
   | 'WAF'

@@ -31,7 +31,7 @@ export class OptionFactory implements IFactory {
     switch (type) {
       case 'EC2':
         return EC2Option(id);
-      case 'RDS':
+      case 'RDS_MYSQL':
         return RDSOption(id);
       case 'S3':
         return S3Option(id);
@@ -61,7 +61,7 @@ export class OptionFactory implements IFactory {
     switch (type) {
       case 'EC2':
         return EC2OptionComponent({ id: id });
-      case 'RDS':
+      case 'RDS_MYSQL':
         return RDSOptionComponent({ id: id });
       case 'S3':
         return S3OptionComponent({ id: id });

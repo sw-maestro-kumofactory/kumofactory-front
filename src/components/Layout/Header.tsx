@@ -1,22 +1,34 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRotate } from '@fortawesome/free-solid-svg-icons';
 
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
-import DropDown from '@/src/components/Blueprint/downshiftTest/DropDown';
 import useStore from '@/src/hooks/useStore';
 import { useLogin } from '@/src/hooks/Auth/useLogin';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { StatusStyle } from '@/src/assets/StatusStyle';
+import { DeployState } from '@/src/types/Deploy';
+import Status from '@/src/components/Layout/Status';
+
+const stateList = ['Success', 'Fail', 'Pending', 'Deploying'];
 
 export const Header = () => {
   const isLogin = useStore(useLoginStore, (state) => state.isLogin);
   const currentBlueprintId = useStore(useBlueprintStore, (state) => state.currentBlueprintId);
   const setBlueprintId = useBlueprintStore((state) => state.CommonAction.setBlueprintId);
+  const [currentDeployState, setCurrentDeployState] = useState<DeployState>('Success');
   const pathname = usePathname();
   const router = useRouter();
   const { setInterceptor, Logout } = useLogin();
   const [isBlueprint, setIsBlueprint] = useState(true);
+
+  const onClickRefresh = () => {
+    const randomNumber = Math.floor(Math.random() * 3);
+    setCurrentDeployState(stateList[randomNumber] as DeployState);
+  };
 
   useEffect(() => {
     const d = pathname.split('/');
@@ -36,54 +48,54 @@ export const Header = () => {
         Kumo Factory
       </Link>
       {currentBlueprintId && (
-        <div className='flex'>
-          <div
-            className={`flex items-center rounded-l-md h-10 ${
-              isBlueprint ? 'bg-[#799ACF] text-white' : 'bg-white text-[#799ACF]'
-            } px-4 cursor-pointer`}
-            onClick={() => {
-              setIsBlueprint(true);
-              router.push(`/blueprint/${currentBlueprintId}`);
-            }}
-          >
-            Blueprint
+        <>
+          <div className='flex'>
+            <div
+              className={`flex items-center rounded-l-md h-10 ${
+                isBlueprint ? 'bg-[#799ACF] text-white' : 'bg-white text-[#799ACF]'
+              } px-4 cursor-pointer`}
+              onClick={() => {
+                setIsBlueprint(true);
+                router.push(`/blueprint/${currentBlueprintId}`);
+              }}
+            >
+              Blueprint
+            </div>
+            <div
+              className={`flex items-center rounded-r-md h-10 ${
+                isBlueprint ? 'bg-white text-[#799ACF]' : 'bg-[#799ACF] text-white'
+              } px-4 cursor-pointer`}
+              onClick={() => {
+                setIsBlueprint(false);
+                router.push(`/blueprint/${currentBlueprintId}/deploy`);
+              }}
+            >
+              Deploy
+            </div>
           </div>
-          <div
-            className={`flex items-center rounded-r-md h-10 ${
-              isBlueprint ? 'bg-white text-[#799ACF]' : 'bg-[#799ACF] text-white'
-            } px-4 cursor-pointer`}
-            onClick={() => {
-              setIsBlueprint(false);
-              router.push(`/blueprint/${currentBlueprintId}/deploy`);
-            }}
-          >
-            Deploy
-          </div>
-        </div>
+          <Status onClick={onClickRefresh} currentState={currentDeployState} />
+        </>
       )}
 
-      {isLogin ? (
-        <>
-          {/* 이런 컨셉 */}
-          {/*<DropDown title={'username'} absolute={true}>*/}
-          {/*  <div className={'bg-white text-black w-80'}>123</div>*/}
-          {/*</DropDown>*/}
-          <div
-            className={'cursor-pointer'}
-            onClick={() => {
-              Logout();
-            }}
-          >
-            로그아웃
-          </div>
-        </>
-      ) : (
-        <>
-          <Link className='bg-[#799ACF] px-4 py-2 rounded-2xl' href='/auth/login'>
-            SignIn
-          </Link>
-        </>
-      )}
+      {!currentBlueprintId &&
+        (isLogin ? (
+          <>
+            <div
+              className={'cursor-pointer'}
+              onClick={() => {
+                Logout();
+              }}
+            >
+              로그아웃
+            </div>
+          </>
+        ) : (
+          <>
+            <Link className='bg-[#799ACF] px-4 py-2 rounded-2xl' href='/auth/login'>
+              SignIn
+            </Link>
+          </>
+        ))}
     </div>
   );
 };

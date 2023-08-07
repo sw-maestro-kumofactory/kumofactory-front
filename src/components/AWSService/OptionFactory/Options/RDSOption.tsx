@@ -98,7 +98,6 @@ export const RDSOptionComponent = ({ id }: { id: string }) => {
   };
 
   useEffect(() => {
-    console.log('mount', selectedOptions);
     return () => {
       setOption(id, {
         id: id,

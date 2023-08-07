@@ -207,7 +207,7 @@ export const useCommonSlice: StateCreator<
             ) {
               if (currentArea.type === 'Subnet') {
                 if (currentArea.scope === 'Private') {
-                  if (currentService.type === 'RDS') {
+                  if (currentService.type === 'RDS_MYSQL') {
                     containRDS = true;
                     currentArea.scope = 'Database';
                     state.subnetCount['database'] += 1;
@@ -217,7 +217,7 @@ export const useCommonSlice: StateCreator<
                     currentOption['subnetType'] = 'Private';
                   }
                 } else if (currentArea.scope === 'Database') {
-                  if (currentService.type !== 'RDS') {
+                  if (currentService.type !== 'RDS_MYSQL') {
                     currentArea.scope = 'Private';
                     state.subnetCount['database'] -= 1;
                     state.subnetCount['private'] += 1;

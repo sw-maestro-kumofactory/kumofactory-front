@@ -37,3 +37,5 @@ export interface DeployRequest {
   language: string;
   env: EnvironmentVariables[];
 }
+
+export type DeployState = 'Provisioning' | 'Pending' | 'Success' | 'Fail';

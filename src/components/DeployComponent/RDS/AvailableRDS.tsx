@@ -14,7 +14,7 @@ const AvailableRDS = () => {
 
   useEffect(() => {
     Object.keys(services).forEach((key) => {
-      if (services[key].type === 'RDS') {
+      if (services[key].type === 'RDS_MYSQL') {
         setRdsList((prev) => [...prev, key]);
       }
     });

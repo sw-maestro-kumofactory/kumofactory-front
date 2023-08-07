@@ -8,7 +8,6 @@ import ElastiCacheSVG from '@/public/icons/Database/Arch_Amazon-ElastiCache_64.s
 import EFSSVG from '@/public/icons/Storage/Arch_Amazon-EFS_64.svg';
 import CloudFrontSVG from '@/public/icons/Network/Arch_Amazon-CloudFront_64.svg';
 import NATSVG from '@/public/icons/Network/Res_Amazon-VPC_NAT-Gateway_48.svg';
-import VPCSVG from '@/public/icons/Network/Arch_Amazon-Virtual-Private-Cloud_64.svg';
 import ELBSVG from '@/public/icons/Network/Arch_Elastic-Load-Balancing_64.svg';
 import ALBSVG from '@/public/icons/NEtwork/Res_Elastic-Load-Balancing_Application-Load-Balancer_48.svg';
 import NLBSVG from '@/public/icons/NEtwork/Res_Elastic-Load-Balancing_Network-Load-Balancer_48.svg';
@@ -34,7 +33,7 @@ export class ServiceFactory implements IFactory {
     switch (type) {
       case 'EC2':
         return <EC2SVG />;
-      case 'RDS':
+      case 'RDS_MYSQL':
         return <RDSSVG />;
       case 'S3':
         return <S3SVG />;
