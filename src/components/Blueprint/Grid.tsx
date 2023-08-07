@@ -222,6 +222,7 @@ const Grid = ({ id }: IProps) => {
                     id={services[key].id}
                     type={services[key].type}
                     lines={services[key].lines}
+                    option={{}}
                   />
                   {selectedServiceId === services[key].id && !isMoving && !lineDrawingMode && (
                     <foreignObject x={services[key].x + 90} y={services[key].y + 15} width={50} height={50}>

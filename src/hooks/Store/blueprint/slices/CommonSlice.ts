@@ -95,6 +95,7 @@ export const useCommonSlice: StateCreator<
     blueprintToJson: () => {
       const json: BlueprintResponse = {
         name: '',
+        uuid: '',
         components: [],
         links: [],
         areas: [],

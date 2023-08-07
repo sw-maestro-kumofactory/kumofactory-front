@@ -11,6 +11,7 @@ export const useOptionSlice: StateCreator<
 > = (set, get) => ({
   targetInstanceId: null,
   targetInstanceName: null,
+  targetInstanceType: null,
   repo: {
     name: '',
     user: '',
@@ -23,6 +24,9 @@ export const useOptionSlice: StateCreator<
     },
     setTargetInstanceName: (targetInstanceName: string) => {
       set((state) => ({ ...state, targetInstanceName }));
+    },
+    setTargetInstanceType: (targetInstanceType: string) => {
+      set((state) => ({ ...state, targetInstanceType }));
     },
     setEnvironmentVariables: (environmentVariables: EnvironmentVariables) => {
       set((state) => {

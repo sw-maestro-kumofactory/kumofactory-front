@@ -1,4 +1,5 @@
-import AvailableInstances from '@/src/components/DeployComponent/AvailableInstances';
+import AvailableInstances from '@/src/components/DeployComponent/Instance/AvailableInstances';
+import AvailableRDS from '@/src/components/DeployComponent/RDS/AvailableRDS';
 
 interface IProps {
   disabled?: boolean;
@@ -7,9 +8,10 @@ interface IProps {
 const DeployMenuList = ({ disabled }: IProps) => {
   return (
     <div className='overflow-x-hidden w-[294px] min-w-[294px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
+      <Title title='Database Setting' />
+      <AvailableRDS />
       <Title title='Available Instances' />
       <AvailableInstances />
-      <Title title='Database Setting' />
     </div>
   );
 };
