@@ -19,25 +19,31 @@ const Title = ({ title }: { title: string }) => (
 
 const BlueprintMenuList = () => {
   const blueprintToJson = useBlueprintStore((state) => state.CommonAction.blueprintToJson);
+  const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
+  const name = useBlueprintStore((state) => state.name);
   const options = useBlueprintStore((state) => state.options);
+
+  const onClickSaveButton = async () => {
+    try {
+      const body = blueprintToJson({ id: currentBlueprintId, name: name });
+      body.components.map((component, index) => {
+        component.options = options[component.id];
+      });
+      // console.log(body);
+      await postTemplateData(body);
+    } catch (e) {
+      alert('Invalid Blueprint');
+      console.log(e);
+    }
+  };
+
   return (
-    <div className='overflow-x-hidden w-[294px] min-w-[294px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
+    <div className='overflow-x-hidden w-[300px] min-w-[300px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
       <Title title='Actions' />
       <div className='flex justify-center gap-4 mb-5'>
         <div
           className='px-4 py-2 w-fit flex gap-2 items-center border-[#195091] border-solid border-2 rounded-xl cursor-pointer'
-          onClick={async () => {
-            try {
-              const body = blueprintToJson();
-              body.components.map((component, index) => {
-                component.option = options[component.id];
-              });
-              await postTemplateData(body);
-            } catch (e) {
-              alert('Invalid Blueprint');
-              console.log(e);
-            }
-          }}
+          onClick={onClickSaveButton}
         >
           <FontAwesomeIcon icon={faFloppyDisk} />
           Save

@@ -40,34 +40,34 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
         alert('AZ는 2개까지만 생성 가능합니다.');
         return;
       } else if (!a && !c) {
-        area.az = 'ap-northeast-2a';
+        area.az = 'AP_NORTHEAST_2A';
       } else if (a || c) {
         if (a) {
-          area.az = 'ap-northeast-2c';
+          area.az = 'AP_NORTHEAST_2C';
         } else {
-          area.az = 'ap-northeast-2a';
+          area.az = 'AP_NORTHEAST_2A';
         }
       }
     }
-    if (type === 'Subnet') {
-      if (scope === 'Public') {
+    if (type === 'SUBNET') {
+      if (scope === 'PUBLIC') {
         if (subnetCount.public >= 2) {
           alert('Public Subnet은 2개까지만 생성 가능합니다.');
           return;
         }
-        area.scope = 'Public';
-      } else if (scope === 'Private') {
+        area.scope = 'PUBLIC';
+      } else if (scope === 'PRIVATE') {
         if (subnetCount.private >= 2) {
           alert('Private Subnet은 2개까지만 생성 가능합니다.');
           return;
         }
-        area.scope = 'Private';
-      } else if (scope === 'Database') {
+        area.scope = 'PRIVATE';
+      } else if (scope === 'DATABASE') {
         if (subnetCount.database >= 2) {
           alert('Database Subnet은 2개까지만 생성 가능합니다.');
           return;
         }
-        area.scope = 'Database';
+        area.scope = 'DATABASE';
       }
     }
     createArea(area, area.type);
