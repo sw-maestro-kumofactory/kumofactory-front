@@ -12,19 +12,19 @@ export const AreaStyle: { [key: string]: IAreaStyle } = {
     fill: 'transparent',
     stroke: '#000000',
   },
-  Subnet: {
+  SUBNET: {
     fill: '#D6F0B6',
     stroke: 'transparent',
   },
-  Public: {
+  PUBLIC: {
     fill: '#D6F0B6',
     stroke: 'transparent',
   },
-  Private: {
+  PRIVATE: {
     fill: '#e8f2f7',
     stroke: 'transparent',
   },
-  Database: {
+  DATABASE: {
     fill: '#f7e8e8',
     stroke: 'transparent',
   },

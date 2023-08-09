@@ -40,9 +40,11 @@ export const useServiceSlice: StateCreator<
         if (service) {
           if (state.isLineDrawing) {
             if (state.linkedServiceId && state.curLineId) {
-              state.lines[state.curLineId].dst.componentId = state.linkedServiceId;
-              state.services[state.linkedServiceId].lines.push(state.curLineId);
-              state.services[state.lines[state.curLineId].src.componentId].lines.push(state.curLineId);
+              state.lines[state.currentBlueprintId][state.curLineId].dst.componentId = state.linkedServiceId;
+              state.services[state.currentBlueprintId][state.linkedServiceId].lines.push(state.curLineId);
+              state.services[state.currentBlueprintId][
+                state.lines[state.currentBlueprintId][state.curLineId].src.componentId
+              ].lines.push(state.curLineId);
             }
             state.curLineId = undefined;
           }
@@ -77,14 +79,13 @@ export const useServiceSlice: StateCreator<
     },
     createService: (service: IComponent, id: string) =>
       set((state) => {
-        state.services[id] = {
+        state.services[state.currentBlueprintId][id] = {
           ...service,
           id,
         };
         return state;
       }),
     setOption: (id: string, options: ServiceOptions) => {
-      console.log(options);
       set((state) => {
         state.options[id] = options;
         return state;

@@ -2,7 +2,7 @@ import { IComponent, ServiceOptions } from '@/src/types/Services';
 import { Coordinate } from '@/src/types/Common';
 
 export interface ServiceState {
-  services: Record<string, IComponent>;
+  services: Record<string, Record<string, IComponent>>;
   selectedServiceId: string | null;
   doubleClickedServiceId: string | null;
   isLineDrawing: boolean;

@@ -1,6 +1,7 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
 
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -21,13 +22,13 @@ interface IProps {
 }
 
 const Grid = ({ id }: IProps) => {
-  const areas = useBlueprintStore((state) => state.areas);
+  const areas = useBlueprintStore((state) => state.areas[id]);
   const selectedAreaId = useBlueprintStore((state) => state.selectedAreaId);
-  const services = useBlueprintStore((state) => state.services);
+  const services = useBlueprintStore((state) => state.services[id]);
   const selectedServiceId = useBlueprintStore((state) => state.selectedServiceId);
   const isMoving = useBlueprintStore((state) => state.isMoving);
   const viewBox = useBlueprintStore((state) => state.viewBox);
-  const lines = useBlueprintStore((state) => state.lines);
+  const lines = useBlueprintStore((state) => state.lines[id]);
   const selectedLineId = useBlueprintStore((state) => state.selectedLineId);
   const lineDrawingMode = useBlueprintStore((state) => state.isLineDrawing);
   const isShowOption = useBlueprintStore((state) => state.isShowOption);
@@ -46,22 +47,17 @@ const Grid = ({ id }: IProps) => {
     setViewBox,
     clearComponent,
     setIsEdit,
+    setBlueprintId,
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
+  const [sortedAreas, setSortedAreas] = useState<IArea[]>([]);
 
-  const typeOrder: AreaTypes[] = ['VPC', 'AZ', 'Subnet'];
-
-  const sortedAreas = typeOrder.flatMap((type) => Object.values(areas).filter((area) => area.type === type));
+  const typeOrder: AreaTypes[] = ['VPC', 'AZ', 'SUBNET'];
 
   const onHandleMouseMove = (e: React.MouseEvent) => {
     if (selectedServiceId) e.stopPropagation();
     onMouseMove(e);
-  };
-
-  const setTemplateById = async (id: number) => {
-    const data = await axios.get('/apiTest/blueprint');
-    setTemplate({ data: data.data });
   };
 
   const handleResize = () => {
@@ -75,7 +71,6 @@ const Grid = ({ id }: IProps) => {
   const onKeyDownESC = (e: KeyboardEvent) => {
     e.stopPropagation();
 
-    // Check if the current target (element that triggered the event) has the className "testA"
     const isSvgTestElement = (e.target as HTMLElement).classList.contains('test');
 
     if (e.key === 'Escape' && isSvgTestElement) {
@@ -91,24 +86,15 @@ const Grid = ({ id }: IProps) => {
   };
 
   useEffect(() => {
-    // 초기화 되는걸 막기 위해서
-    if (!services) {
-      if (id !== 'empty') {
-        setTemplateById(1);
-      } else {
-        setTemplate({
-          data: {
-            name: '',
-            uuid: '',
-            components: [],
-            links: [],
-            areas: [],
-          },
-        });
-      }
-    }
-    setIsLoading(false);
+    setBlueprintId(id);
   }, []);
+
+  useEffect(() => {
+    if (areas) {
+      const sortedAreas = typeOrder.flatMap((type) => Object.values(areas).filter((area) => area.type === type));
+      setSortedAreas(sortedAreas);
+    }
+  }, [areas]);
 
   useEffect(() => {
     handleResize();
@@ -176,7 +162,7 @@ const Grid = ({ id }: IProps) => {
                   key={area.id}
                   area={area}
                   activate={selectedAreaId === area.id}
-                  styleKey={area.type === 'Subnet' ? area.scope! : area.type}
+                  styleKey={area.type === 'SUBNET' ? area.scope! : area.type}
                 />
               ))}
             </g>
@@ -201,44 +187,55 @@ const Grid = ({ id }: IProps) => {
               })}
             </g>
             <g id='services'>
-              {Object.keys(services).map((key) => (
-                <g key={services[key].id}>
-                  <Service
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDoubleClickService(e, services[key]);
-                    }}
-                    onMouseDown={(e) => {
-                      e.stopPropagation();
-                      onMouseDownService(e, services[key]);
-                    }}
-                    onMouseEnter={(e) => {
-                      e.stopPropagation();
-                      onMouseEnterService(e, services[key]);
-                    }}
-                    onMouseLeave={(e) => {
-                      e.stopPropagation();
-                      onMouseLeaveService(e, services[key]);
-                    }}
-                    key={services[key].id}
-                    isActive={services[key].id === selectedServiceId}
-                    x={services[key].x}
-                    y={services[key].y}
-                    id={services[key].id}
-                    type={services[key].type}
-                    lines={services[key].lines}
-                    option={{}}
-                  />
-                  {selectedServiceId === services[key].id && !isMoving && !lineDrawingMode && (
-                    <foreignObject x={services[key].x + 90} y={services[key].y + 15} width={50} height={50}>
-                      <CreateLineContainer />
+              {Object.keys(services).map((key) => {
+                const serviceName = services[key].type;
+
+                const serviceNameWidth = serviceName.length * 12;
+                const xAdjustment = (80 - serviceNameWidth) / 2;
+                return (
+                  <g key={services[key].id}>
+                    <Service
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDoubleClickService(e, services[key]);
+                      }}
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                        onMouseDownService(e, services[key]);
+                      }}
+                      onMouseEnter={(e) => {
+                        e.stopPropagation();
+                        onMouseEnterService(e, services[key]);
+                      }}
+                      onMouseLeave={(e) => {
+                        e.stopPropagation();
+                        onMouseLeaveService(e, services[key]);
+                      }}
+                      key={services[key].id}
+                      isActive={services[key].id === selectedServiceId}
+                      x={services[key].x}
+                      y={services[key].y}
+                      id={services[key].id}
+                      type={services[key].type}
+                      lines={services[key].lines}
+                      options={{}}
+                    />
+                    {selectedServiceId === services[key].id && !isMoving && !lineDrawingMode && (
+                      <foreignObject x={services[key].x + 90} y={services[key].y + 15} width={50} height={50}>
+                        <CreateLineContainer />
+                      </foreignObject>
+                    )}
+                    <foreignObject
+                      x={services[key].x + xAdjustment}
+                      y={services[key].y + 80}
+                      width='100%'
+                      height='100%'
+                    >
+                      <div className='flex justify-center items-center select-none w-fit '>{services[key].type}</div>
                     </foreignObject>
-                  )}
-                  <foreignObject x={services[key].x - 40} y={services[key].y + 80} width={160} height={24}>
-                    <div className='flex justify-center select-none'>{services[key].type}</div>
-                  </foreignObject>
-                </g>
-              ))}
+                  </g>
+                );
+              })}
             </g>
           </svg>
           {isShowOption && doubleClickedServiceId && (

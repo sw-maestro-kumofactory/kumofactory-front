@@ -2,7 +2,7 @@ import { authAxiosInstance } from '@/src/api';
 import { BlueprintInfo, BlueprintResponse } from '@/src/types/Blueprint';
 
 export const postTemplateData = async (body: BlueprintResponse): Promise<any> => {
-  const { data } = await authAxiosInstance.post<BlueprintResponse>(`/api/blueprint/aws`, body, {});
+  const { data } = await authAxiosInstance.post<BlueprintResponse>(`/api/blueprint/aws?provision=false`, body, {});
   return data;
 };
 
@@ -11,7 +11,7 @@ export const getTemplateList = async (): Promise<any> => {
   return data;
 };
 
-export const getTemplateListById = async (id: number): Promise<BlueprintResponse> => {
+export const getTemplateListById = async (id: string): Promise<BlueprintResponse> => {
   const { data } = await authAxiosInstance.get<BlueprintResponse>(`/api/blueprint/aws/${id}`);
   return data;
 };

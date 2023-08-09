@@ -30,18 +30,19 @@ export const useLineSlice: StateCreator<
     setLineDrawingMode: (flag: boolean) =>
       set((state) => {
         if (flag && state.selectedServiceId) {
+          const currentServices = state.services[state.currentBlueprintId];
           state.isLineDrawing = true;
           const lineId = v1().toString();
-          state.lines[lineId] = {
+          state.lines[state.currentBlueprintId][lineId] = {
             id: lineId,
             src: {
-              x: state.services[state.selectedServiceId].x + 40,
-              y: state.services[state.selectedServiceId].y + 40,
+              x: currentServices[state.selectedServiceId].x + 40,
+              y: currentServices[state.selectedServiceId].y + 40,
               componentId: state.selectedServiceId,
             },
             dst: {
-              x: state.services[state.selectedServiceId].x + 40,
-              y: state.services[state.selectedServiceId].y + 40,
+              x: currentServices[state.selectedServiceId].x + 40,
+              y: currentServices[state.selectedServiceId].y + 40,
               componentId: '',
             },
           };
@@ -57,9 +58,15 @@ export const useLineSlice: StateCreator<
         }
         return state;
       }),
+    initialCreateLine: (id: string) => {
+      set((state) => {
+        state.lines[id] = {};
+        return state;
+      });
+    },
     createLine: (id: string, src: Point, dst: Point) =>
       set((state) => {
-        state.lines[id] = {
+        state.lines[state.currentBlueprintId][id] = {
           id: id,
           src: {
             x: src.x,
@@ -76,7 +83,7 @@ export const useLineSlice: StateCreator<
       }),
     setComponentLine: (lineId: string, componentId: string) =>
       set((state) => {
-        state.services[componentId].lines.push(lineId);
+        state.services[state.currentBlueprintId][componentId].lines.push(lineId);
         return state;
       }),
   },

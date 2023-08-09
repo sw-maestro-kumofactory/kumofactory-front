@@ -7,7 +7,7 @@ export interface IComponent extends HasLine {
   x: number;
   y: number;
   type: ServicesString;
-  option: {};
+  options: {};
 }
 
 export interface EC2Options {
@@ -21,18 +21,18 @@ export interface EC2Options {
 }
 
 const AccessScope = {
-  Public: 'Public',
-  Private: 'Private',
-  Database: 'Database',
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE',
+  DATABASE: 'DATABASE',
 } as const;
 
 export type AccessScope = (typeof AccessScope)[keyof typeof AccessScope] | null;
 
-export const AccessScopeList = [AccessScope.Public, AccessScope.Private, AccessScope.Database];
+export const AccessScopeList = [AccessScope.PUBLIC, AccessScope.PRIVATE, AccessScope.DATABASE];
 
 const AvailabilityZone = {
-  AP_NORTHEAST_2A: 'ap-northeast-2a',
-  AP_NORTHEAST_2C: 'ap-northeast-2c',
+  AP_NORTHEAST_2A: 'AP_NORTHEAST_2A',
+  AP_NORTHEAST_2C: 'AP_NORTHEAST_2C',
 } as const;
 
 export type AvailabilityZone = (typeof AvailabilityZone)[keyof typeof AvailabilityZone] | null;
@@ -161,7 +161,7 @@ export interface ELBOptions {
   targetGroupPort: number; // for target group
   targetGroupId: string;
   targetGroupName: string;
-  healthCheckPath: string; // url for health check ex) "/"
+  healthCheckPath: string; // url for health check ex "/"
   name: string; // loadBalancerName
   listenerId: string; // listener id
 }
@@ -195,11 +195,11 @@ export type ServicesString =
   | 'S3'
   | 'ROUTE53'
   | 'WAF'
-  | 'ElastiCache'
-  | 'CloudFront'
+  | 'ELASTIC_CACHE'
+  | 'CLOUDFRONT'
   | 'EFS'
   | 'NAT_GATEWAY'
   | 'ELB'
-  | 'AutoScaling'
+  | 'AUTO_SCALING'
   | 'NLB'
   | 'ALB';

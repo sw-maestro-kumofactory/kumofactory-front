@@ -4,7 +4,7 @@ import { v1 } from 'uuid';
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
 import { AreaTypes, IArea } from '@/src/types/Area';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import { AccessScope, AvailabilityZone, AvailabilityZoneList } from '@/src/types/Services';
+import blueprintMenuList from '@/src/components/Blueprint/Menu/Blueprint/BlueprintMenuList';
 
 export const useAreaSlice: StateCreator<
   AllBluePrintStates,
@@ -39,28 +39,26 @@ export const useAreaSlice: StateCreator<
     },
     createArea: (area: IArea, type: AreaTypes) =>
       set((state) => {
-        console.log(area);
         state.selectedServiceId = null;
         state.doubleClickedServiceId = null;
         if (type === 'AZ') {
-          if (area.az === 'ap-northeast-2a') {
+          if (area.az === 'AP_NORTHEAST_2A') {
             state.azCount['2a'] += 1;
-          } else if (area.az === 'ap-northeast-2c') {
+          } else if (area.az === 'AP_NORTHEAST_2C') {
             state.azCount['2c'] += 1;
           }
-        } else if (type === 'Subnet') {
-          if (area.scope === 'Public') {
+        } else if (type === 'SUBNET') {
+          if (area.scope === 'PUBLIC') {
             state.subnetCount.public += 1;
-          } else if (area.scope === 'Private') {
+          } else if (area.scope === 'PRIVATE') {
             state.subnetCount.private += 1;
-          } else if (area.scope === 'Database') {
+          } else if (area.scope === 'DATABASE') {
             state.subnetCount.database += 1;
           }
         }
-        const id = v1().toString();
-        state.areas[id] = {
+        state.areas[state.currentBlueprintId][area.id] = {
           ...area,
-          id: id,
+          id: area.id,
           type: type,
         };
         return state;
@@ -86,8 +84,8 @@ export const useAreaSlice: StateCreator<
     },
     setArea: (id, width, height) =>
       set((state) => {
-        state.areas[id].width = width;
-        state.areas[id].height = height;
+        state.areas[state.currentBlueprintId][id].width = width;
+        state.areas[state.currentBlueprintId][id].height = height;
         return state;
       }),
   },

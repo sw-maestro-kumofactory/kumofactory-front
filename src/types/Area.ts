@@ -11,7 +11,7 @@ export interface IArea {
   az: AvailabilityZone | null;
 }
 
-export type AreaTypes = 'Subnet' | 'VPC' | 'AZ';
+export type AreaTypes = 'SUBNET' | 'VPC' | 'AZ';
 
 export interface CommonAreaOptions {
   id: string;

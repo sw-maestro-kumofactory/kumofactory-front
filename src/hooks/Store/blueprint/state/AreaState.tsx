@@ -1,7 +1,7 @@
 import { AreaTypes, IArea } from '@/src/types/Area';
 
 export interface AreaState {
-  areas: Record<string, IArea>;
+  areas: Record<string, Record<string, IArea>>;
   selectedAreaId: string | null;
   azCount: {
     '2a': number;

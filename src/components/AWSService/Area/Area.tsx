@@ -17,7 +17,7 @@ const Area = ({ area, activate, styleKey }: IProps) => {
 
   const getName = (area: IArea) => {
     if (area.type === 'VPC') return 'VPC';
-    if (area.type === 'Subnet') return area.scope;
+    if (area.type === 'SUBNET') return area.scope;
     if (area.type === 'AZ') return area.az;
   };
 
@@ -108,8 +108,8 @@ const Area = ({ area, activate, styleKey }: IProps) => {
           </>
         )}
       </svg>
-      <foreignObject x={area.x} y={area.y - 20} width={160} height={24}>
-        <div className='z-20 select-none'>{getName(area)}</div>
+      <foreignObject className='-z-20 select-auto' x={area.x} y={area.y - 20} width='100%' height='20'>
+        <div className='-z-20 w-fit select-none '>{getName(area)}</div>
       </foreignObject>
     </>
   );

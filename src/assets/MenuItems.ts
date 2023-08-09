@@ -8,7 +8,7 @@ export const MenuItemList: ServiceItemType = {
     },
     {
       name: 'AutoScaling',
-      type: 'AutoScaling',
+      type: 'AUTO_SCALING',
     },
   ],
   Storage: [
@@ -28,7 +28,7 @@ export const MenuItemList: ServiceItemType = {
     },
     {
       name: 'ElastiCache',
-      type: 'ElastiCache',
+      type: 'ELASTIC_CACHE',
     },
   ],
   Network: [
@@ -38,7 +38,7 @@ export const MenuItemList: ServiceItemType = {
     },
     {
       name: 'CloudFront',
-      type: 'CloudFront',
+      type: 'CLOUDFRONT',
     },
 
     {
@@ -70,13 +70,13 @@ export const AreaItemList: AreaItemInterface[] = [
   },
   {
     name: 'Public Subnet',
-    type: 'Subnet',
-    scope: 'Public',
+    type: 'SUBNET',
+    scope: 'PUBLIC',
   },
   {
     name: 'Private Subnet',
-    type: 'Subnet',
-    scope: 'Private',
+    type: 'SUBNET',
+    scope: 'PRIVATE',
   },
   {
     name: 'AZ',

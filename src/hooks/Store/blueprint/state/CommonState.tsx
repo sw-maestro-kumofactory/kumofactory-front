@@ -3,7 +3,8 @@ import { BlueprintResponse } from '@/src/types/Blueprint';
 
 export interface CommonState {
   name: string;
-  currentBlueprintId: string | null;
+  currentBlueprintId: string;
+  blueprintList: string[];
   isEdit: boolean;
   offset: Coordinate;
   gridSrc: Coordinate;
@@ -28,11 +29,11 @@ export interface CommonState {
     height: number;
   };
   CommonAction: {
-    initState: () => void;
-    setBlueprintId: (id: string | null) => void;
+    initState: (id: string) => void;
+    setBlueprintId: (id: string) => void;
     setName: (name: string) => void;
     setIsEdit: (flag: boolean) => void;
-    blueprintToJson: () => BlueprintResponse;
+    blueprintToJson: ({ id, name }: { id: string; name: string }) => BlueprintResponse;
     setBlueprintSrc: (x: number, y: number) => void;
     setGridSrc: () => void;
     setViewBox: (width: number, height: number) => void;

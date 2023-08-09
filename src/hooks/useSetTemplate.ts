@@ -2,22 +2,24 @@ import { useState } from 'react';
 
 import { BlueprintResponse } from '@/src/types/Blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { ServiceOptions } from '@/src/types/Services';
 
 export const useSetTemplate = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const createService = useBlueprintStore((state) => state.ServiceAction.createService);
-  const createLine = useBlueprintStore((state) => state.LineAction.createLine);
-  const setComponentLine = useBlueprintStore((state) => state.LineAction.setComponentLine);
+  const [isLoading, setIsLoading] = useState(false);
+  const { createService, setOption } = useBlueprintStore((state) => state.ServiceAction);
+  const { createLine, setComponentLine } = useBlueprintStore((state) => state.LineAction);
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
+
   const setTemplate = ({ data }: { data: BlueprintResponse }) => {
     //add for initialize State
-    initState();
+    initState(data.uuid);
 
     const services = data.components;
     const lines = data.links;
     const areas = data.areas;
     for (const service of services) {
+      setOption(service.id, service.options as ServiceOptions);
       createService(
         {
           id: service.id,
@@ -25,7 +27,7 @@ export const useSetTemplate = () => {
           x: service.x,
           y: service.y,
           lines: [],
-          option: {},
+          options: service.options,
         },
         service.id,
       );
@@ -36,9 +38,21 @@ export const useSetTemplate = () => {
       setComponentLine(line.id, line.dst.componentId);
     }
 
-    // for (const area of areas) {
-    //   createArea({ id: area.id, x: area.x, y: area.y, width: area.width, height: area.height, type: area.type });
-    // }
+    for (const area of areas) {
+      createArea(
+        {
+          id: area.id,
+          x: area.x,
+          y: area.y,
+          width: area.width,
+          height: area.height,
+          type: area.type,
+          az: area.az,
+          scope: area.scope,
+        },
+        area.type,
+      );
+    }
   };
 
   return { isLoading, setIsLoading, setTemplate };

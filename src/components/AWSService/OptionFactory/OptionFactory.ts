@@ -39,11 +39,11 @@ export class OptionFactory implements IFactory {
         return ROUTE53Option(id);
       case 'WAF':
         return WAFOption(id);
-      case 'ElastiCache':
+      case 'ELASTIC_CACHE':
         return ElastiCacheOption(id);
       case 'EFS':
         return EFSOption(id);
-      case 'CloudFront':
+      case 'CLOUDFRONT':
         return CloudFrontOption(id);
       case 'NAT_GATEWAY':
         return NATOption(id);
@@ -53,7 +53,7 @@ export class OptionFactory implements IFactory {
         return ELBOption(id);
       case 'ALB':
         return ALBOption(id);
-      case 'AutoScaling':
+      case 'AUTO_SCALING':
         return AutoScalingOption(id);
     }
   }
@@ -69,11 +69,11 @@ export class OptionFactory implements IFactory {
         return ROUTE53OptionComponent({ id: id });
       case 'WAF':
         return WAFOptionComponent({ id: id });
-      case 'ElastiCache':
+      case 'ELASTIC_CACHE':
         return ElastiCacheOptionComponent({ id: id });
       case 'EFS':
         return EFSOptionComponent({ id: id });
-      case 'CloudFront':
+      case 'CLOUDFRONT':
         return CloudFrontOptionComponent({ id: id });
       case 'NAT_GATEWAY':
         return NATOptionComponent({ id: id });
@@ -83,7 +83,7 @@ export class OptionFactory implements IFactory {
         return ALBOptionComponent(id);
       case 'NLB':
         return ALBOptionComponent(id);
-      case 'AutoScaling':
+      case 'AUTO_SCALING':
         return AutoScalingOptionComponent({ id: id });
     }
   }

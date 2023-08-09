@@ -41,11 +41,11 @@ export class ServiceFactory implements IFactory {
         return <Route53SVG />;
       case 'WAF':
         return <WAFSVG />;
-      case 'ElastiCache':
+      case 'ELASTIC_CACHE':
         return <ElastiCacheSVG />;
       case 'EFS':
         return <EFSSVG />;
-      case 'CloudFront':
+      case 'CLOUDFRONT':
         return <CloudFrontSVG />;
       case 'NAT_GATEWAY':
         return <NATSVG />;
@@ -55,7 +55,7 @@ export class ServiceFactory implements IFactory {
         return <ALBSVG />;
       case 'NLB':
         return <NLBSVG />;
-      case 'AutoScaling':
+      case 'AUTO_SCALING':
         return <AutoScalingSVG />;
     }
   }

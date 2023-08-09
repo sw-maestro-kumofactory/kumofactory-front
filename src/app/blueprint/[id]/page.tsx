@@ -1,5 +1,5 @@
 import BlueprintMenuList from '@/src/components/Blueprint/Menu/Blueprint/BlueprintMenuList';
-import Grid from '@/src/components/Blueprint/Grid';
+import Grid from '@/src/components/Blueprint/Grid/Grid';
 
 const Blueprint = ({ params }: { params: { id: string } }) => {
   const blueprintId = params.id;

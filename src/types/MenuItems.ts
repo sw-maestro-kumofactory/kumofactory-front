@@ -12,6 +12,6 @@ export interface AreaItemInterface {
   scope: AccessScope | null;
 }
 
-export type AreaItemType = 'VPC' | 'AZ' | 'Subnet';
+export type AreaItemType = 'VPC' | 'AZ' | 'SUBNET';
 
 export type ServiceItemType = Record<string, ServiceItemInterface[]>;

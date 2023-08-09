@@ -11,7 +11,7 @@ export interface EC2Options {
 }
 
 export enum AccessScope {
-  Public,
+  PUBLIC,
   Private,
   Database,
 }
