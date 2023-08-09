@@ -16,7 +16,7 @@ const Status = ({ currentState, onClick }: IProps) => {
         <FontAwesomeIcon className='cursor-pointer' icon={faRotate} onClick={onClick} />
       </div>
       <div className={`w-8 h-8 rounded-full`} style={{ backgroundColor: StatusStyle[currentState].fill }}></div>
-      <div className='w-24 flex justify-center'>{currentState}</div>
+      <div className='w-32 flex justify-center'>{currentState}</div>
     </div>
   );
 };

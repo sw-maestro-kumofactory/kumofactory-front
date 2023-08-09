@@ -38,4 +38,4 @@ export interface DeployRequest {
   env: EnvironmentVariables[];
 }
 
-export type DeployState = 'Provisioning' | 'Pending' | 'Success' | 'Fail';
+export type DeployState = 'PROVISIONING' | 'PENDING' | 'SUCCESS' | 'FAIL';

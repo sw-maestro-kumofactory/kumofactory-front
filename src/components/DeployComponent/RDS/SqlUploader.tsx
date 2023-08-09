@@ -48,7 +48,7 @@ const SqlUploader = () => {
 
   return (
     <div className='w-full h-full p-8 flex flex-col items-center jsutify-center'>
-      <div className='w-4/5 h-full flex flex-col gap-y-4'>
+      <div className='w-11/12 h-full flex flex-col gap-y-4'>
         <div className='text-2xl'>Database Setting</div>
         <div className='text-md text-gray-500'>Upload Your sql file by Drag & Drop or select from file explorer</div>
         <div className='flex flex-col gap-y-8 items-center h-full'>

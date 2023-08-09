@@ -2,31 +2,28 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRotate } from '@fortawesome/free-solid-svg-icons';
 
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import useStore from '@/src/hooks/useStore';
 import { useLogin } from '@/src/hooks/Auth/useLogin';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import { StatusStyle } from '@/src/assets/StatusStyle';
 import { DeployState } from '@/src/types/Deploy';
 import Status from '@/src/components/Layout/Status';
 
-const stateList = ['Success', 'Fail', 'Pending', 'Deploying'];
+const stateList = ['SUCCESS', 'FAIL', 'PENDING', 'PROVISIONING'];
 
 export const Header = () => {
   const isLogin = useStore(useLoginStore, (state) => state.isLogin);
   const currentBlueprintId = useStore(useBlueprintStore, (state) => state.currentBlueprintId);
   const setBlueprintId = useBlueprintStore((state) => state.CommonAction.setBlueprintId);
-  const [currentDeployState, setCurrentDeployState] = useState<DeployState>('Success');
+  const [currentDeployState, setCurrentDeployState] = useState<DeployState>('SUCCESS');
   const pathname = usePathname();
   const router = useRouter();
   const { setInterceptor, Logout } = useLogin();
   const [isBlueprint, setIsBlueprint] = useState(true);
 
   const onClickRefresh = () => {
-    const randomNumber = Math.floor(Math.random() * 3);
+    const randomNumber = Math.floor(Math.random() * 4);
     setCurrentDeployState(stateList[randomNumber] as DeployState);
   };
 

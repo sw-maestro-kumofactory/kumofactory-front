@@ -43,7 +43,7 @@ const DeployComponent = () => {
 
   return (
     <div className='w-full h-full flex flex-col p-8 overflow-y-scroll items-center'>
-      <div className='w-4/5 h-full'>
+      <div className='w-11/12 h-full'>
         <div className='pb-4 text-2xl'>Repositories</div>
         <div className=' pb-4 text-md text-gray-500'>Select Repository to Deploy</div>
         {Object.keys(data).map((key) => {
