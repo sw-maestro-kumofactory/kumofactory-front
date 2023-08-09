@@ -1,7 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
-import Link from 'next/link';
-
 import NewBlueprint from '@/src/components/Blueprint/Templates/NewBlueprint';
 
 const Templates = () => {

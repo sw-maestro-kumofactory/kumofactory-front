@@ -12,9 +12,6 @@ export const useSetTemplate = () => {
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
 
   const setTemplate = ({ data }: { data: BlueprintResponse }) => {
-    //add for initialize State
-    initState(data.uuid);
-
     const services = data.components;
     const lines = data.links;
     const areas = data.areas;

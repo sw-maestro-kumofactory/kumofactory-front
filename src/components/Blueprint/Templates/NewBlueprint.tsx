@@ -5,15 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import { v1 } from 'uuid';
 
-import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
-
 const NewBlueprint = () => {
   const router = useRouter();
-  const initState = useBlueprintStore((state) => state.CommonAction.initState);
 
   const onClick = () => {
     const id = v1().toString();
-    initState(id);
     router.push(`/blueprint/${id}`);
   };
 
