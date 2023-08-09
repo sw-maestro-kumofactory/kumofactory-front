@@ -8,6 +8,7 @@ export interface BlueprintResponse {
   components: Omit<IComponent, 'lines'>[];
   links: Line[];
   areas: IArea[];
+  svgFile: string;
 }
 
 export interface BlueprintInfo {

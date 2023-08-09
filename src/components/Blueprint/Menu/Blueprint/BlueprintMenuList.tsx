@@ -8,7 +8,7 @@ import { Menus } from '@/src/assets/Menus';
 import DropDown from '@/src/components/Blueprint/downshiftTest/DropDown';
 import ServiceItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/ServiceItemWrapper';
 import { postTemplateData } from '@/src/api/template';
-import { ExportSvg } from '@/src/utils/ExportSvg';
+import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { AreaItemList } from '@/src/assets/MenuItems';
 import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
@@ -30,6 +30,8 @@ const BlueprintMenuList = () => {
         component.options = options[component.id];
       });
       // console.log(body);
+      const encodedSVG = getSvgBlob();
+      body['svgFile'] = encodedSVG;
       await postTemplateData(body);
     } catch (e) {
       alert('Invalid Blueprint');

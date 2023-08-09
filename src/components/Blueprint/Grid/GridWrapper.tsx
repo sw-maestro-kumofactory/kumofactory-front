@@ -24,7 +24,7 @@ const GridWrapper = ({ blueprintId }: IProps) => {
       initState(blueprintId);
       try {
         const data = await getTemplateListById(id);
-        setTemplate({ data: data });
+        setTemplate({ data: data, isTemplate: false });
       } catch (e) {}
       setIsLoading(false);
     }

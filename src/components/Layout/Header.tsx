@@ -32,7 +32,7 @@ export const Header = () => {
     if (d.length >= 3 && d[1] === 'blueprint') {
       setBlueprintId(d[2]);
       if (d[3] === 'deploy') setIsBlueprint(false);
-    } else setBlueprintId(null);
+    } else setBlueprintId('');
   }, [pathname]);
 
   useEffect(() => {

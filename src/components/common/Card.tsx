@@ -27,13 +27,13 @@ const Card = ({ index, id, name }: IProps) => {
               className='flex justify-center items-center bg-black text-white h-10 rounded-xl mb-4'
               href={`/blueprint/${id}`}
             >
-              Load
+              Load Blueprint
             </Link>
             <Link
               className='flex justify-center items-center w-40 h-10 text-white border-white border-2 rounded-xl'
-              href={`/blueprint/${id}`}
+              href={`/blueprint/${id}/deploy`}
             >
-              Settings
+              Application Deploy
             </Link>
           </div>
         )}

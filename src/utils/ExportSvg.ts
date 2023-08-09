@@ -7,3 +7,10 @@ export const ExportSvg = () => {
   downloadLink.href = URL.createObjectURL(blob);
   downloadLink.click();
 };
+
+export const getSvgBlob = () => {
+  const divElement = document.querySelector('#blueprint')!;
+  const svgComponent = divElement.innerHTML;
+  const encodedSVG = `data:image/svg+xml;base64,${btoa(svgComponent)}`;
+  return encodedSVG;
+};

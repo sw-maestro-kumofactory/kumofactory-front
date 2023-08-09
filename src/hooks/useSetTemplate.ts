@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { v1 } from 'uuid';
 
 import { BlueprintResponse } from '@/src/types/Blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -11,34 +12,49 @@ export const useSetTemplate = () => {
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
 
-  const setTemplate = ({ data }: { data: BlueprintResponse }) => {
+  const setTemplate = ({ data, isTemplate }: { data: BlueprintResponse; isTemplate: boolean }) => {
+    let keyMap: Record<string, string> = {};
     const services = data.components;
     const lines = data.links;
     const areas = data.areas;
     for (const service of services) {
-      setOption(service.id, service.options as ServiceOptions);
+      let id = service.id;
+      if (isTemplate) {
+        const newId = v1().toString();
+        keyMap[id] = newId;
+        id = newId;
+      }
+      setOption(id, service.options as ServiceOptions);
       createService(
         {
-          id: service.id,
+          id: id,
           type: service.type,
           x: service.x,
           y: service.y,
           lines: [],
           options: service.options,
         },
-        service.id,
+        id,
       );
     }
     for (const line of lines) {
-      createLine(line.id, line.src, line.dst);
-      setComponentLine(line.id, line.src.componentId);
-      setComponentLine(line.id, line.dst.componentId);
+      let src = line.src;
+      let dst = line.dst;
+      if (isTemplate) {
+        src.componentId = keyMap[src.componentId];
+        dst.componentId = keyMap[dst.componentId];
+      }
+
+      createLine(line.id, src, dst);
+      setComponentLine(line.id, src.componentId);
+      setComponentLine(line.id, dst.componentId);
     }
 
     for (const area of areas) {
+      const id = isTemplate ? v1().toString() : area.id;
       createArea(
         {
-          id: area.id,
+          id: id,
           x: area.x,
           y: area.y,
           width: area.width,
