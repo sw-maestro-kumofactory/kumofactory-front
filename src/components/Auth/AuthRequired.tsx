@@ -1,17 +1,23 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 
 interface IProps {
   children: React.ReactNode;
 }
 
 const AuthRequired = ({ children }: IProps) => {
+  const accessToken = useLoginStore((state) => state.accessToken);
+  const router = useRouter();
+
   useEffect(() => {
-    if (window !== undefined) {
-      const token = localStorage.getItem('accessToken');
+    if (!accessToken) {
       alert('please login!');
-      if (!token) window.location.href = '/auth/login';
+      router.replace('/auth/login');
     }
   }, []);
+
   return <>{children}</>;
 };
 
