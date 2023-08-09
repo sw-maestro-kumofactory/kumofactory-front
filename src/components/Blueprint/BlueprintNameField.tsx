@@ -26,18 +26,21 @@ const BlueprintNameField = () => {
     <div className={`Input-Wrapper absolute w-auto m-4 left-${blueprintSrc.x} top-${blueprintSrc.y} z-10`}>
       {isEdit ? (
         <input
-          className='w-auto min-w-[2ch]'
+          className='flex flex-1 justify-center items-center  min-w-10'
           type='text'
           onChange={(e) => {
-            const t = e.target.value;
-            setName(t);
+            setName(e.target.value);
           }}
           onClick={(e) => e.stopPropagation()}
           value={name}
+          style={{
+            width: `${name.length + 4}ch`,
+          }}
           autoFocus
         />
       ) : (
         <div
+          className='w-fit'
           onClick={(e) => {
             e.stopPropagation();
             setIsEdit(true);
