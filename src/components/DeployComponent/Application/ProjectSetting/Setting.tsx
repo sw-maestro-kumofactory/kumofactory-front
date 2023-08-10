@@ -1,9 +1,9 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import EnvironmentVariableComponent from '@/src/components/DeployComponent/Application/ProjectSetting/EnvironmentVariableComponent';
-import { getBranches, postDeploy } from '@/src/api/deploy';
+import { getRepoBranches, postDeploy } from '@/src/api/deploy';
 import { DeployRequest } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 
@@ -37,7 +37,7 @@ const Setting = ({ id }: IProps) => {
 
   const getBranchList = async () => {
     try {
-      const d = await getBranches('higeuni', id);
+      const d = await getRepoBranches('higeuni', id);
       setBranches(d);
       setCurBranch(d[0]);
     } catch (e) {

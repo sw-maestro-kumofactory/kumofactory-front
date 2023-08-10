@@ -7,14 +7,14 @@ import { PersonalRepo } from '@/src/types/Deploy';
 import { getUserRepositories } from '@/src/api/deploy';
 
 interface IProps {
-  isUser?: boolean;
+  isUser: boolean;
   id: string;
   repoInfo: PersonalRepo[];
 }
 
-const RepositoryContainer = ({ id, repoInfo }: IProps) => {
+const RepositoryContainer = ({ id, repoInfo, isUser }: IProps) => {
   return (
-    <div className='w-full h-3/5 pb-8 '>
+    <div className='w-full max-h-[600px] min-h-fit pb-8 mb-12'>
       <div className='flex items-center py-8 px-4 gap-x-4 h-12 bg-blue-100 w-full rounded-t-xl'>
         <Image
           src='https://avatars.githubusercontent.com/u/59858440?v=4'
@@ -25,9 +25,9 @@ const RepositoryContainer = ({ id, repoInfo }: IProps) => {
         />
         <div>{id}</div>
       </div>
-      <div className='bg-white h-4/5 rounded-b-xl overflow-y-scroll'>
+      <div className='bg-white h-fit max-h-[552px] rounded-b-xl overflow-y-scroll'>
         {repoInfo.map((repo, index) => (
-          <Repository key={repo.fullName} id={repo.name} name={repo.name} />
+          <Repository key={repo.fullName} id={repo.name} name={repo.name} isUser={isUser} />
         ))}
       </div>
     </div>
