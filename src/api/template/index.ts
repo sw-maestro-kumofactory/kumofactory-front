@@ -1,22 +1,20 @@
 import { authAxiosInstance } from '@/src/api';
-import { BlueprintInfo, BlueprintResponse, BlueprintScope } from '@/src/types/Blueprint';
 
-export const postTemplateData = async (body: BlueprintResponse): Promise<any> => {
-  const { data } = await authAxiosInstance.post<BlueprintResponse>(`/api/blueprint/aws?provision=false`, body, {});
+export const getTemplateById = async (id: string) => {
+  const { data } = await authAxiosInstance.get(`/api/template/${id}`);
   return data;
 };
 
-export const getTemplateList = async (): Promise<any> => {
-  const { data } = await authAxiosInstance.get<BlueprintInfo[]>(`/api/blueprint/aws/list`);
+export const getTemplateByName = async (name: string) => {
+  const { data } = await authAxiosInstance.get(`/api/template/name/${name}`);
+};
+
+export const getKumofactoryTemplate = async () => {
+  const { data } = await authAxiosInstance.get(`/api/template/kumofactory`);
   return data;
 };
 
-export const getTemplateListById = async (id: string): Promise<BlueprintResponse> => {
-  const { data } = await authAxiosInstance.get<BlueprintResponse>(`/api/blueprint/aws/${id}`);
-  return data;
-};
-
-export const putTemplateScope = async (id: string, scope: BlueprintScope) => {
-  const { data } = await authAxiosInstance.put<BlueprintResponse>(`/api/blueprint/aws/${id}?scope=${scope}`);
+export const getAllTemplates = async () => {
+  const { data } = await authAxiosInstance.get(`/api/template`);
   return data;
 };

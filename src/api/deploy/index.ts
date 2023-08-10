@@ -2,7 +2,7 @@ import { authAxiosInstance } from '@/src/api';
 import { DeployRequest, DeployResponse } from '@/src/types/Deploy';
 
 export const getUserRepositories = async (username: string) => {
-  const { data } = await authAxiosInstance.get<DeployResponse>(`/test/build/list/${username}`);
+  const { data } = await authAxiosInstance.get<DeployResponse>(`/test/build/list`);
   return data;
 };
 
@@ -11,8 +11,13 @@ export const getOrgRepositories = async (org: string) => {
   return data;
 };
 
-export const getBranches = async (owner: string, repo: string) => {
-  const { data } = await authAxiosInstance.get<string[]>(`/test/build/list/${owner}/${repo}/branch`);
+export const getOrgRepoBranches = async (org: string, repo: string) => {
+  const { data } = await authAxiosInstance.get<string[]>(`/test/build/list/${org}/${repo}/branch`);
+  return data;
+};
+
+export const getRepoBranches = async (owner: string, repo: string) => {
+  const { data } = await authAxiosInstance.get<string[]>(`/test/build/list/${repo}/branch`);
   return data;
 };
 
