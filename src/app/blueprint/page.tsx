@@ -6,9 +6,10 @@ import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import { getTemplateList, getTemplateListById } from '@/src/api/template';
 import Card from '@/src/components/common/Card';
 import AuthRequired from '@/src/components/Auth/AuthRequired';
+
+import { getBlueprintList, getBlueprintListById } from '../../api/blueprint';
 
 const BluePrint = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +18,7 @@ const BluePrint = () => {
 
   const getTemplate = async () => {
     try {
-      const res = await getTemplateList();
+      const res = await getBlueprintList();
       setUserBlueprints(res);
     } catch (err) {
       console.log(err);
@@ -33,7 +34,7 @@ const BluePrint = () => {
       <div className=' h-full overflow-y-scroll'>
         <div className='mx-20 my-8 text-3xl font-extrabold'>My Blueprints</div>
         <div
-          className='w-full h-full px-16 flex flex-wrap '
+          className='w-full h-full px-16 flex flex-wrap content-start'
           onClick={() => {
             // 바깥쪽 누르면 모달창 닫힘
             setIsOpen(false);
@@ -41,7 +42,7 @@ const BluePrint = () => {
         >
           <div className='w-1/3 h-2/5 p-4'>
             <div
-              className='flex flex-col items-center justify-center w-full h-5/6 text-sky-700 bg-gray-200 border-4 hover:border-sky-700 rounded-2xl cursor-pointer'
+              className='flex flex-col items-center justify-center w-full h-full text-sky-700 bg-gray-200 border-4 hover:border-sky-700 rounded-2xl cursor-pointer'
               onClick={(e) => {
                 e.stopPropagation();
                 setIsOpen(true);
@@ -53,7 +54,7 @@ const BluePrint = () => {
           </div>
           {userBlueprints.length !== 0 &&
             userBlueprints.map((blueprint) => {
-              return <Card key={blueprint.id} data={blueprint} />;
+              return <Card key={blueprint.id} data={blueprint} isTemplate={false} />;
             })}
           <ModalContainer isShow={isOpen}>
             <Templates />
