@@ -16,9 +16,9 @@ export interface EnvironmentVariables {
 }
 
 export interface DeployResponse {
-  repoCount: string;
+  repoCount: number;
   repoInfo: PersonalRepo[];
-  orgCount: string;
+  orgCount: number;
   orgList: string[];
 }
 
