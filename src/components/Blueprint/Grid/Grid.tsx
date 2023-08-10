@@ -1,7 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useSearchParams } from 'next/navigation';
 
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -10,9 +8,6 @@ import Area from '@/src/components/AWSService/Area/Area';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
 import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
-import { getTemplateList, getTemplateListById, postTemplateData } from '@/src/api/template';
-import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import { EC2OptionComponent } from '@/src/components/AWSService/OptionFactory/Options/EC2Option';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 import { AreaTypes, IArea } from '@/src/types/Area';
 import DeployButton from '@/src/components/Blueprint/FloatingButton/DeployButton';
@@ -228,8 +223,8 @@ const Grid = ({ id }: IProps) => {
                     <foreignObject
                       x={services[key].x + xAdjustment}
                       y={services[key].y + 80}
-                      width='100%'
-                      height='100%'
+                      width={serviceNameWidth.toString()}
+                      height='21'
                     >
                       <div className='flex justify-center items-center select-none w-fit '>{services[key].type}</div>
                     </foreignObject>
