@@ -7,18 +7,19 @@ import { regionList } from '@/src/assets/RegionList';
 import { Menus } from '@/src/assets/Menus';
 import DropDown from '@/src/components/Blueprint/downshiftTest/DropDown';
 import ServiceItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/ServiceItemWrapper';
-import { postTemplateData } from '@/src/api/template';
 import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { AreaItemList } from '@/src/assets/MenuItems';
 import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
+
+import { postBlueprintData } from '../../../../api/blueprint';
 
 const Title = ({ title }: { title: string }) => (
   <div className='w-full h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
 );
 
 const BlueprintMenuList = () => {
-  const blueprintToJson = useBlueprintStore((state) => state.CommonAction.blueprintToJson);
+  const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
   const scope = useBlueprintStore((state) => state.blueprintScope[currentBlueprintId]);
   const name = useBlueprintStore((state) => state.name);
@@ -30,9 +31,10 @@ const BlueprintMenuList = () => {
       body.components.map((component, index) => {
         component.options = options[component.id];
       });
+      body.scope = scope;
       const encodedSVG = getSvgBlob();
       body['svgFile'] = encodedSVG;
-      await postTemplateData(body);
+      await postBlueprintData(body);
     } catch (e) {
       alert('Invalid Blueprint');
       console.log(e);
@@ -41,6 +43,21 @@ const BlueprintMenuList = () => {
 
   return (
     <div className='overflow-x-hidden w-[300px] min-w-[300px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
+      <Title title='Scope' />
+      <div className='text-sm text-gray-500 mx-4 -mt-2 mb-4'>공개 범위를 설정하세요!</div>
+      <label className='relative inline-flex items-center cursor-pointer mx-4'>
+        <input
+          type='checkbox'
+          value=''
+          className='sr-only peer'
+          checked={scope === 'PUBLIC'}
+          onChange={() => {
+            setBlueprintScope(currentBlueprintId, scope === 'PUBLIC' ? 'PRIVATE' : 'PUBLIC');
+          }}
+        />
+        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none  peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 mr-4"></div>
+        <div>{scope}</div>
+      </label>
       <Title title='Actions' />
       <div className='flex justify-center gap-4 mb-5'>
         <div
