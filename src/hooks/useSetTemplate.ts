@@ -9,7 +9,7 @@ export const useSetTemplate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { createService, setOption } = useBlueprintStore((state) => state.ServiceAction);
   const { createLine, setComponentLine } = useBlueprintStore((state) => state.LineAction);
-  const initState = useBlueprintStore((state) => state.CommonAction.initState);
+  const { initState, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
 
   const setTemplate = ({ data, isTemplate }: { data: BlueprintResponse; isTemplate: boolean }) => {
@@ -17,6 +17,7 @@ export const useSetTemplate = () => {
     const services = data.components;
     const lines = data.links;
     const areas = data.areas;
+    setBlueprintScope(data.uuid, data.scope);
     for (const service of services) {
       let id = service.id;
       if (isTemplate) {
@@ -44,7 +45,6 @@ export const useSetTemplate = () => {
         src.componentId = keyMap[src.componentId];
         dst.componentId = keyMap[dst.componentId];
       }
-
       createLine(line.id, src, dst);
       setComponentLine(line.id, src.componentId);
       setComponentLine(line.id, dst.componentId);

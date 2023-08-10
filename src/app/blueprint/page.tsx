@@ -53,15 +53,7 @@ const BluePrint = () => {
           </div>
           {userBlueprints.length !== 0 &&
             userBlueprints.map((blueprint) => {
-              return (
-                <Card
-                  key={blueprint.id}
-                  index={blueprint.id}
-                  id={blueprint.uuid}
-                  name={blueprint.name}
-                  svg={blueprint.presignedUrl}
-                />
-              );
+              return <Card key={blueprint.id} data={blueprint} />;
             })}
           <ModalContainer isShow={isOpen}>
             <Templates />

@@ -6,6 +6,7 @@ import { DeployState } from '@/src/types/Deploy';
 export interface BlueprintResponse {
   uuid: string;
   name: string;
+  scope: BlueprintScope;
   components: Omit<IComponent, 'lines'>[];
   links: Line[];
   areas: IArea[];
@@ -16,7 +17,10 @@ export interface BlueprintInfo {
   id: number;
   uuid: string;
   name: string;
+  scope: BlueprintScope;
   createdAt: string;
   status: DeployState;
   presignedUrl: string;
 }
+
+export type BlueprintScope = 'PUBLIC' | 'PRIVATE' | 'KUMOFACTORY';

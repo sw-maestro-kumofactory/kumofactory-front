@@ -2,7 +2,6 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import Grid from '@/src/components/Blueprint/Grid/Grid';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import { getTemplateListById } from '@/src/api/template';
 import Loading from '@/src/components/common/Loading';
@@ -11,7 +10,7 @@ interface IProps extends PropsWithChildren {
   blueprintId: string;
 }
 
-const GridWrapper = ({ blueprintId }: IProps) => {
+const GridWrapper = ({ blueprintId, children }: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const blueprintList = useBlueprintStore((state) => state.blueprintList);
   const { initState } = useBlueprintStore((state) => state.CommonAction);
@@ -36,7 +35,7 @@ const GridWrapper = ({ blueprintId }: IProps) => {
 
   if (isLoading) return <Loading />;
 
-  return <Grid id={blueprintId} />;
+  return <>{children}</>;
 };
 
 export default GridWrapper;

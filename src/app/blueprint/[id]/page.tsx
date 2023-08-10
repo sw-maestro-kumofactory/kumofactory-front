@@ -8,7 +8,9 @@ const Blueprint = ({ params }: { params: { id: string } }) => {
   return (
     <div className='flex h-full overflow-y-hidden'>
       <BlueprintMenuList />
-      <GridWrapper blueprintId={blueprintId} />
+      <GridWrapper blueprintId={blueprintId}>
+        <Grid id={blueprintId} />
+      </GridWrapper>
     </div>
   );
 };

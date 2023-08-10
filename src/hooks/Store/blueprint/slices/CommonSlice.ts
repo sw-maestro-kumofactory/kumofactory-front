@@ -1,7 +1,7 @@
 import { StateCreator } from 'zustand';
 
 import { CommonState } from '@/src/hooks/Store/blueprint/state/CommonState';
-import { BlueprintResponse } from '@/src/types/Blueprint';
+import { BlueprintResponse, BlueprintScope } from '@/src/types/Blueprint';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { EC2Options } from '@/src/types/Services';
@@ -32,6 +32,7 @@ export const useCommonSlice: StateCreator<
 > = (set, get) => ({
   name: 'My blueprint',
   currentBlueprintId: '',
+  blueprintScope: {},
   blueprintList: [],
   offset: {
     x: 0,
@@ -70,9 +71,16 @@ export const useCommonSlice: StateCreator<
       set((state) => {
         state.blueprintList.push(id);
         state.currentBlueprintId = id;
+        state.blueprintScope[id] = 'PRIVATE';
         state.services[id] = {};
         state.lines[id] = {};
         state.areas[id] = {};
+        return state;
+      });
+    },
+    setBlueprintScope: (id: string, scope: BlueprintScope) => {
+      set((state) => {
+        state.blueprintScope[id] = scope;
         return state;
       });
     },
@@ -98,9 +106,11 @@ export const useCommonSlice: StateCreator<
       const json: BlueprintResponse = {
         name: name,
         uuid: id,
+        scope: 'PRIVATE',
         components: [],
         links: [],
         areas: [],
+        svgFile: '',
       };
       // services
       for (const service of Object.values(get().services[id])) {

@@ -20,6 +20,7 @@ const Title = ({ title }: { title: string }) => (
 const BlueprintMenuList = () => {
   const blueprintToJson = useBlueprintStore((state) => state.CommonAction.blueprintToJson);
   const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
+  const scope = useBlueprintStore((state) => state.blueprintScope[currentBlueprintId]);
   const name = useBlueprintStore((state) => state.name);
   const options = useBlueprintStore((state) => state.options);
 
@@ -29,7 +30,6 @@ const BlueprintMenuList = () => {
       body.components.map((component, index) => {
         component.options = options[component.id];
       });
-      // console.log(body);
       const encodedSVG = getSvgBlob();
       body['svgFile'] = encodedSVG;
       await postTemplateData(body);

@@ -1,9 +1,10 @@
 import { Coordinate, Point } from '@/src/types/Common';
-import { BlueprintResponse } from '@/src/types/Blueprint';
+import { BlueprintResponse, BlueprintScope } from '@/src/types/Blueprint';
 
 export interface CommonState {
   name: string;
   currentBlueprintId: string;
+  blueprintScope: Record<string, BlueprintScope>;
   blueprintList: string[];
   isEdit: boolean;
   offset: Coordinate;
@@ -31,6 +32,7 @@ export interface CommonState {
   CommonAction: {
     initState: (id: string) => void;
     setBlueprintId: (id: string) => void;
+    setBlueprintScope: (id: string, scope: BlueprintScope) => void;
     setName: (name: string) => void;
     setIsEdit: (flag: boolean) => void;
     blueprintToJson: ({ id, name }: { id: string; name: string }) => BlueprintResponse;
