@@ -1,6 +1,7 @@
 import { IComponent } from '@/src/types/Services';
 import { Line } from '@/src/types/Line';
 import { IArea } from '@/src/types/Area';
+import { DeployState } from '@/src/types/Deploy';
 
 export interface BlueprintResponse {
   uuid: string;
@@ -16,4 +17,6 @@ export interface BlueprintInfo {
   uuid: string;
   name: string;
   createdAt: string;
+  status: DeployState;
+  presignedUrl: string;
 }
