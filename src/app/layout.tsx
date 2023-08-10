@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 
 import { Header } from '@/src/components/Layout/Header';
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import ReactQueryProvider from '@/src/app/ReactQueryProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,10 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body className={(inter.className, 'bg-[#FCF7F4]')}>
-        <ReactQueryProvider>
-          <Header />
-          <div className='w-full h-full pt-16'>{children}</div>
-        </ReactQueryProvider>
+        <Header />
+        <div className='w-full h-full pt-16'>{children}</div>
       </body>
     </html>
   );

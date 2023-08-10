@@ -184,7 +184,6 @@ export type ServiceOptions =
   | CloudFrontOptions
   | EFSOptions
   | NATOptions
-  | ELBOptions
   | AutoScalingOptions
   | NLBOptions
   | ALBOptions;
@@ -199,7 +198,6 @@ export type ServicesString =
   | 'CLOUDFRONT'
   | 'EFS'
   | 'NAT_GATEWAY'
-  | 'ELB'
   | 'AUTO_SCALING'
   | 'NLB'
   | 'ALB';

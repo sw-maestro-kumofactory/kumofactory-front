@@ -63,15 +63,21 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
         {isHover && (
           <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
             <div className='cursor-pointer' onClick={onCLickLoad}>
-              <div className='flex justify-center items-center bg-black p-2 text-white h-10 rounded-xl mb-4'>
+              <div
+                className={`flex justify-center items-center bg-black p-2 text-white h-10 rounded-xl ${
+                  !isTemplate && 'mb-4'
+                }`}
+              >
                 Load {isTemplate ? 'Template' : 'Blueprint'}
               </div>
             </div>
-            <div onClick={onClickToDeploy}>
-              <div className='flex justify-center items-center w-fit p-2 h-10 text-white border-white border-2 rounded-xl'>
-                Application Deploy
+            {!isTemplate && (
+              <div onClick={onClickToDeploy}>
+                <div className='flex justify-center items-center w-fit p-2 h-10 text-white border-white border-2 rounded-xl cursor-pointer'>
+                  Application Deploy
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
         <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-2xl'>

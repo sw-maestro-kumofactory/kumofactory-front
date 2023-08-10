@@ -13,13 +13,14 @@ import {
   CloudFrontOptionComponent,
 } from '@/src/components/AWSService/OptionFactory/Options/CloudFrontOption';
 import { NATOption, NATOptionComponent } from '@/src/components/AWSService/OptionFactory/Options/NATOption';
-import { ELBOption, ELBOptionComponent } from '@/src/components/AWSService/OptionFactory/Options/ELBOption';
+// import { ELBOption, ELBOptionComponent } from '@/src/components/AWSService/OptionFactory/Options/ELBOption';
 import {
   AutoScalingOption,
   AutoScalingOptionComponent,
 } from '@/src/components/AWSService/OptionFactory/Options/AutoScalingOption';
 import { ServiceOptions, ServicesString } from '@/src/types/Services';
 import { ALBOption, ALBOptionComponent } from '@/src/components/AWSService/OptionFactory/Options/ALBOption';
+import { NLBOption, NLBOptionComponent } from '@/src/components/AWSService/OptionFactory/Options/NLBOption';
 
 interface IFactory {
   createOption: (type: ServicesString, id: string) => ServiceOptions;
@@ -47,10 +48,10 @@ export class OptionFactory implements IFactory {
         return CloudFrontOption(id);
       case 'NAT_GATEWAY':
         return NATOption(id);
-      case 'ELB':
-        return ELBOption(id);
+      // case 'ELB':
+      //   return ELBOption(id);
       case 'NLB':
-        return ELBOption(id);
+        return NLBOption(id);
       case 'ALB':
         return ALBOption(id);
       case 'AUTO_SCALING':
@@ -77,12 +78,12 @@ export class OptionFactory implements IFactory {
         return CloudFrontOptionComponent({ id: id });
       case 'NAT_GATEWAY':
         return NATOptionComponent({ id: id });
-      case 'ELB':
-        return ELBOptionComponent({ id: id });
+      // case 'ELB':
+      //   return ELBOptionComponent({ id: id });
       case 'ALB':
         return ALBOptionComponent(id);
       case 'NLB':
-        return ALBOptionComponent(id);
+        return NLBOptionComponent(id);
       case 'AUTO_SCALING':
         return AutoScalingOptionComponent({ id: id });
     }

@@ -173,7 +173,7 @@ dist
 .svelte-kit
 
 ### StorybookJs ###
-# gitignore template for the Storybook, UI guide for front apps
+# gitignore blueprint for the Storybook, UI guide for front apps
 # website: https://storybook.js.org/
 
 storybook-static/

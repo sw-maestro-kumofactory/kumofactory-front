@@ -36,6 +36,7 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
 
   useEffect(() => {
     setData(blueprintId);
+    return () => {};
   }, []);
 
   if (isLoading) return <Loading />;
