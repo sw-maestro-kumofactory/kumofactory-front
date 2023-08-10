@@ -1,8 +1,8 @@
 import { authAxiosInstance } from '@/src/api';
 import { DeployRequest, DeployResponse } from '@/src/types/Deploy';
 
-export const getUserRepositories = async (username: string) => {
-  const { data } = await authAxiosInstance.get<DeployResponse>(`/test/build/list`);
+export const getUserRepositories = async () => {
+  const { data } = await authAxiosInstance.get<DeployResponse>(`/api/build/list`);
   return data;
 };
 
