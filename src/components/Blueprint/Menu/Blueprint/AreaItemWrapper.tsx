@@ -16,8 +16,9 @@ interface IProps {
 
 const AreaItemWrapper = ({ type, name, scope }: IProps) => {
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
-  const azCount = useBlueprintStore((state) => state.azCount);
-  const subnetCount = useBlueprintStore((state) => state.subnetCount);
+  const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
+  const azCount = useBlueprintStore((state) => state.azCount[currentBlueprintId]);
+  const subnetCount = useBlueprintStore((state) => state.subnetCount[currentBlueprintId]);
 
   const createAreaByType = () => {
     const id = v1().toString();

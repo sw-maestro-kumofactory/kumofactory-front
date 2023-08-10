@@ -71,6 +71,15 @@ export const useCommonSlice: StateCreator<
       set((state) => {
         state.blueprintList.push(id);
         state.currentBlueprintId = id;
+        state.subnetCount[id] = {
+          public: 0,
+          private: 0,
+          database: 0,
+        };
+        state.azCount[id] = {
+          '2a': 0,
+          '2c': 0,
+        };
         state.blueprintScope[id] = 'PRIVATE';
         state.services[id] = {};
         state.lines[id] = {};
@@ -204,6 +213,7 @@ export const useCommonSlice: StateCreator<
     onMouseleave: (e) => {},
     onMouseUp: (e) => {
       set((state) => {
+        const currentCount = state.subnetCount[state.currentBlueprintId];
         for (let areaId in state.areas[state.currentBlueprintId]) {
           const currentArea = state.areas[state.currentBlueprintId][areaId];
           let containRDS = false;
@@ -221,8 +231,8 @@ export const useCommonSlice: StateCreator<
                   if (currentService.type === 'RDS_MYSQL') {
                     containRDS = true;
                     currentArea.scope = 'DATABASE';
-                    state.subnetCount['database'] += 1;
-                    state.subnetCount['private'] -= 1;
+                    currentCount['database'] += 1;
+                    currentCount['private'] -= 1;
                     currentOption['subnetType'] = 'DATABASE';
                   } else {
                     currentOption['subnetType'] = 'PRIVATE';
@@ -230,8 +240,8 @@ export const useCommonSlice: StateCreator<
                 } else if (currentArea.scope === 'DATABASE') {
                   if (currentService.type !== 'RDS_MYSQL') {
                     currentArea.scope = 'PRIVATE';
-                    state.subnetCount['database'] -= 1;
-                    state.subnetCount['private'] += 1;
+                    currentCount['database'] -= 1;
+                    currentCount['private'] += 1;
                     currentOption['subnetType'] = 'PRIVATE';
                   } else {
                     containRDS = true;
@@ -247,8 +257,8 @@ export const useCommonSlice: StateCreator<
           }
           if (currentArea.type === 'SUBNET' && currentArea.scope === 'DATABASE' && !containRDS) {
             currentArea.scope = 'PRIVATE';
-            state.subnetCount['database'] -= 1;
-            state.subnetCount['private'] += 1;
+            currentCount['database'] -= 1;
+            currentCount['private'] += 1;
           }
         }
 
@@ -408,6 +418,8 @@ export const useCommonSlice: StateCreator<
     },
     clearComponent: () => {
       set((state) => {
+        const currentSubnetCount = state.subnetCount[state.currentBlueprintId];
+        const currentAzCount = state.azCount[state.currentBlueprintId];
         if (state.selectedServiceId) {
           //   selectedService 제거
           const currentService = state.services[state.currentBlueprintId][state.selectedServiceId];
@@ -426,12 +438,12 @@ export const useCommonSlice: StateCreator<
         } else if (state.selectedAreaId) {
           const curArea = state.areas[state.currentBlueprintId][state.selectedAreaId];
           if (curArea.type === 'AZ') {
-            if (curArea.az === 'AP_NORTHEAST_2A') state.azCount['2a'] -= 1;
-            else if (curArea.az === 'AP_NORTHEAST_2C') state.azCount['2c'] -= 1;
+            if (curArea.az === 'AP_NORTHEAST_2A') currentAzCount['2a'] -= 1;
+            else if (curArea.az === 'AP_NORTHEAST_2C') currentAzCount['2c'] -= 1;
           } else if (curArea.type === 'SUBNET') {
-            if (curArea.scope === 'PUBLIC') state.subnetCount.public -= 1;
-            else if (curArea.scope === 'PRIVATE') state.subnetCount.private -= 1;
-            else if (curArea.scope === 'DATABASE') state.subnetCount.database -= 1;
+            if (curArea.scope === 'PUBLIC') currentSubnetCount.public -= 1;
+            else if (curArea.scope === 'PRIVATE') currentSubnetCount.private -= 1;
+            else if (curArea.scope === 'DATABASE') currentSubnetCount.database -= 1;
           }
           delete state.areas[state.currentBlueprintId][state.selectedAreaId];
         } else if (state.selectedLineId) {

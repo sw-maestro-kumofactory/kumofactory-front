@@ -1,5 +1,6 @@
 import { StateCreator } from 'zustand';
 import { v1 } from 'uuid';
+import { current } from 'immer';
 
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
 import { AreaTypes, IArea } from '@/src/types/Area';
@@ -14,15 +15,8 @@ export const useAreaSlice: StateCreator<
 > = (set, get) => ({
   areas: {},
   selectedAreaId: null,
-  azCount: {
-    '2a': 0,
-    '2c': 0,
-  },
-  subnetCount: {
-    public: 0,
-    private: 0,
-    database: 0,
-  },
+  azCount: {},
+  subnetCount: {},
   resizeState: {
     isResizable: false,
     dir: -1,
@@ -41,19 +35,21 @@ export const useAreaSlice: StateCreator<
       set((state) => {
         state.selectedServiceId = null;
         state.doubleClickedServiceId = null;
+        const currentSubnetCount = state.subnetCount[state.currentBlueprintId];
+        const currentAzCount = state.azCount[state.currentBlueprintId];
         if (type === 'AZ') {
           if (area.az === 'AP_NORTHEAST_2A') {
-            state.azCount['2a'] += 1;
+            currentAzCount['2a'] += 1;
           } else if (area.az === 'AP_NORTHEAST_2C') {
-            state.azCount['2c'] += 1;
+            currentAzCount['2c'] += 1;
           }
         } else if (type === 'SUBNET') {
           if (area.scope === 'PUBLIC') {
-            state.subnetCount.public += 1;
+            currentSubnetCount.public += 1;
           } else if (area.scope === 'PRIVATE') {
-            state.subnetCount.private += 1;
+            currentSubnetCount.private += 1;
           } else if (area.scope === 'DATABASE') {
-            state.subnetCount.database += 1;
+            currentSubnetCount.database += 1;
           }
         }
         state.areas[state.currentBlueprintId][area.id] = {
