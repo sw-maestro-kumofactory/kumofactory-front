@@ -9,7 +9,7 @@ export const useSetTemplate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { createService, setOption } = useBlueprintStore((state) => state.ServiceAction);
   const { createLine, setComponentLine } = useBlueprintStore((state) => state.LineAction);
-  const { initState, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
+  const { setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
 
   const setTemplate = ({ data, isTemplate }: { data: BlueprintResponse; isTemplate: boolean }) => {

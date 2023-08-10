@@ -14,13 +14,13 @@ export interface BlueprintResponse {
 }
 
 export interface BlueprintInfo {
-  id: number;
+  id?: number;
   uuid: string;
   name: string;
   scope: BlueprintScope;
-  createdAt: string;
-  status: DeployState;
-  presignedUrl: string;
+  createdAt?: string;
+  status?: DeployState;
+  presignedUrl?: string;
 }
 
 export type BlueprintScope = 'PUBLIC' | 'PRIVATE' | 'KUMOFACTORY';
