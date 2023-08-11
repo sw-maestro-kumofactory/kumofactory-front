@@ -8,16 +8,15 @@ import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 interface IProps {
   id: string;
   name: string;
-  isUser: boolean;
 }
-const Repository = ({ id, name, isUser }: IProps) => {
+const Repository = ({ id, name }: IProps) => {
   const router = useRouter();
   const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
 
   const toSetting = () => {
     if (targetInstanceId) {
-      router.push(`/blueprint/${currentBlueprintId}/deploy/${id}${isUser ? '' : '?orgRepo=true'}`);
+      router.push(`/blueprint/${currentBlueprintId}/deploy/${id}/${name}`);
     } else {
       alert('인스턴스를 선택해주세요.');
     }

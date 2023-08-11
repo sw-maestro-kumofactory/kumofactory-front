@@ -21,7 +21,8 @@ const ThirdPartyCallback = ({ type, callbackURL, authRequestFunction }: Callback
       try {
         const res = await authRequestFunction(code);
         const newToken = res.accessToken;
-        Login(newToken);
+        const username = res.profileName;
+        Login(newToken, username);
         router.push('/');
       } catch (e) {
         console.error('component/auth/Callback.tsx', e);

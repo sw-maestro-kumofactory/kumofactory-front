@@ -6,7 +6,7 @@ import { authAxiosInstance } from '@/src/api';
 import { getRefreshToken, logout } from '@/src/api/auth';
 
 export const useLogin = () => {
-  const { accessToken, isLogin, setAccessToken } = useLoginStore();
+  const { accessToken, isLogin, setAccessToken, username } = useLoginStore();
 
   const setInterceptor = () => {
     authAxiosInstance.interceptors.response.use(
@@ -23,7 +23,7 @@ export const useLogin = () => {
           try {
             const res = await getRefreshToken();
             const newAccessToken = res;
-            Login(newAccessToken);
+            Login(newAccessToken, username);
             originRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
             return await axios(originRequest);
           } catch (err) {
@@ -37,15 +37,15 @@ export const useLogin = () => {
     );
   };
 
-  const Login = (token: string | null) => {
-    setAccessToken(token);
+  const Login = (token: string | null, username: string) => {
+    setAccessToken(token, username);
     authAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   };
 
   const Logout = async () => {
     console.log('logout');
     try {
-      setAccessToken(null);
+      setAccessToken(null, '');
       await logout();
       delete authAxiosInstance.defaults.headers.common['Authorization'];
     } catch (err) {
@@ -55,7 +55,7 @@ export const useLogin = () => {
 
   useEffect(() => {
     if (accessToken) {
-      Login(accessToken);
+      Login(accessToken, username);
     }
     setInterceptor();
   }, []);

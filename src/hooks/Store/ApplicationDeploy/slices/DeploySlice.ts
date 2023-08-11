@@ -12,6 +12,7 @@ export const useOptionSlice: StateCreator<
   targetInstanceId: null,
   targetInstanceName: null,
   targetInstanceType: null,
+  repositoryList: {},
   repo: {
     name: '',
     user: '',
@@ -21,6 +22,9 @@ export const useOptionSlice: StateCreator<
   DeployAction: {
     setTargetInstanceId: (targetInstanceId: string) => {
       set((state) => ({ ...state, targetInstanceId }));
+    },
+    setRepositoryList: (repositoryList: Record<string, any>) => {
+      set((state) => ({ ...state, repositoryList }));
     },
     setTargetInstanceName: (targetInstanceName: string) => {
       set((state) => ({ ...state, targetInstanceName }));

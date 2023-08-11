@@ -7,22 +7,22 @@ import { PersonalRepo } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import SqlUploader from '@/src/components/DeployComponent/RDS/SqlUploader';
 import Loading from '@/src/components/common/Loading';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 
 const DeployComponent = () => {
   const targetInstanceType = useDeployStore((state) => state.targetInstanceType);
-  const [isRepo, setIsRepo] = useState(true);
-  const [data, setData] = useState<Record<string, PersonalRepo[]>>({});
+  const repositoryList = useDeployStore((state) => state.repositoryList);
+  const setRepositoryList = useDeployStore((state) => state.DeployAction.setRepositoryList);
+  const username = useLoginStore((state) => state.username);
   const [isLoading, setIsLoading] = useState(true);
-  const [username, setUsername] = useState<string>('');
 
   const getRepo = async () => {
     try {
       const d = await getUserRepositories();
       const tmp: Record<string, PersonalRepo[]> = {};
       if (d.repoCount > 0) {
-        const username = d.repoInfo[0].fullName.split('/')[0];
         tmp[username] = d.repoInfo;
-        setUsername(username);
       }
 
       if (d.orgCount > 0) {
@@ -36,8 +36,7 @@ const DeployComponent = () => {
           tmp[org] = orgRepo;
         });
       }
-
-      setData(tmp);
+      setRepositoryList(tmp);
       setIsLoading(false);
     } catch (e) {
       console.log(e);
@@ -45,7 +44,11 @@ const DeployComponent = () => {
   };
 
   useEffect(() => {
-    getRepo();
+    if (Object.keys(repositoryList).length === 0) {
+      getRepo();
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   if (!targetInstanceType) {
@@ -67,8 +70,8 @@ const DeployComponent = () => {
         <div className=' pb-4 text-md text-gray-500'>Select Repository to Deploy</div>
         {isLoading && <Loading />}
         {!isLoading &&
-          Object.keys(data).map((key) => {
-            return <RepositoryContainer key={key} repoInfo={data[key]} id={key} isUser={key === username} />;
+          Object.keys(repositoryList).map((key) => {
+            return <RepositoryContainer key={key} repoInfo={repositoryList[key]} id={key} />;
           })}
       </div>
     </div>
