@@ -20,12 +20,7 @@ const ConfirmPopover = ({ Heading, Description, children, onClickConfirm }: IPro
   const [open, setOpen] = useState(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger
-        onClick={() => setOpen((v) => !v)}
-        className='px-4 py-2 w-fit flex gap-2 items-center border-[#195091] border-solid border-2 rounded-xl cursor-pointer'
-      >
-        {children}
-      </PopoverTrigger>
+      <PopoverTrigger onClick={() => setOpen((v) => !v)}>{children}</PopoverTrigger>
       <PopoverContent className='bg-white p-8 justify-center items-center rounded-2xl shadow-lg'>
         <div className='text-2xl mb-4'>{Heading}</div>
         <div className='mb-8'>{Description}</div>
