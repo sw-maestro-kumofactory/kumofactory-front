@@ -2,6 +2,8 @@
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
 
 import { regionList } from '@/src/assets/RegionList';
 import { Menus } from '@/src/assets/Menus';
@@ -11,6 +13,8 @@ import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { AreaItemList } from '@/src/assets/MenuItems';
 import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
+import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 import { postBlueprintData } from '../../../../api/blueprint';
 
@@ -19,13 +23,19 @@ const Title = ({ title }: { title: string }) => (
 );
 
 const BlueprintMenuList = () => {
+  const params = useParams();
+  const id = params.id;
+  const userBlueprintsIds = useAuthStore((state) => state.userBlueprintsIds);
+  const [apiLoading, setApiLoading] = useState(false);
+  const [saved, setSaved] = useState(userBlueprintsIds.includes(id));
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
   const scope = useBlueprintStore((state) => state.blueprintScope[currentBlueprintId]);
   const name = useBlueprintStore((state) => state.name);
   const options = useBlueprintStore((state) => state.options);
 
-  const onClickSaveButton = async () => {
+  const onClickSaveConfirm = async () => {
+    setApiLoading(true);
     try {
       const body = blueprintToJson({ id: currentBlueprintId, name: name });
       body.components.map((component, index) => {
@@ -35,10 +45,11 @@ const BlueprintMenuList = () => {
       const encodedSVG = getSvgBlob();
       body['svgFile'] = encodedSVG;
       await postBlueprintData(body);
+      setSaved(true);
     } catch (e) {
-      alert('Invalid Blueprint');
-      console.log(e);
+      setSaved(false);
     }
+    setApiLoading(false);
   };
 
   return (
@@ -59,14 +70,21 @@ const BlueprintMenuList = () => {
         <div>{scope}</div>
       </label>
       <Title title='Actions' />
+      <div className={`text-sm mx-4 -mt-4 mb-2 ${saved ? 'text-green-700' : 'text-red-600'}`}>
+        {saved ? 'Saved!' : 'Not saved'}
+      </div>
       <div className='flex justify-center gap-4 mb-5'>
-        <div
-          className='px-4 py-2 w-fit flex gap-2 items-center border-[#195091] border-solid border-2 rounded-xl cursor-pointer'
-          onClick={onClickSaveButton}
+        <ConfirmPopover
+          Heading={'Confirm Save'}
+          Description={'Your architecture will be saved.(not Deployed)'}
+          onClickConfirm={onClickSaveConfirm}
         >
-          <FontAwesomeIcon icon={faFloppyDisk} />
-          Save
-        </div>
+          <div className='px-4 py-2 w-fit flex gap-2 items-center border-[#195091] border-solid border-2 rounded-xl cursor-pointer'>
+            <FontAwesomeIcon className={`${apiLoading ? 'animate-spin' : ''}`} icon={faFloppyDisk} />
+            Save
+          </div>
+        </ConfirmPopover>
+
         <div
           className='px-4 py-2 w-fit flex gap-2 bg-[#195091] items-center text-white rounded-xl cursor-pointer'
           onClick={ExportSvg}
@@ -76,15 +94,6 @@ const BlueprintMenuList = () => {
           Export
         </div>
       </div>
-      <DropDown title={'REGION'} key={'region'} absolute={false}>
-        <select className='appearance-none w-[220px] h-8 mx-4 mt-3 '>
-          {regionList.map((region) => (
-            <option key={region} value={region}>
-              {region}
-            </option>
-          ))}
-        </select>
-      </DropDown>
       <DropDown title={'Areas'} key={'Areas'} absolute={false}>
         {AreaItemList.map((AreaItem) => (
           <AreaItemWrapper key={AreaItem.name} type={AreaItem.type} name={AreaItem.name} scope={AreaItem.scope} />
