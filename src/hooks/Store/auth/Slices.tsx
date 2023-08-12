@@ -8,8 +8,22 @@ export const useUserBlueprintSlice: StateCreator<
   [['zustand/devtools', never], ['zustand/immer', never]],
   UserBlueprintState
 > = (set, get) => ({
-  userBlueprints: [],
+  userBlueprints: {},
+  userBlueprintsIds: [],
   UserBlueprintAction: {
-    setUserBlueprints: (userBlueprints) => set({ userBlueprints: userBlueprints }),
+    addUserBlueprint: (userBlueprint, saved) =>
+      set((state) => {
+        state.userBlueprints[userBlueprint.uuid] = { ...userBlueprint, saved: saved };
+        state.userBlueprintsIds.push(userBlueprint.uuid);
+        return state;
+      }),
+    setUserBlueprints: (userBlueprints, saved) =>
+      set((state) => {
+        userBlueprints.map((userBlueprint) => {
+          state.userBlueprints[userBlueprint.uuid] = { ...userBlueprint, saved: saved };
+          state.userBlueprintsIds.push(userBlueprint.uuid);
+        });
+        return state;
+      }),
   },
 });

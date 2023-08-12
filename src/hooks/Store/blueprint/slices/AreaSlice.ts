@@ -35,8 +35,8 @@ export const useAreaSlice: StateCreator<
       set((state) => {
         state.selectedServiceId = null;
         state.doubleClickedServiceId = null;
-        const currentSubnetCount = state.subnetCount[state.currentBlueprintId];
-        const currentAzCount = state.azCount[state.currentBlueprintId];
+        const currentSubnetCount = state.subnetCount[state.currentBlueprintInfo.uuid];
+        const currentAzCount = state.azCount[state.currentBlueprintInfo.uuid];
         if (type === 'AZ') {
           if (area.az === 'AP_NORTHEAST_2A') {
             currentAzCount['2a'] += 1;
@@ -52,7 +52,7 @@ export const useAreaSlice: StateCreator<
             currentSubnetCount.database += 1;
           }
         }
-        state.areas[state.currentBlueprintId][area.id] = {
+        state.areas[state.currentBlueprintInfo.uuid][area.id] = {
           ...area,
           id: area.id,
           type: type,
@@ -80,8 +80,8 @@ export const useAreaSlice: StateCreator<
     },
     setArea: (id, width, height) =>
       set((state) => {
-        state.areas[state.currentBlueprintId][id].width = width;
-        state.areas[state.currentBlueprintId][id].height = height;
+        state.areas[state.currentBlueprintInfo.uuid][id].width = width;
+        state.areas[state.currentBlueprintInfo.uuid][id].height = height;
         return state;
       }),
   },

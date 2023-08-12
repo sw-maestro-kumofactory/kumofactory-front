@@ -18,8 +18,8 @@ interface IProps {
 
 const Grid = ({ id }: IProps) => {
   const areas = useBlueprintStore((state) => state.areas[id]);
-  const selectedAreaId = useBlueprintStore((state) => state.selectedAreaId);
   const services = useBlueprintStore((state) => state.services[id]);
+  const selectedAreaId = useBlueprintStore((state) => state.selectedAreaId);
   const selectedServiceId = useBlueprintStore((state) => state.selectedServiceId);
   const isMoving = useBlueprintStore((state) => state.isMoving);
   const viewBox = useBlueprintStore((state) => state.viewBox);
@@ -75,8 +75,7 @@ const Grid = ({ id }: IProps) => {
     }
   };
 
-  const handleOnClickDeployButton = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleOnClickDeployButton = () => {
     console.log('deploy');
   };
 

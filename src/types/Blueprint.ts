@@ -19,7 +19,7 @@ export interface BlueprintInfo {
   name: string;
   scope: BlueprintScope;
   createdAt?: string;
-  status?: DeployState;
+  status: DeployState;
   presignedUrl?: string;
 }
 

@@ -1,8 +1,14 @@
 import { BlueprintInfo } from '@/src/types/Blueprint';
 
+interface bluePrintWithSaveState extends BlueprintInfo {
+  saved: boolean;
+}
+
 export interface UserBlueprintState {
-  userBlueprints: BlueprintInfo[];
+  userBlueprints: Record<string, bluePrintWithSaveState>;
+  userBlueprintsIds: string[];
   UserBlueprintAction: {
-    setUserBlueprints: (blueprints: BlueprintInfo[]) => void;
+    addUserBlueprint: (blueprint: BlueprintInfo, saved: boolean) => void;
+    setUserBlueprints: (blueprints: BlueprintInfo[], saved: boolean) => void;
   };
 }

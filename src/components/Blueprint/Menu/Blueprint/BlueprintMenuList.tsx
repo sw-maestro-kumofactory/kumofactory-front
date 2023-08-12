@@ -5,7 +5,6 @@ import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 
-import { regionList } from '@/src/assets/RegionList';
 import { Menus } from '@/src/assets/Menus';
 import DropDown from '@/src/components/Blueprint/downshiftTest/DropDown';
 import ServiceItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/ServiceItemWrapper';
@@ -15,8 +14,7 @@ import { AreaItemList } from '@/src/assets/MenuItems';
 import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
 import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-
-import { postBlueprintData } from '../../../../api/blueprint';
+import { postBlueprintData } from '@/src/api/blueprint';
 
 const Title = ({ title }: { title: string }) => (
   <div className='w-full h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
@@ -29,15 +27,18 @@ const BlueprintMenuList = () => {
   const [apiLoading, setApiLoading] = useState(false);
   const [saved, setSaved] = useState(userBlueprintsIds.includes(id));
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
-  const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
-  const scope = useBlueprintStore((state) => state.blueprintScope[currentBlueprintId]);
-  const name = useBlueprintStore((state) => state.name);
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
+  const scope = useBlueprintStore((state) => state.blueprintScope[currentBlueprintInfo.uuid]);
   const options = useBlueprintStore((state) => state.options);
 
   const onClickSaveConfirm = async () => {
     setApiLoading(true);
     try {
-      const body = blueprintToJson({ id: currentBlueprintId, name: name });
+      const body = blueprintToJson({
+        id: currentBlueprintInfo.uuid,
+        name: currentBlueprintInfo.name,
+        scope: currentBlueprintInfo.scope,
+      });
       body.components.map((component, index) => {
         component.options = options[component.id];
       });
@@ -63,7 +64,7 @@ const BlueprintMenuList = () => {
           className='sr-only peer'
           checked={scope === 'PUBLIC'}
           onChange={() => {
-            setBlueprintScope(currentBlueprintId, scope === 'PUBLIC' ? 'PRIVATE' : 'PUBLIC');
+            setBlueprintScope(currentBlueprintInfo.uuid, scope === 'PUBLIC' ? 'PRIVATE' : 'PUBLIC');
           }}
         />
         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none  peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 mr-4"></div>
