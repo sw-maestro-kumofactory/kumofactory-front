@@ -16,7 +16,6 @@ const Setting = ({ id }: IProps) => {
   const user = params.userName;
   const router = useRouter();
   const environmentVariables = useDeployStore((state) => state.environmentVariables);
-  const repositoryList = useDeployStore((state) => state.repositoryList);
   const targetInstanceName = useDeployStore((state) => state.targetInstanceName);
   const username = useLoginStore((state) => state.username);
   const [language, setLanguage] = useState<string>('');
