@@ -112,7 +112,7 @@ const Area = ({ area, activate, styleKey }: IProps) => {
         className='-z-20 select-auto'
         x={area.x}
         y={area.y - 20}
-        width={getName(area)?.length * 12}
+        width={getName(area)!.length * 12}
         height='20'
       >
         <div className='-z-20 w-fit select-none '>{getName(area)}</div>
