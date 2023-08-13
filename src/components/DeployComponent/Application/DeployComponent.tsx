@@ -9,6 +9,7 @@ import SqlUploader from '@/src/components/DeployComponent/RDS/SqlUploader';
 import Loading from '@/src/components/common/Loading';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
+import SkeletonRepositoryContainer from '@/src/components/DeployComponent/Application/Repository/SkeletonRepositoryContainer';
 
 const DeployComponent = () => {
   const targetInstanceType = useDeployStore((state) => state.targetInstanceType);
@@ -68,7 +69,12 @@ const DeployComponent = () => {
       <div className='w-11/12 h-full'>
         <div className='pb-4 text-2xl'>Repositories</div>
         <div className=' pb-4 text-md text-gray-500'>Select Repository to Deploy</div>
-        {isLoading && <Loading />}
+        {isLoading && (
+          <>
+            <SkeletonRepositoryContainer />
+            <SkeletonRepositoryContainer />
+          </>
+        )}
         {!isLoading &&
           Object.keys(repositoryList).map((key) => {
             return <RepositoryContainer key={key} repoInfo={repositoryList[key]} id={key} />;
