@@ -11,12 +11,12 @@ interface IProps {
 }
 const Repository = ({ id, name }: IProps) => {
   const router = useRouter();
-  const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
 
   const toSetting = () => {
     if (targetInstanceId) {
-      router.push(`/blueprint/${currentBlueprintId}/deploy/${id}/${name}`);
+      router.push(`/blueprint/${currentBlueprintInfo.uuid}/deploy/${id}/${name}`);
     } else {
       alert('인스턴스를 선택해주세요.');
     }

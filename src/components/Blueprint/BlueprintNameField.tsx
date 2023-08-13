@@ -4,7 +4,7 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
 const BlueprintNameField = () => {
   const blueprintSrc = useBlueprintStore((state) => state.blueprintElementPosition);
-  const name = useBlueprintStore((state) => state.name);
+  const name = useBlueprintStore((state) => state.currentBlueprintInfo.name);
   const setName = useBlueprintStore((state) => state.CommonAction.setName);
   const isEdit = useBlueprintStore((state) => state.isEdit);
   const setIsEdit = useBlueprintStore((state) => state.CommonAction.setIsEdit);

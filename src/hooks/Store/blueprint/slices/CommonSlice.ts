@@ -5,6 +5,7 @@ import { BlueprintResponse, BlueprintScope } from '@/src/types/Blueprint';
 import { getQuadrant } from '@/src/utils/getQuadrant';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { EC2Options } from '@/src/types/Services';
+import { DeployState } from '@/src/types/Deploy';
 
 // 그리드 내에서의 상대 좌표를 얻는다.
 const getGirdPoint = (
@@ -30,9 +31,13 @@ export const useCommonSlice: StateCreator<
   [['zustand/devtools', never], ['zustand/immer', never]],
   CommonState
 > = (set, get) => ({
-  name: 'My blueprint',
-  currentBlueprintId: '',
   blueprintScope: {},
+  currentBlueprintInfo: {
+    name: 'My blueprint',
+    uuid: '',
+    scope: 'PRIVATE',
+    status: 'FAIL',
+  },
   blueprintList: [],
   offset: {
     x: 0,
@@ -79,9 +84,7 @@ export const useCommonSlice: StateCreator<
         state.linkedServiceId = undefined;
         state.selectedLineId = null;
         state.isEdit = false;
-
         state.blueprintList.push(id);
-        state.currentBlueprintId = id;
         state.subnetCount[id] = {
           public: 0,
           private: 0,
@@ -98,6 +101,12 @@ export const useCommonSlice: StateCreator<
         return state;
       });
     },
+    setCurrentBlueprintInfo: (info: { name: string; uuid: string; scope: BlueprintScope; status: DeployState }) => {
+      set((state) => {
+        state.currentBlueprintInfo = info;
+        return state;
+      });
+    },
     setBlueprintScope: (id: string, scope: BlueprintScope) => {
       set((state) => {
         state.blueprintScope[id] = scope;
@@ -106,13 +115,13 @@ export const useCommonSlice: StateCreator<
     },
     setBlueprintId: (id: string) => {
       set((state) => {
-        state.currentBlueprintId = id;
+        state.currentBlueprintInfo.uuid = id;
         return state;
       });
     },
     setName: (name: string) => {
       set((state) => {
-        state.name = name;
+        state.currentBlueprintInfo.name = name;
         return state;
       });
     },
@@ -122,11 +131,11 @@ export const useCommonSlice: StateCreator<
         return state;
       });
     },
-    blueprintToJson: ({ id, name }: { id: string; name: string }) => {
+    blueprintToJson: ({ id, name, scope }: { id: string; name: string; scope: BlueprintScope }) => {
       const json: BlueprintResponse = {
         name: name,
         uuid: id,
-        scope: 'PRIVATE',
+        scope: scope,
         components: [],
         links: [],
         areas: [],
@@ -224,12 +233,12 @@ export const useCommonSlice: StateCreator<
     onMouseleave: (e) => {},
     onMouseUp: (e) => {
       set((state) => {
-        const currentCount = state.subnetCount[state.currentBlueprintId];
-        for (let areaId in state.areas[state.currentBlueprintId]) {
-          const currentArea = state.areas[state.currentBlueprintId][areaId];
+        const currentCount = state.subnetCount[state.currentBlueprintInfo.uuid];
+        for (let areaId in state.areas[state.currentBlueprintInfo.uuid]) {
+          const currentArea = state.areas[state.currentBlueprintInfo.uuid][areaId];
           let containRDS = false;
-          for (let serviceId in state.services[state.currentBlueprintId]) {
-            const currentService = state.services[state.currentBlueprintId][serviceId];
+          for (let serviceId in state.services[state.currentBlueprintInfo.uuid]) {
+            const currentService = state.services[state.currentBlueprintInfo.uuid][serviceId];
             const currentOption = state.options[serviceId] as EC2Options;
             if (
               currentService.x >= currentArea.x &&
@@ -288,13 +297,14 @@ export const useCommonSlice: StateCreator<
           state.viewBox,
           state.blueprintElementPosition,
         );
-        const currentService = state.services[state.currentBlueprintId];
-        const currentAreas = state.areas[state.currentBlueprintId];
-        const currentLines = state.lines[state.currentBlueprintId];
+        const currentService = state.services[state.currentBlueprintInfo.uuid];
+        const currentAreas = state.areas[state.currentBlueprintInfo.uuid];
+        const currentLines = state.lines[state.currentBlueprintInfo.uuid];
         if (state.isLineDrawing && state.curLineId) {
-          const currentLines = state.lines[state.currentBlueprintId];
+          const currentLines = state.lines[state.currentBlueprintInfo.uuid];
           if (state.linkedServiceId) {
-            const service = currentService[state.lines[state.currentBlueprintId][state.curLineId].src.componentId];
+            const service =
+              currentService[state.lines[state.currentBlueprintInfo.uuid][state.curLineId].src.componentId];
             const linkedService = currentService[state.linkedServiceId];
             const cx = service.x - linkedService.x + 40;
             const cy = service.y - linkedService.y + 40;
@@ -306,7 +316,7 @@ export const useCommonSlice: StateCreator<
             currentLines[state.curLineId].dst.y = newPointY;
           }
           // src의 좌표 움직이기
-          const service = currentService[state.lines[state.currentBlueprintId][state.curLineId].src.componentId];
+          const service = currentService[state.lines[state.currentBlueprintInfo.uuid][state.curLineId].src.componentId];
           const cx = newPointX - service.x - 40;
           const cy = newPointY - service.y - 40;
           const { x, y } = getQuadrant(cx, cy, service.x + 40, service.y + 40);
@@ -320,7 +330,7 @@ export const useCommonSlice: StateCreator<
           if (state.resizeState.dir === 1) {
             // 동
             const newWidth = newPointX - area.x;
-            if (newWidth > 100) state.areas[state.currentBlueprintId][state.selectedAreaId].width = newWidth;
+            if (newWidth > 100) state.areas[state.currentBlueprintInfo.uuid][state.selectedAreaId].width = newWidth;
           } else if (state.resizeState.dir === 2) {
             // 서
             const diff = area.x - newPointX;
@@ -429,25 +439,25 @@ export const useCommonSlice: StateCreator<
     },
     clearComponent: () => {
       set((state) => {
-        const currentSubnetCount = state.subnetCount[state.currentBlueprintId];
-        const currentAzCount = state.azCount[state.currentBlueprintId];
+        const currentSubnetCount = state.subnetCount[state.currentBlueprintInfo.uuid];
+        const currentAzCount = state.azCount[state.currentBlueprintInfo.uuid];
         if (state.selectedServiceId) {
           //   selectedService 제거
-          const currentService = state.services[state.currentBlueprintId][state.selectedServiceId];
-          delete state.services[state.currentBlueprintId][state.selectedServiceId];
+          const currentService = state.services[state.currentBlueprintInfo.uuid][state.selectedServiceId];
+          delete state.services[state.currentBlueprintInfo.uuid][state.selectedServiceId];
           for (const line of currentService.lines) {
-            const removedLine = state.lines[state.currentBlueprintId][line];
+            const removedLine = state.lines[state.currentBlueprintInfo.uuid][line];
             if (removedLine.src.componentId === state.selectedServiceId) {
-              const dstService = state.services[state.currentBlueprintId][removedLine.dst.componentId];
+              const dstService = state.services[state.currentBlueprintInfo.uuid][removedLine.dst.componentId];
               dstService.lines = dstService.lines.filter((l) => l !== line);
             } else {
-              const srcService = state.services[state.currentBlueprintId][removedLine.src.componentId];
+              const srcService = state.services[state.currentBlueprintInfo.uuid][removedLine.src.componentId];
               srcService.lines = srcService.lines.filter((l) => l !== line);
             }
-            delete state.lines[state.currentBlueprintId][line];
+            delete state.lines[state.currentBlueprintInfo.uuid][line];
           }
         } else if (state.selectedAreaId) {
-          const curArea = state.areas[state.currentBlueprintId][state.selectedAreaId];
+          const curArea = state.areas[state.currentBlueprintInfo.uuid][state.selectedAreaId];
           if (curArea.type === 'AZ') {
             if (curArea.az === 'AP_NORTHEAST_2A') currentAzCount['2a'] -= 1;
             else if (curArea.az === 'AP_NORTHEAST_2C') currentAzCount['2c'] -= 1;
@@ -456,15 +466,15 @@ export const useCommonSlice: StateCreator<
             else if (curArea.scope === 'PRIVATE') currentSubnetCount.private -= 1;
             else if (curArea.scope === 'DATABASE') currentSubnetCount.database -= 1;
           }
-          delete state.areas[state.currentBlueprintId][state.selectedAreaId];
+          delete state.areas[state.currentBlueprintInfo.uuid][state.selectedAreaId];
         } else if (state.selectedLineId) {
           //   selectedLine 제거
-          const line = state.lines[state.currentBlueprintId][state.selectedLineId];
-          const srcService = state.services[state.currentBlueprintId][line.src.componentId];
-          const dstService = state.services[state.currentBlueprintId][line.dst.componentId];
+          const line = state.lines[state.currentBlueprintInfo.uuid][state.selectedLineId];
+          const srcService = state.services[state.currentBlueprintInfo.uuid][line.src.componentId];
+          const dstService = state.services[state.currentBlueprintInfo.uuid][line.dst.componentId];
           srcService.lines = srcService.lines.filter((l) => l !== state.selectedLineId);
           dstService.lines = dstService.lines.filter((l) => l !== state.selectedLineId);
-          delete state.lines[state.currentBlueprintId][state.selectedLineId];
+          delete state.lines[state.currentBlueprintInfo.uuid][state.selectedLineId];
         }
 
         // 모든 상태 null

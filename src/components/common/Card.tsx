@@ -15,6 +15,7 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
   const [isHover, setIsHover] = useState(false);
   const [svgData, setSvgData] = useState<string>('');
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
+  const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const { setTemplate } = useSetTemplate();
 
   const onCLickLoad = async () => {
@@ -24,12 +25,18 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
         initState(newUUID);
         const templateData = await getTemplateById(data.uuid);
         templateData.uuid = newUUID;
+        setCurrentBlueprintInfo({
+          ...data,
+          uuid: newUUID,
+        });
         setTemplate({ data: templateData, isTemplate: true });
+        setBlueprintScope(newUUID, 'PRIVATE');
         router.push(`/blueprint/${newUUID}`);
       } catch (e) {
         console.log(e);
       }
     } else {
+      setCurrentBlueprintInfo(data);
       router.push(`/blueprint/${data.uuid}`);
     }
   };

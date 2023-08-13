@@ -7,7 +7,7 @@ const SettingPage = ({ params }: { params: { repoId: string } }) => {
   return (
     <div className='flex h-full overflow-y-hidden'>
       <DeployMenuList disabled={true} />
-      <Setting id={repositoryId} />
+      <Setting />
     </div>
   );
 };

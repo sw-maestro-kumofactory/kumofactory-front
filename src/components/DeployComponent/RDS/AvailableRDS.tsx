@@ -7,15 +7,15 @@ import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 
 const AvailableRDS = () => {
   const services = useBlueprintStore((state) => state.services);
-  const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
   const setTargetInstanceId = useDeployStore((state) => state.DeployAction.setTargetInstanceId);
   const setTargetInstanceType = useDeployStore((state) => state.DeployAction.setTargetInstanceType);
   const [rdsList, setRdsList] = useState<string[]>([]);
 
   useEffect(() => {
-    Object.keys(services[currentBlueprintId]).forEach((key) => {
-      if (services[currentBlueprintId][key].type === 'RDS_MYSQL') {
+    Object.keys(services[currentBlueprintInfo.uuid]).forEach((key) => {
+      if (services[currentBlueprintInfo.uuid][key].type === 'RDS_MYSQL') {
         setRdsList((prev) => [...prev, key]);
       }
     });

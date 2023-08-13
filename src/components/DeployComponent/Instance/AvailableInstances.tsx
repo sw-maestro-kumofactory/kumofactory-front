@@ -8,18 +8,18 @@ import { EC2Options } from '@/src/types/Services';
 
 const AvailableInstances = () => {
   const services = useBlueprintStore((state) => state.services);
-  const currentBlueprintId = useBlueprintStore((state) => state.currentBlueprintId);
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const options = useBlueprintStore((state) => state.options);
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
   const [ec2List, setEc2List] = useState<string[]>([]);
   const [s3List, setS3List] = useState<string[]>([]);
 
   useEffect(() => {
-    Object.keys(services[currentBlueprintId]).forEach((key) => {
-      if (services[currentBlueprintId][key].type === 'EC2') {
+    Object.keys(services[currentBlueprintInfo.uuid]).forEach((key) => {
+      if (services[currentBlueprintInfo.uuid][key].type === 'EC2') {
         setEc2List((prev) => [...prev, key]);
       }
-      if (services[currentBlueprintId][key].type === 'S3') {
+      if (services[currentBlueprintInfo.uuid][key].type === 'S3') {
         setS3List((prev) => [...prev, key]);
       }
     });

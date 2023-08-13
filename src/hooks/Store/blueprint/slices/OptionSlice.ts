@@ -1,8 +1,5 @@
 import { StateCreator } from 'zustand';
-import { v1 } from 'uuid';
 
-import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
-import { IArea } from '@/src/types/Area';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { OptionState } from '@/src/hooks/Store/blueprint/state/OptionState';
 

@@ -9,14 +9,16 @@ import { useLogin } from '@/src/hooks/Auth/useLogin';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { DeployState } from '@/src/types/Deploy';
 import Status from '@/src/components/Layout/Status';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 const stateList = ['SUCCESS', 'FAIL', 'PENDING', 'PROVISIONING'];
 
 export const Header = () => {
   const isLogin = useStore(useLoginStore, (state) => state.isLogin);
-  const currentBlueprintId = useStore(useBlueprintStore, (state) => state.currentBlueprintId);
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
+  const userBlueprints = useAuthStore((state) => state.userBlueprints);
   const setBlueprintId = useBlueprintStore((state) => state.CommonAction.setBlueprintId);
-  const [currentDeployState, setCurrentDeployState] = useState<DeployState>('SUCCESS');
+  const [currentDeployState, setCurrentDeployState] = useState<DeployState>('PENDING');
   const pathname = usePathname();
   const router = useRouter();
   const { setInterceptor, Logout } = useLogin();
@@ -31,6 +33,7 @@ export const Header = () => {
     const d = pathname.split('/');
     if (d.length >= 3 && d[1] === 'blueprint') {
       setBlueprintId(d[2]);
+      if (Object.keys(userBlueprints).includes(d[2])) setCurrentDeployState(userBlueprints[d[2]].status);
       if (d[3] === 'deploy') setIsBlueprint(false);
     } else setBlueprintId('');
   }, [pathname]);
@@ -44,7 +47,7 @@ export const Header = () => {
       <Link className='px-4 py-2 rounded-2xl' href='/'>
         Kumo Factory
       </Link>
-      {currentBlueprintId && (
+      {currentBlueprintInfo.uuid && (
         <>
           <div className='flex'>
             <div
@@ -53,7 +56,7 @@ export const Header = () => {
               } px-4 cursor-pointer`}
               onClick={() => {
                 setIsBlueprint(true);
-                router.push(`/blueprint/${currentBlueprintId}`);
+                router.push(`/blueprint/${currentBlueprintInfo.uuid}`);
               }}
             >
               Blueprint
@@ -64,7 +67,7 @@ export const Header = () => {
               } px-4 cursor-pointer`}
               onClick={() => {
                 setIsBlueprint(false);
-                router.push(`/blueprint/${currentBlueprintId}/deploy`);
+                router.push(`/blueprint/${currentBlueprintInfo.uuid}/deploy`);
               }}
             >
               Deploy
@@ -74,7 +77,7 @@ export const Header = () => {
         </>
       )}
 
-      {!currentBlueprintId &&
+      {!currentBlueprintInfo.uuid &&
         (isLogin ? (
           <>
             <div

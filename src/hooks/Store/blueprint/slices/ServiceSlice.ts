@@ -40,10 +40,10 @@ export const useServiceSlice: StateCreator<
         if (service) {
           if (state.isLineDrawing) {
             if (state.linkedServiceId && state.curLineId) {
-              state.lines[state.currentBlueprintId][state.curLineId].dst.componentId = state.linkedServiceId;
-              state.services[state.currentBlueprintId][state.linkedServiceId].lines.push(state.curLineId);
-              state.services[state.currentBlueprintId][
-                state.lines[state.currentBlueprintId][state.curLineId].src.componentId
+              state.lines[state.currentBlueprintInfo.uuid][state.curLineId].dst.componentId = state.linkedServiceId;
+              state.services[state.currentBlueprintInfo.uuid][state.linkedServiceId].lines.push(state.curLineId);
+              state.services[state.currentBlueprintInfo.uuid][
+                state.lines[state.currentBlueprintInfo.uuid][state.curLineId].src.componentId
               ].lines.push(state.curLineId);
             }
             state.curLineId = undefined;
@@ -79,7 +79,8 @@ export const useServiceSlice: StateCreator<
     },
     createService: (service: IComponent, id: string) =>
       set((state) => {
-        state.services[state.currentBlueprintId][id] = {
+        console.log(state.currentBlueprintInfo.uuid);
+        state.services[state.currentBlueprintInfo.uuid][id] = {
           ...service,
           id,
         };

@@ -18,8 +18,8 @@ const RepositoryContainer = ({ id, repoInfo }: IProps) => {
         <Image
           src='https://avatars.githubusercontent.com/u/59858440?v=4'
           className='rounded-full'
-          width='30'
-          height='30'
+          width='32'
+          height='32'
           alt={'GRAVATAR'}
         />
         <div>{id}</div>

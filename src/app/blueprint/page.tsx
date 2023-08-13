@@ -9,7 +9,7 @@ import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import Card from '@/src/components/common/Card';
 import AuthRequired from '@/src/components/Auth/AuthRequired';
 
-import { getBlueprintList, getBlueprintListById } from '../../api/blueprint';
+import { getBlueprintList } from '../../api/blueprint';
 
 const BluePrint = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +19,7 @@ const BluePrint = () => {
   const getTemplate = async () => {
     try {
       const res = await getBlueprintList();
-      setUserBlueprints(res);
+      setUserBlueprints(res, true);
     } catch (err) {
       console.log(err);
     }
@@ -52,10 +52,9 @@ const BluePrint = () => {
               New BluePrint
             </div>
           </div>
-          {userBlueprints.length !== 0 &&
-            userBlueprints.map((blueprint) => {
-              return <Card key={blueprint.id} data={blueprint} isTemplate={false} />;
-            })}
+          {Object.keys(userBlueprints).map((key) => {
+            return <Card key={key} data={userBlueprints[key]} isTemplate={false} />;
+          })}
           <ModalContainer isShow={isOpen}>
             <Templates />
           </ModalContainer>
