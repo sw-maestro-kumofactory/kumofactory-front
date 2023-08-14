@@ -18,7 +18,7 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
   const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const { setTemplate } = useSetTemplate();
 
-  const onCLickLoad = async () => {
+  const onClickLoad = async () => {
     if (isTemplate) {
       try {
         const newUUID = v1().toString();
@@ -29,6 +29,7 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
           ...data,
           uuid: newUUID,
         });
+        console.log(templateData);
         setTemplate({ data: templateData, isTemplate: true });
         setBlueprintScope(newUUID, 'PRIVATE');
         router.push(`/blueprint/${newUUID}`);
@@ -45,20 +46,20 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
     router.push(`/blueprint/${data.uuid}/deploy`);
   };
 
-  const fetchSvgData = async () => {
-    try {
-      const urlParts = data.presignedUrl!.split('/');
-      const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
-      const response = await commonAxiosInstance.get(url);
-      setSvgData(response.data);
-    } catch (error) {
-      console.error('Error fetching SVG data:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSvgData();
-  }, []);
+  // const fetchSvgData = async () => {
+  //   try {
+  //     const urlParts = data.presignedUrl!.split('/');
+  //     const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
+  //     const response = await commonAxiosInstance.get(url);
+  //     setSvgData(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching SVG data:', error);
+  //   }
+  // };
+  //
+  // useEffect(() => {
+  //   fetchSvgData();
+  // }, []);
 
   return (
     <div className='w-1/3 h-2/5 p-4'>
@@ -69,7 +70,7 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
       >
         {isHover && (
           <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
-            <div className='cursor-pointer' onClick={onCLickLoad}>
+            <div className='cursor-pointer' onClick={onClickLoad}>
               <div
                 className={`flex justify-center items-center bg-black p-2 text-white h-10 rounded-xl ${
                   !isTemplate && 'mb-4'

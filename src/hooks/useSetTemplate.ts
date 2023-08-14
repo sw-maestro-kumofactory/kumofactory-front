@@ -13,14 +13,12 @@ export const useSetTemplate = () => {
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
 
   const setTemplate = ({ data, isTemplate }: { data: BlueprintResponse; isTemplate: boolean }) => {
-    console.log(1);
     let keyMap: Record<string, string> = {};
     const services = data.components;
     const lines = data.links;
     const areas = data.areas;
-    console.log(2);
     setBlueprintScope(data.uuid, data.scope);
-    console.log(3);
+    console.log('lines : ', lines);
 
     for (const service of services) {
       let id = service.id;
@@ -42,7 +40,6 @@ export const useSetTemplate = () => {
         id,
       );
     }
-    console.log(4);
     for (const line of lines) {
       let src = line.src;
       let dst = line.dst;
@@ -54,7 +51,6 @@ export const useSetTemplate = () => {
       setComponentLine(line.id, src.componentId);
       setComponentLine(line.id, dst.componentId);
     }
-    console.log(5);
     for (const area of areas) {
       const id = isTemplate ? v1().toString() : area.id;
       createArea(
@@ -71,7 +67,6 @@ export const useSetTemplate = () => {
         area.type,
       );
     }
-    console.log(6);
   };
 
   return { isLoading, setIsLoading, setTemplate };

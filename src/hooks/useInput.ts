@@ -5,7 +5,6 @@ const useInput = <T>(initialValue: T) => {
   const valueRef = useRef<T>(initialValue);
 
   const onHandleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    console.log(e.target.value);
     valueRef.current = e.target.value as unknown as T;
     setValue(e.target.value as unknown as T);
   };

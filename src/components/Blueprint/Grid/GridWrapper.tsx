@@ -29,7 +29,15 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
       try {
         const data = await getBlueprintListById(id);
         setTemplate({ data: data, isTemplate: false });
-      } catch (e) {}
+      } catch (e) {
+        setCurrentBlueprintInfo({
+          uuid: blueprintId,
+          name: 'New Blueprint',
+          scope: 'PRIVATE',
+          status: 'PENDING',
+        });
+        console.log('GridWrapper', e);
+      }
     }
     setIsLoading(false);
   };

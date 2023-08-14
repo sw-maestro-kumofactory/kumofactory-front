@@ -2,6 +2,7 @@ import { authAxiosInstance } from '@/src/api';
 
 export const getTemplateById = async (id: string) => {
   const { data } = await authAxiosInstance.get(`/api/template/${id}`);
+  console.log(data);
   return data;
 };
 

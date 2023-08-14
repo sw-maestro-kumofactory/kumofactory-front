@@ -21,7 +21,7 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
   const subnetCount = useBlueprintStore((state) => state.subnetCount[currentBlueprintInfo.uuid]);
 
   const createAreaByType = () => {
-    const id = v1().toString();
+    const id = 'v' + v1().toString();
 
     const area: IArea = {
       id: id,

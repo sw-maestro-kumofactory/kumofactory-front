@@ -27,7 +27,7 @@ const ServiceItemWrapper = ({ type, children }: IProps) => {
             key={item.type}
             type={item.type}
             onClick={() => {
-              const id = v1().toString();
+              const id = 'v' + v1().toString();
               createService(serviceFactory.createService({ type: item.type }), id);
               createOption(optionFactory.createOption(item.type, id));
             }}

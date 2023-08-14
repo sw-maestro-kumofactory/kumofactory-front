@@ -45,8 +45,7 @@ const BlueprintMenuList = () => {
       body.scope = scope;
       const encodedSVG = getSvgBlob();
       body['svgFile'] = encodedSVG;
-      console.log(body);
-      await postDeployBlueprintData(body);
+      await postSaveBlueprintData(body);
       setSaved(true);
     } catch (e) {
       setSaved(false);

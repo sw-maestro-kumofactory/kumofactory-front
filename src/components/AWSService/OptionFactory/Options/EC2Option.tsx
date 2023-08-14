@@ -46,7 +46,7 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
     value: securityGroupType,
     valueRef: securityGroupTypeRef,
     onHandleChange: handleSecurityGroupTypeChange,
-  } = useInput<string | null>(selectedOptions?.securityGroupType);
+  } = useInput<string | null>(selectedOptions?.subnetType);
   const {
     value: subnetType,
     valueRef: subnetTypeRef,

@@ -79,7 +79,6 @@ export const useServiceSlice: StateCreator<
     },
     createService: (service: IComponent, id: string) =>
       set((state) => {
-        console.log(state.currentBlueprintInfo.uuid);
         state.services[state.currentBlueprintInfo.uuid][id] = {
           ...service,
           id,
