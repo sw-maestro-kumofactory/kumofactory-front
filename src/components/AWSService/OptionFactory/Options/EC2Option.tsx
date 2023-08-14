@@ -4,14 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import Image from 'next/image';
 
-import { AccessScope, AccessScopeList, EC2Options, InstanceType, InstanceTypeList } from '@/src/types/Services';
-import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
+import { AccessScope, AccessScopeList, AvailabilityZone, EC2Options, InstanceTypeList } from '@/src/types/Services';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useInput from '@/src/hooks/useInput';
 
 export const EC2Option = (id: string): EC2Options => {
   return {
-    instanceType: 't2.micro',
+    instanceType: 't3.micro',
     machineImage: '',
     subnetType: null,
     availabilityZone: null,
@@ -48,6 +47,16 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
     valueRef: securityGroupTypeRef,
     onHandleChange: handleSecurityGroupTypeChange,
   } = useInput<string | null>(selectedOptions?.securityGroupType);
+  const {
+    value: subnetType,
+    valueRef: subnetTypeRef,
+    onHandleChange: handleSubnetTypeChange,
+  } = useInput<AccessScope | null>(selectedOptions?.subnetType);
+  const {
+    value: availabilityZone,
+    valueRef: availabilityZoneRef,
+    onHandleChange: handleAvailabilityZoneChange,
+  } = useInput<AvailabilityZone | null>(selectedOptions?.availabilityZone);
 
   const mouseEnter = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -66,10 +75,10 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
       id: id,
       instanceType: instanceType,
       machineImage: '',
-      subnetType: null,
-      availabilityZone: null,
+      subnetType: subnetType,
+      availabilityZone: availabilityZone,
       instanceName: instanceName,
-      securityGroupType: securityGroupType,
+      securityGroupType: subnetType,
     } as EC2Options);
   };
 
@@ -79,10 +88,10 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
         id: id,
         instanceType: instanceTypeRef.current,
         machineImage: '',
-        subnetType: null,
-        availabilityZone: null,
+        subnetType: subnetTypeRef.current,
+        availabilityZone: availabilityZoneRef.current,
         instanceName: instanceNameRef.current,
-        securityGroupType: securityGroupTypeRef.current,
+        securityGroupType: subnetTypeRef.current,
       } as EC2Options);
   }, []);
 

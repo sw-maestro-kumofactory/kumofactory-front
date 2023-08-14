@@ -15,7 +15,7 @@ const NewBlueprint = () => {
 
   return (
     <div
-      className='flex flex-col items-center justify-center w-full h-5/6 text-sky-700 bg-gray-200 border-4 hover:border-sky-700 rounded-2xl cursor-pointer'
+      className='flex flex-col items-center justify-center w-full h-full text-sky-700 bg-gray-200 border-4 hover:border-sky-700 rounded-2xl cursor-pointer'
       onClick={onClick}
     >
       <FontAwesomeIcon icon={faSquarePlus} className='text-4xl mb-4' />

@@ -14,7 +14,7 @@ import { AreaItemList } from '@/src/assets/MenuItems';
 import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
 import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import { postBlueprintData } from '@/src/api/blueprint';
+import { postDeployBlueprintData, postSaveBlueprintData } from '@/src/api/blueprint';
 
 const Title = ({ title }: { title: string }) => (
   <div className='w-full h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
@@ -45,7 +45,8 @@ const BlueprintMenuList = () => {
       body.scope = scope;
       const encodedSVG = getSvgBlob();
       body['svgFile'] = encodedSVG;
-      await postBlueprintData(body);
+      console.log(body);
+      await postDeployBlueprintData(body);
       setSaved(true);
     } catch (e) {
       setSaved(false);

@@ -63,7 +63,7 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
   return (
     <div className='w-1/3 h-2/5 p-4'>
       <div
-        className='ImageWrapper w-full h-4/5 relative rounded-t-2xl'
+        className='ImageWrapper w-full h-3/4 relative rounded-t-2xl'
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
       >
@@ -97,10 +97,10 @@ const Card = ({ data, isTemplate }: { data: BlueprintInfo; isTemplate: boolean }
           </svg>
         </div>
       </div>
-      <div className='flex justify-between items-center p-4 h-1/5 rounded-b-2xl border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
+      <div className='flex justify-between items-center p-4 h-1/4 rounded-b-2xl border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
         <div>
-          <div className='mb-2.5 text-xl'>{data.name}</div>
-          <div>{moment(data.createdAt).format('YYYY-MM-DD')}</div>
+          <div className='mb-2.5 text-lg md:text-base'>{data.name}</div>
+          <div className='text-base md:text-sm'>{moment(data.createdAt).format('YYYY-MM-DD')}</div>
         </div>
         {data.status && (
           <div className='flex items-center gap-x-2'>

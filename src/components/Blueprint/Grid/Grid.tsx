@@ -11,6 +11,7 @@ import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 import { AreaTypes, IArea } from '@/src/types/Area';
 import DeployButton from '@/src/components/Blueprint/FloatingButton/DeployButton';
+import { postDeployBlueprintData } from '@/src/api/blueprint';
 
 interface IProps {
   id: string;
@@ -76,6 +77,7 @@ const Grid = ({ id }: IProps) => {
   };
 
   const handleOnClickDeployButton = () => {
+    // postDeployBlueprintData()
     console.log('deploy');
   };
 

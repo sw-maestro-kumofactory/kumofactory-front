@@ -1,8 +1,13 @@
 import { authAxiosInstance } from '@/src/api';
 import { BlueprintInfo, BlueprintResponse, BlueprintScope } from '@/src/types/Blueprint';
 
-export const postBlueprintData = async (body: BlueprintResponse): Promise<any> => {
+export const postSaveBlueprintData = async (body: BlueprintResponse): Promise<any> => {
   const { data } = await authAxiosInstance.post<BlueprintResponse>(`/api/blueprint/aws?provision=false`, body, {});
+  return data;
+};
+
+export const postDeployBlueprintData = async (body: BlueprintResponse): Promise<any> => {
+  const { data } = await authAxiosInstance.post<BlueprintResponse>(`/api/blueprint/aws?provision=true`, body, {});
   return data;
 };
 
