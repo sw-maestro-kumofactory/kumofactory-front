@@ -25,3 +25,12 @@ export const postDeploy = async (body: DeployRequest) => {
   const { data } = await authAxiosInstance.post(`/api/build/deploy`, body);
   return data;
 };
+
+export const uploadSQLFile = async (body: FormData) => {
+  const { data } = await authAxiosInstance.post(`/test/api/v1/rds/database-1`, body, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return data;
+};

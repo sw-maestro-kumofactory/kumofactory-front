@@ -76,11 +76,6 @@ const Grid = ({ id }: IProps) => {
     }
   };
 
-  const handleOnClickDeployButton = () => {
-    // postDeployBlueprintData()
-    console.log('deploy');
-  };
-
   useEffect(() => {
     setBlueprintId(id);
   }, []);
@@ -121,7 +116,7 @@ const Grid = ({ id }: IProps) => {
         setIsEdit(false);
       }}
     >
-      <DeployButton onClick={handleOnClickDeployButton} />
+      <DeployButton />
       {!isLoading && <BlueprintNameField />}
       {viewBox.width !== 0 && !isLoading ? (
         <div id='blueprint'>

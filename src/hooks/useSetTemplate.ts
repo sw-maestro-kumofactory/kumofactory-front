@@ -18,7 +18,6 @@ export const useSetTemplate = () => {
     const lines = data.links;
     const areas = data.areas;
     setBlueprintScope(data.uuid, data.scope);
-    console.log('lines : ', lines);
 
     for (const service of services) {
       let id = service.id;

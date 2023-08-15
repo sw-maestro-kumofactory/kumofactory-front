@@ -65,7 +65,7 @@ export const Header = () => {
 
       {currentBlueprintInfo.uuid && (
         <>
-          <div className='flex'>
+          <div className='absolute top-4 left-1/2 -translate-x-1/2 flex'>
             <div
               className={`flex items-center rounded-l-md h-10 ${
                 isBlueprint ? 'bg-[#799ACF] text-white' : 'bg-white text-[#799ACF]'

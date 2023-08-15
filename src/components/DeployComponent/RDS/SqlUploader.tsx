@@ -1,5 +1,7 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 
+import { uploadSQLFile } from '@/src/api/deploy';
+
 const SqlUploader = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -22,7 +24,6 @@ const SqlUploader = () => {
     const file = e.dataTransfer.files[0];
     if (file) {
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
-
       if (fileExtension === 'sql') {
         setFile(file);
       } else {
@@ -34,6 +35,22 @@ const SqlUploader = () => {
   const handleResetClick = () => {
     setFile(null);
     if (fileInputRef.current) {
+    }
+  };
+
+  const handleSubmitClick = async () => {
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append('dbUsername', 'admin');
+        formData.append('dbPassword', 'qwer1234');
+        formData.append('sqlFile', file);
+        await uploadSQLFile(formData);
+      } catch (e) {
+        alert('Failed to upload SQL file.');
+      }
+    } else {
+      alert('Please choose a valid SQL file.');
     }
   };
 
@@ -75,14 +92,13 @@ const SqlUploader = () => {
           <div className='w-full -mt-8 flex justify-end gap-x-4'>
             <div
               className='text-xl p-4 border-2 border-solid border-[#799acf] text-[#195091] rounded-xl cursor-pointer'
-              onClick={() => {
-                setFile(null);
-                formRef.current?.reset();
-              }}
+              onClick={handleResetClick}
             >
               reset
             </div>
-            <div className='text-xl p-4 bg-[#195091] text-white rounded-xl cursor-pointer'>submit</div>
+            <div className='text-xl p-4 bg-[#195091] text-white rounded-xl cursor-pointer' onClick={handleSubmitClick}>
+              submit
+            </div>
           </div>
         </div>
       </div>

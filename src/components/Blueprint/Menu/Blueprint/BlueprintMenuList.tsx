@@ -31,28 +31,6 @@ const BlueprintMenuList = () => {
   const scope = useBlueprintStore((state) => state.blueprintScope[currentBlueprintInfo.uuid]);
   const options = useBlueprintStore((state) => state.options);
 
-  const onClickSaveConfirm = async () => {
-    setApiLoading(true);
-    try {
-      const body = blueprintToJson({
-        id: currentBlueprintInfo.uuid,
-        name: currentBlueprintInfo.name,
-        scope: currentBlueprintInfo.scope,
-      });
-      body.components.map((component, index) => {
-        component.options = options[component.id];
-      });
-      body.scope = scope;
-      const encodedSVG = getSvgBlob();
-      body['svgFile'] = encodedSVG;
-      await postSaveBlueprintData(body);
-      setSaved(true);
-    } catch (e) {
-      setSaved(false);
-    }
-    setApiLoading(false);
-  };
-
   return (
     <div className='overflow-x-hidden w-[300px] min-w-[300px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
       <Title title='Scope' />
@@ -70,31 +48,9 @@ const BlueprintMenuList = () => {
         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none  peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 mr-4"></div>
         <div>{scope}</div>
       </label>
-      <Title title='Actions' />
-      <div className={`text-sm mx-4 -mt-4 mb-2 ${saved ? 'text-green-700' : 'text-red-600'}`}>
-        {saved ? 'Saved!' : 'Not saved'}
-      </div>
-      <div className='flex justify-center gap-4 mb-5'>
-        <ConfirmPopover
-          Heading={'Confirm Save'}
-          Description={'Your architecture will be saved.(not Deployed)'}
-          onClickConfirm={onClickSaveConfirm}
-        >
-          <div className='px-4 py-2 w-fit flex gap-2 items-center border-[#195091] border-solid border-2 rounded-xl cursor-pointer'>
-            <FontAwesomeIcon className={`${apiLoading ? 'animate-spin' : ''}`} icon={faFloppyDisk} />
-            Save
-          </div>
-        </ConfirmPopover>
-
-        <div
-          className='px-4 py-2 w-fit flex gap-2 bg-[#195091] items-center text-white rounded-xl cursor-pointer'
-          onClick={ExportSvg}
-        >
-          <FontAwesomeIcon icon={faPalette} />
-          <input type='file' id='fileInput' className='hidden' />
-          Export
-        </div>
-      </div>
+      {/*<div className={`text-sm mx-4 -mt-4 mb-2 ${saved ? 'text-green-700' : 'text-red-600'}`}>*/}
+      {/*  {saved ? 'Saved!' : 'Not saved'}*/}
+      {/*</div>*/}
       <DropDown title={'Areas'} key={'Areas'} absolute={false}>
         {AreaItemList.map((AreaItem) => (
           <AreaItemWrapper key={AreaItem.name} type={AreaItem.type} name={AreaItem.name} scope={AreaItem.scope} />

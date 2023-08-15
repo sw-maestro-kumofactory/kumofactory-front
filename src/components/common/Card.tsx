@@ -130,7 +130,9 @@ const Card = ({ data, isTemplate }: IProps) => {
       </div>
       <div className='flex justify-between items-center p-4 h-1/4 rounded-b-2xl border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
         <div>
-          <div className='mb-2.5 text-lg md:text-base max-w-[250px] overflow-x-hidden'>{data.name}</div>
+          <div className=' h-8 mb-1 text-lg md:text-base max-w-[250px] overflow-y-hidden whitespace-nowrap text-ellipsis'>
+            {data.name}
+          </div>
           <div className='text-base md:text-sm'>{moment(data.createdAt).format('YYYY-MM-DD')}</div>
         </div>
         {data.status && (
