@@ -36,7 +36,6 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
           scope: 'PRIVATE',
           status: 'PENDING',
         });
-        console.log('GridWrapper', e);
       }
     }
     setIsLoading(false);

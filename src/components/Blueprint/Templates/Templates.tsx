@@ -5,6 +5,7 @@ import NewBlueprint from '@/src/components/Blueprint/Templates/NewBlueprint';
 import { getAllTemplates } from '@/src/api/template';
 import Card from '@/src/components/common/Card';
 import { BlueprintInfo } from '@/src/types/Blueprint';
+import { deleteBlueprint } from '@/src/api/blueprint';
 
 const Templates = () => {
   const [templates, setTemplates] = useState<BlueprintInfo[]>([]);

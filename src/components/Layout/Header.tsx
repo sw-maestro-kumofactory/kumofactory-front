@@ -2,6 +2,8 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import useStore from '@/src/hooks/useStore';
@@ -23,10 +25,15 @@ export const Header = () => {
   const router = useRouter();
   const { setInterceptor, Logout } = useLogin();
   const [isBlueprint, setIsBlueprint] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
 
   const onClickRefresh = () => {
     const randomNumber = Math.floor(Math.random() * 4);
     setCurrentDeployState(stateList[randomNumber] as DeployState);
+  };
+
+  const onClickEdit = () => {
+    setIsEdit(!isEdit);
   };
 
   useEffect(() => {
@@ -44,9 +51,18 @@ export const Header = () => {
 
   return (
     <div className='fixed flex justify-between w-full text-lg text-white bg-[#195091] h-16 p-4 select-none items-center'>
-      <Link className='px-4 py-2 rounded-2xl' href='/'>
-        Kumo Factory
-      </Link>
+      <div className='flex gap-x-4 content-center py-2'>
+        <Link className='px-4 rounded-2xl' href='/'>
+          Kumo Factory
+        </Link>
+        {currentBlueprintInfo.uuid && (
+          <div className='flex gap-x-4 items-center'>
+            <div className='max-w-xs overflow-x-hidden '>{currentBlueprintInfo.name}</div>
+            <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
+          </div>
+        )}
+      </div>
+
       {currentBlueprintInfo.uuid && (
         <>
           <div className='flex'>
