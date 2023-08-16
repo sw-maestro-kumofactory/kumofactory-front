@@ -45,7 +45,7 @@ const EC2Info = ({ option, active }: IProps) => {
         className={`p-2 w-full h-fit flex justify-between text-center ${active ? 'bg-[#799ACF]' : ''}  text-white`}
         onClick={onClickArea}
       >
-        <label className={`text-lg h-fit ${showOptions ? '' : 'text-black'}`}>{option.instanceName}</label>
+        <label className={`text-lg h-fit ${showOptions ? '' : 'text-black'}`}>{option.instanceName}(EC2)</label>
         <div className='flex items-center'>
           <FontAwesomeIcon
             className={`h-full transition-transform duration-300 ${

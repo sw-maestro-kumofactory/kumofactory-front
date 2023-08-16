@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 
@@ -8,18 +8,26 @@ import Templates from '@/src/components/Blueprint/Templates/Templates';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import Card from '@/src/components/common/Card';
 import AuthRequired from '@/src/components/Auth/AuthRequired';
-
-import { getBlueprintList } from '../../api/blueprint';
+import { deleteBlueprint, getBlueprintList } from '@/src/api/blueprint';
 
 const BluePrint = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
-  const setUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.setUserBlueprints);
+  const { setUserBlueprints, deleteUserBlueprint } = useAuthStore((state) => state.UserBlueprintAction);
 
   const getTemplate = async () => {
     try {
       const res = await getBlueprintList();
       setUserBlueprints(res, true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onClickTrashCan = async (id: string) => {
+    try {
+      await deleteBlueprint(id);
+      deleteUserBlueprint(id);
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +61,16 @@ const BluePrint = () => {
             </div>
           </div>
           {Object.keys(userBlueprints).map((key) => {
-            return <Card key={key} data={userBlueprints[key]} isTemplate={false} />;
+            return (
+              <Card
+                key={key}
+                data={userBlueprints[key]}
+                isTemplate={false}
+                onClickDelete={() => {
+                  onClickTrashCan(userBlueprints[key].uuid);
+                }}
+              />
+            );
           })}
           <ModalContainer isShow={isOpen}>
             <Templates />

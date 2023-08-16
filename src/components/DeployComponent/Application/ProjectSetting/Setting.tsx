@@ -59,7 +59,7 @@ const Setting = () => {
   }, []);
 
   return (
-    <div className='w-full h-full flex flex-col items-center '>
+    <div className='w-full h-full pl-[294px] flex flex-col items-center overflow-y-scroll'>
       <div className='w-11/12 h-full flex flex-col p-8'>
         <div className=' flex justify-between items-center'>
           <div className='text-gray-600 cursor-pointer' onClick={() => router.back()}>
@@ -73,44 +73,53 @@ const Setting = () => {
               // onClickDeployButton();
             }}
           >
-            <div className='p-4 bg-[#799ACF] text-white rounded-md cursor-pointer'>Deploy</div>
+            <div className='p-4 bg-white border-solid border-2 border-[#799ACF] text-[#799ACF] rounded-xl cursor-pointer'>
+              Deploy
+            </div>
           </ConfirmPopover>
         </div>
-        <div className='text-lg pb-4'>Current Repository : {repoId}</div>
-        <div className='text-lg pb-4'>Current Target Instance : {targetInstanceName}</div>
-        <div className='text-lg pb-4'>Select Branch to deploy</div>
-        <select
-          className='w-1/2 h-8 border border-gray-300 rounded-md'
-          value={curBranch}
-          onChange={(e) => {
-            setCurBranch(e.target.value);
-          }}
-        >
-          {branches.map((branch) => (
-            <option key={branch} value={branch}>
-              {branch}
-            </option>
-          ))}
-        </select>
-        <div className='text-lg py-4'>Select Framework</div>
-        <div className='flex gap-x-4'>
-          <div
-            className='cursor-pointer'
-            onClick={() => {
-              setLanguage('java');
+        <div className='w-full text-lg p-2 mt-4 bg-[#799ACF] rounded-md text-white'>Current Information</div>
+        <div className='py-4 px-2'>
+          <div className=' pb-4'>Current Repository : {repoId}</div>
+          <div className=''>Current Target Instance : {targetInstanceName}</div>
+        </div>
+        <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Select Branch To Deploy</div>
+        <div className='py-4 mx-2'>
+          <select
+            className='w-1/2 p-2 border border-gray-300 rounded-md'
+            value={curBranch}
+            onChange={(e) => {
+              setCurBranch(e.target.value);
             }}
           >
-            <input type='radio' name='language' value='java' id='java' />
-            <label htmlFor='java'>Spring</label>
-          </div>
-          <div
-            className='cursor-pointer'
-            onClick={() => {
-              setLanguage('node');
-            }}
-          >
-            <input type='radio' name='language' value='node' id='node' />
-            <label htmlFor='node'>Express</label>
+            {branches.map((branch) => (
+              <option key={branch} value={branch}>
+                {branch}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Select Framework</div>
+        <div className='py-4 px-2'>
+          <div className='flex gap-x-4'>
+            <div
+              className='cursor-pointer'
+              onClick={() => {
+                setLanguage('java');
+              }}
+            >
+              <input type='radio' name='language' value='java' id='java' />
+              <label htmlFor='java'>Spring</label>
+            </div>
+            <div
+              className='cursor-pointer'
+              onClick={() => {
+                setLanguage('node');
+              }}
+            >
+              <input type='radio' name='language' value='node' id='node' />
+              <label htmlFor='node'>Express</label>
+            </div>
           </div>
         </div>
         <EnvironmentVariableComponent />

@@ -1,5 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import EC2Info from '@/src/components/DeployComponent/Instance/EC2Info';
@@ -36,7 +38,11 @@ const AvailableInstances = () => {
       </div>
       <div>
         {s3List.map((s3) => {
-          return <div key={'asdf'}>{s3}</div>;
+          return (
+            <div key={s3} className={`p-2 w-full h-fit flex justify-between text-center text-white`}>
+              <div className={`text-lg h-fit text-black`}>{s3}(S3)</div>
+            </div>
+          );
         })}
       </div>
     </div>

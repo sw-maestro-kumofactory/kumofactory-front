@@ -12,6 +12,7 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { DeployState } from '@/src/types/Deploy';
 import Status from '@/src/components/Layout/Status';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import BlueprintNamePopover from '@/src/components/common/Popover/BlueprintNamePopover';
 
 const stateList = ['SUCCESS', 'FAIL', 'PENDING', 'PROVISIONING'];
 
@@ -56,10 +57,12 @@ export const Header = () => {
           Kumo Factory
         </Link>
         {currentBlueprintInfo.uuid && (
-          <div className='flex gap-x-4 items-center'>
-            <div className='max-w-xs overflow-x-hidden '>{currentBlueprintInfo.name}</div>
-            <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
-          </div>
+          <BlueprintNamePopover>
+            <div className='flex gap-x-4 items-center'>
+              <div className='max-w-xs overflow-x-hidden '>{currentBlueprintInfo.name}</div>
+              <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
+            </div>
+          </BlueprintNamePopover>
         )}
       </div>
 

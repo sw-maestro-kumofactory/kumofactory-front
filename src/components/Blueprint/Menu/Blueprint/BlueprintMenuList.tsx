@@ -1,20 +1,13 @@
 'use client';
-import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPalette } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
 import { useParams } from 'next/navigation';
 
 import { Menus } from '@/src/assets/Menus';
 import DropDown from '@/src/components/Blueprint/downshiftTest/DropDown';
 import ServiceItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/ServiceItemWrapper';
-import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { AreaItemList } from '@/src/assets/MenuItems';
 import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
-import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import { postDeployBlueprintData, postSaveBlueprintData } from '@/src/api/blueprint';
 
 const Title = ({ title }: { title: string }) => (
   <div className='w-full h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
@@ -22,14 +15,10 @@ const Title = ({ title }: { title: string }) => (
 
 const BlueprintMenuList = () => {
   const params = useParams();
-  const id = params.id;
   const userBlueprintsIds = useAuthStore((state) => state.userBlueprintsIds);
-  const [apiLoading, setApiLoading] = useState(false);
-  const [saved, setSaved] = useState(userBlueprintsIds.includes(id));
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const scope = useBlueprintStore((state) => state.blueprintScope[currentBlueprintInfo.uuid]);
-  const options = useBlueprintStore((state) => state.options);
 
   return (
     <div className='overflow-x-hidden w-[300px] min-w-[300px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>

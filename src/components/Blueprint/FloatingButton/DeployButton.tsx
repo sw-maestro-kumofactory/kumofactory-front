@@ -36,7 +36,9 @@ const DeployButton = () => {
     try {
       const data = getData();
       await postSaveBlueprintData(data);
-    } catch (e) {}
+    } catch (e) {
+      alert('Save Failed!');
+    }
   };
 
   const onClickExportButton = () => {
@@ -48,7 +50,9 @@ const DeployButton = () => {
     try {
       const data = getData();
       await postDeployBlueprintData(data);
-    } catch (e) {}
+    } catch (e) {
+      alert('Deploy Failed!');
+    }
   };
   return (
     <div className='absolute right-4 top-20'>

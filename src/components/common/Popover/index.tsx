@@ -102,13 +102,14 @@ export const usePopoverContext = () => {
 export function Popover({
   children,
   modal = false,
+  placement,
   ...restOptions
 }: {
   children: React.ReactNode;
 } & PopoverOptions) {
   // This can accept any props as options, e.g. `placement`,
   // or other positioning options.
-  const popover = usePopover({ modal, ...restOptions });
+  const popover = usePopover({ modal, placement, ...restOptions });
   return <PopoverContext.Provider value={popover}>{children}</PopoverContext.Provider>;
 }
 

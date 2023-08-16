@@ -17,6 +17,12 @@ export const useUserBlueprintSlice: StateCreator<
         state.userBlueprintsIds.push(userBlueprint.uuid);
         return state;
       }),
+    deleteUserBlueprint: (uuid) =>
+      set((state) => {
+        delete state.userBlueprints[uuid];
+        state.userBlueprintsIds = state.userBlueprintsIds.filter((id) => id !== uuid);
+        return state;
+      }),
     setUserBlueprints: (userBlueprints, saved) =>
       set((state) => {
         userBlueprints.map((userBlueprint) => {

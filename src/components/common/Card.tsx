@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { v1 } from 'uuid';
@@ -11,19 +11,21 @@ import { StatusStyle } from '@/src/assets/StatusStyle';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { getTemplateById } from '@/src/api/template';
-import { deleteBlueprint } from '@/src/api/blueprint';
+import { deleteBlueprint, getBlueprintList } from '@/src/api/blueprint';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface IProps {
   data: BlueprintInfo;
   isTemplate: boolean;
-  onClickDelete?: (id: string) => void;
+  onClickDelete?: () => void;
 }
 
-const Card = ({ data, isTemplate }: IProps) => {
+const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   const router = useRouter();
   const [isHover, setIsHover] = useState(false);
   const [svgData, setSvgData] = useState<string>('');
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
+  const setUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.setUserBlueprints);
   const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const { setTemplate } = useSetTemplate();
 
@@ -69,7 +71,7 @@ const Card = ({ data, isTemplate }: IProps) => {
     try {
       await deleteBlueprint(data.uuid);
     } catch (e) {
-      console.error(e);
+      alert('Delete Failed');
     }
   };
 
@@ -92,7 +94,7 @@ const Card = ({ data, isTemplate }: IProps) => {
             {!isTemplate && (
               <div
                 className='absolute right-5 top-4 w-8 h-8 rounded-full border-solid border-2 border-gray-400 flex justify-center items-center cursor-pointer'
-                onClick={onClickTrashCan}
+                onClick={onClickDelete}
               >
                 <FontAwesomeIcon style={{ color: 'white' }} icon={faTrashCan} />
               </div>
@@ -100,8 +102,8 @@ const Card = ({ data, isTemplate }: IProps) => {
             <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
               <div className='cursor-pointer' onClick={onClickLoad}>
                 <div
-                  className={`flex justify-center items-center bg-black p-2 text-white h-10 rounded-xl ${
-                    !isTemplate && 'mb-4'
+                  className={`flex justify-center items-center bg-black text-white h-10 rounded-xl ${
+                    !isTemplate ? 'mb-4 p-2' : 'p-4'
                   }`}
                 >
                   Load {isTemplate ? 'Template' : 'Blueprint'}
@@ -119,7 +121,7 @@ const Card = ({ data, isTemplate }: IProps) => {
           </>
         )}
         <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-2xl'>
-          <div className='absolute left-5 top-4 border-2 border-solid border-gray-400 w-fit p-2 rounded-2xl'>
+          <div className='absolute left-5 top-4 border-2 text-sm border-solid border-gray-400 w-fit p-1 rounded-md'>
             {data.scope}
           </div>
           <svg className='w-full  h-full rounded-t-2xl'>
@@ -130,7 +132,7 @@ const Card = ({ data, isTemplate }: IProps) => {
       </div>
       <div className='flex justify-between items-center p-4 h-1/4 rounded-b-2xl border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
         <div>
-          <div className=' h-8 mb-1 text-lg md:text-base max-w-[250px] overflow-y-hidden whitespace-nowrap text-ellipsis'>
+          <div className='h-6 mb-1 text-lg md:text-base max-w-[250px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
             {data.name}
           </div>
           <div className='text-base md:text-sm'>{moment(data.createdAt).format('YYYY-MM-DD')}</div>

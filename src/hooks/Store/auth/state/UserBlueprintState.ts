@@ -9,6 +9,7 @@ export interface UserBlueprintState {
   userBlueprintsIds: string[];
   UserBlueprintAction: {
     addUserBlueprint: (blueprint: BlueprintInfo, saved: boolean) => void;
+    deleteUserBlueprint: (blueprintId: string) => void;
     setUserBlueprints: (blueprints: BlueprintInfo[], saved: boolean) => void;
   };
 }

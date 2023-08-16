@@ -64,20 +64,20 @@ const SqlUploader = () => {
   };
 
   return (
-    <div className='w-full h-full p-8 flex flex-col items-center jsutify-center'>
+    <div className='w-full h-full pl-[294px] py-8 flex flex-col items-center jsutify-center'>
       <div className='w-11/12 h-full flex flex-col gap-y-4'>
         <div className='text-2xl'>Database Setting</div>
         <div className='text-md text-gray-500'>Upload Your sql file by Drag & Drop or select from file explorer</div>
         <div className='flex flex-col gap-y-8 items-center h-full'>
           <div
-            className='w-full h-4/5 bg-[#799ACF] flex flex-col justify-center items-center text-2xl rounded-xl cursor-pointer'
+            className='w-full h-4/5 border-blue-200 border-2 border-solid flex flex-col justify-center items-center text-2xl rounded-xl cursor-pointer'
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
           >
             <div className='text-4xl text-[#195091]'>Upload Your SQL File</div>
-            {file && <div className='text-md mt-12 text-white'>{file.name} is selected.</div>}
+            {file && <div className='text-md mt-12 text-gray-600'>{file.name} is selected.</div>}
           </div>
           <form ref={formRef}>
             <input

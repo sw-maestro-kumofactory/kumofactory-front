@@ -150,7 +150,6 @@ export const RDSOptionComponent = ({ id }: { id: string }) => {
       <input type='text' value={username} onChange={handleUsernameChange} />
       <AttributeName text={'Password'} />
       <input type='text' value={password} onChange={handlePasswordChange} />
-      <button type='submit'>Submit</button>
     </form>
   );
 };

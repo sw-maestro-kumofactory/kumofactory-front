@@ -6,12 +6,10 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import Loading from '@/src/components/common/Loading';
 import Area from '@/src/components/AWSService/Area/Area';
 import CreateLineContainer from '@/src/components/Blueprint/FloatingButton/CreateLine/CreateLineContainer';
-import BlueprintNameField from '@/src/components/Blueprint/BlueprintNameField';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 import { AreaTypes, IArea } from '@/src/types/Area';
 import DeployButton from '@/src/components/Blueprint/FloatingButton/DeployButton';
-import { postDeployBlueprintData } from '@/src/api/blueprint';
 
 interface IProps {
   id: string;
@@ -117,7 +115,6 @@ const Grid = ({ id }: IProps) => {
       }}
     >
       <DeployButton />
-      {!isLoading && <BlueprintNameField />}
       {viewBox.width !== 0 && !isLoading ? (
         <div id='blueprint'>
           <svg

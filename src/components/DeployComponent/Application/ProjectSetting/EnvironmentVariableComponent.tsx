@@ -47,33 +47,52 @@ const EnvironmentVariableComponent = () => {
   };
 
   return (
-    <div className='w-full mt-4'>
-      <div className='text-lg font-bold mb-4'>Add Environment Variable</div>
-      <div className='flex bg-amber-100 p-4'>
-        <input className='w-1/3 mr-4 p-4 rounded-2xl' placeholder='key' value={key} onChange={onKeyChange} />
-        <input className='w-1/3 p-4 rounded-2xl mr-12' placeholder='value' value={value} onChange={onValueChange} />
-        <div className='w-1/6 p-4 rounded-2xl bg-amber-300 cursor-pointer' onClick={handleAddEnvironmentVariables}>
+    <div className='w-full'>
+      <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Add Environmental Variable</div>
+      <div className='flex py-4 justify-between items-center'>
+        <div className='w-5/12'>
+          <div className='w-full px-4 mb-4 rounded-2xl'>Key</div>
+          <input className='w-full p-4 rounded-2xl' placeholder='key' value={key} onChange={onKeyChange} />
+        </div>
+        <div className='w-5/12'>
+          <div className='w-full mr-4 px-4 mb-4 rounded-2xl'>Value</div>
+          <input className='w-full p-4 rounded-2xl mr-12' placeholder='value' value={value} onChange={onValueChange} />
+        </div>
+        <div
+          className='p-4 h-fit mr-4 rounded-2xl border-solid border-2 border-gray-400 cursor-pointer'
+          onClick={handleAddEnvironmentVariables}
+        >
           Add
         </div>
       </div>
-      <div className='text-lg font-bold my-4'>Environment Variables</div>
+      <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Variable List</div>
+      {EnvironmentVariables.length !== 0 && (
+        <div className='w-full flex px-4 py-2'>
+          <div className='w-5/12 mr-5'>Key</div>
+          <div className='w-5/12'>Value</div>
+        </div>
+      )}
       <div>
         {EnvironmentVariables.map((variable, index) => (
-          <div key={index} className='flex bg-amber-100 p-4'>
+          <div key={index} className='flex mb-4'>
             <input
-              className='w-2/5 mr-4 p-4 rounded-2xl'
+              className={`w-5/12 mr-4 p-4 rounded-2xl bg-white ${
+                editIndex === index ? 'ring-2 ring-inset inset-blue-500' : ''
+              }`}
               value={editIndex === index ? editedKey : variable.key}
               onChange={(e) => setEditedKey(e.target.value)} // Store the temporary edited key in editedKey state
               disabled={editIndex !== index}
             />
             <input
-              className='w-2/5 p-4 rounded-2xl mr-12'
+              className={`w-5/12 mr-4 p-4 rounded-2xl bg-white ${
+                editIndex === index ? 'ring-2 ring-inset inset-blue-500' : ''
+              }`}
               value={editIndex === index ? editedValue : variable.value}
               onChange={(e) => setEditedValue(e.target.value)} // Store the temporary edited value in editedValue state
               disabled={editIndex !== index}
             />
             <div
-              className='w-fit p-4 rounded-2xl bg-amber-300 cursor-pointer mr-4'
+              className='flex justify-center w-20 p-4 rounded-2xl cursor-pointer mr-4 bg-white'
               onClick={() => {
                 if (editIndex === index) {
                   handleUpdateEnvironmentVariables();
@@ -87,7 +106,7 @@ const EnvironmentVariableComponent = () => {
               {editIndex === index ? 'Save' : 'Edit'}
             </div>
             <div
-              className='w-fit p-4 rounded-2xl bg-amber-300 cursor-pointer'
+              className='w-fit p-4 rounded-2xl bg-white cursor-pointer'
               onClick={() => {
                 handleDeleteEnvironmentVariables(variable.key);
               }}

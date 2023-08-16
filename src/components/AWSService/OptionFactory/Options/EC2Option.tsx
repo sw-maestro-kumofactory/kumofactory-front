@@ -99,6 +99,7 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
 
   return (
     <form onSubmit={handleOnSubmit}>
+      <div className='text-xl my-4 text-[#799ACF]'> EC2 Setting</div>
       <AttributeName text='Instance Type' />
       <div className='flex align-middle'>
         <select value={instanceType} onChange={handleInstanceTypeChange}>
@@ -139,7 +140,6 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
           </option>
         ))}
       </select>
-      <button type='submit'>Submit</button>
     </form>
   );
 };
