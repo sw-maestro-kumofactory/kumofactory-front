@@ -1,11 +1,9 @@
 'use client';
 
 import { v1 } from 'uuid';
-import { useCallback } from 'react';
 
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { AreaTypes, IArea } from '@/src/types/Area';
-import { AreaItemType } from '@/src/types/MenuItems';
 import { AccessScope } from '@/src/types/Services';
 
 interface IProps {
@@ -74,7 +72,7 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
     createArea(area, area.type);
   };
   return (
-    <div className='flex flex-wrap cursor-pointer text-sm  p-2 border-solid border-gray-400 border-t-2 '>
+    <div className='flex flex-wrap cursor-pointer text-sm p-2 border-solid border-gray-400 border-t-2 '>
       <div key={type} onClick={() => createAreaByType()}>
         {name}
       </div>

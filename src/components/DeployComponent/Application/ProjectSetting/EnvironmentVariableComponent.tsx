@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import useInput from '@/src/hooks/useInput';
@@ -15,6 +17,7 @@ const EnvironmentVariableComponent = () => {
   const [editIndex, setEditIndex] = useState<number | null>(null); // State variable to keep track of the index being edited
   const [editedKey, setEditedKey] = useState<string>('');
   const [editedValue, setEditedValue] = useState<string>('');
+  const [eyeIndex, setEyeIndex] = useState<number | null>(null);
 
   const handleAddEnvironmentVariables = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -44,6 +47,10 @@ const EnvironmentVariableComponent = () => {
     setEditIndex(null);
     setKey('');
     setValue('');
+  };
+
+  const onClickEye = (id: number) => {
+    setEyeIndex(eyeIndex === null ? id : null);
   };
 
   return (
@@ -83,19 +90,33 @@ const EnvironmentVariableComponent = () => {
               onChange={(e) => setEditedKey(e.target.value)} // Store the temporary edited key in editedKey state
               disabled={editIndex !== index}
             />
-            <input
-              className={`w-5/12 mr-4 p-4 rounded-2xl bg-white ${
+            <div
+              className={`w-5/12 mr-4 rounded-2xl flex items-center p-4 bg-white ${
                 editIndex === index ? 'ring-2 ring-inset inset-blue-500' : ''
               }`}
-              value={editIndex === index ? editedValue : variable.value}
-              onChange={(e) => setEditedValue(e.target.value)} // Store the temporary edited value in editedValue state
-              disabled={editIndex !== index}
-            />
+            >
+              <input
+                className={`w-full bg-white `}
+                type={editIndex !== index && eyeIndex !== index ? 'password' : 'text'}
+                value={editIndex === index ? editedValue : variable.value}
+                onChange={(e) => setEditedValue(e.target.value)} // Store the temporary edited value in editedValue state
+                disabled={editIndex !== index}
+              />
+
+              <FontAwesomeIcon
+                className='cursor-pointer'
+                onClick={() => {
+                  onClickEye(index);
+                }}
+                icon={eyeIndex === index ? faEyeSlash : faEye}
+              />
+            </div>
             <div
               className='flex justify-center w-20 p-4 rounded-2xl cursor-pointer mr-4 bg-white'
               onClick={() => {
                 if (editIndex === index) {
                   handleUpdateEnvironmentVariables();
+                  setEyeIndex(null);
                 } else {
                   setEditedKey(variable.key);
                   setEditedValue(variable.value);

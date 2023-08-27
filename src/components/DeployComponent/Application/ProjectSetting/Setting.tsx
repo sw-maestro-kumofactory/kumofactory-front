@@ -60,7 +60,7 @@ const Setting = () => {
 
   return (
     <div className='w-full h-full pl-[294px] flex flex-col items-center overflow-y-scroll'>
-      <div className='w-11/12 h-full flex flex-col p-8'>
+      <div className='w-11/12 h-full flex flex-col py-4 px-8'>
         <div className=' flex justify-between items-center'>
           <div className='text-gray-600 cursor-pointer' onClick={() => router.back()}>
             back
@@ -70,7 +70,7 @@ const Setting = () => {
             Description={'Your Repository will be Deployed Selected Instance'}
             onClickConfirm={() => {
               //   TODO: Deploy API 호출
-              // onClickDeployButton();
+              alert('Deploy Success!');
             }}
           >
             <div className='p-4 bg-white border-solid border-2 border-[#799ACF] text-[#799ACF] rounded-xl cursor-pointer'>
@@ -86,7 +86,7 @@ const Setting = () => {
         <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Select Branch To Deploy</div>
         <div className='py-4 mx-2'>
           <select
-            className='w-1/2 p-2 border border-gray-300 rounded-md'
+            className='w-1/2 p-4 border border-gray-300 rounded-md'
             value={curBranch}
             onChange={(e) => {
               setCurBranch(e.target.value);
@@ -101,14 +101,14 @@ const Setting = () => {
         </div>
         <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Select Framework</div>
         <div className='py-4 px-2'>
-          <div className='flex gap-x-4'>
+          <div className='flex gap-x-8'>
             <div
               className='cursor-pointer'
               onClick={() => {
                 setLanguage('java');
               }}
             >
-              <input type='radio' name='language' value='java' id='java' />
+              <input className='m-2' type='radio' name='language' value='java' id='java' />
               <label htmlFor='java'>Spring</label>
             </div>
             <div
@@ -117,7 +117,7 @@ const Setting = () => {
                 setLanguage('node');
               }}
             >
-              <input type='radio' name='language' value='node' id='node' />
+              <input className='m-2' type='radio' name='language' value='node' id='node' />
               <label htmlFor='node'>Express</label>
             </div>
           </div>

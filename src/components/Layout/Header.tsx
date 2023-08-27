@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { current } from 'immer';
 
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import useStore from '@/src/hooks/useStore';
@@ -21,7 +22,10 @@ export const Header = () => {
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
   const setBlueprintId = useBlueprintStore((state) => state.CommonAction.setBlueprintId);
-  const [currentDeployState, setCurrentDeployState] = useState<DeployState>('PENDING');
+  const setCurrentBlueprintInfo = useBlueprintStore((state) => state.CommonAction.setCurrentBlueprintInfo);
+  const [currentDeployState, setCurrentDeployState] = useState<DeployState>(currentBlueprintInfo.status);
+  const editUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.editUserBlueprints);
+
   const pathname = usePathname();
   const router = useRouter();
   const { setInterceptor, Logout } = useLogin();
@@ -30,7 +34,10 @@ export const Header = () => {
 
   const onClickRefresh = () => {
     const randomNumber = Math.floor(Math.random() * 4);
-    setCurrentDeployState(stateList[randomNumber] as DeployState);
+    // setCurrentDeployState(stateList[randomNumber] as DeployState);
+    editUserBlueprints({ ...currentBlueprintInfo, status: 'SUCCESS' }, true);
+    setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'SUCCESS' as DeployState });
+    setCurrentDeployState('SUCCESS' as DeployState);
   };
 
   const onClickEdit = () => {
@@ -45,6 +52,10 @@ export const Header = () => {
       if (d[3] === 'deploy') setIsBlueprint(false);
     } else setBlueprintId('');
   }, [pathname]);
+
+  useEffect(() => {
+    setCurrentDeployState(currentBlueprintInfo.status);
+  }, [userBlueprints]);
 
   useEffect(() => {
     setInterceptor();

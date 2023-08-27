@@ -18,6 +18,10 @@ const AuthRequired = ({ children }: IProps) => {
     }
   }, []);
 
+  if (!accessToken) {
+    return <></>;
+  }
+
   return <>{children}</>;
 };
 

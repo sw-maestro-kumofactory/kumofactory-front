@@ -1,15 +1,9 @@
 import { useState } from 'react';
 
-import {
-  Popover,
-  PopoverClose,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeading,
-  PopoverTrigger,
-} from '@/src/components/common/Popover/index';
+import { Popover, PopoverContent, PopoverTrigger } from '@/src/components/common/Popover/index';
 import useInput from '@/src/hooks/useInput';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface IProps {
   Heading?: string;
@@ -24,6 +18,9 @@ const BlueprintNamePopover = ({ children }: IProps) => {
   const name = useBlueprintStore((state) => state.currentBlueprintInfo.name);
   const setName = useBlueprintStore((state) => state.CommonAction.setName);
   const setIsEdit = useBlueprintStore((state) => state.CommonAction.setIsEdit);
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
+  const setCurrentBlueprintInfo = useBlueprintStore((state) => state.CommonAction.setCurrentBlueprintInfo);
+  const editUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.editUserBlueprints);
 
   const { value: nameValue, onHandleChange: onHandleNameChange } = useInput(name);
   const { value: description, onHandleChange: onHandleDescriptionChange } = useInput('');
@@ -31,6 +28,8 @@ const BlueprintNamePopover = ({ children }: IProps) => {
   const onClickConfirm = () => {
     setOpen(false);
     setName(nameValue);
+    editUserBlueprints({ ...currentBlueprintInfo, name: nameValue }, true);
+    setCurrentBlueprintInfo({ ...currentBlueprintInfo, name: nameValue });
     setIsEdit(false);
   };
 
@@ -38,7 +37,6 @@ const BlueprintNamePopover = ({ children }: IProps) => {
     setOpen(false);
     setIsEdit(false);
   };
-
   return (
     <Popover placement='bottom-start' open={open} onOpenChange={setOpen}>
       <PopoverTrigger onClick={() => setOpen((v) => !v)}>{children}</PopoverTrigger>

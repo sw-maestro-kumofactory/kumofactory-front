@@ -37,7 +37,9 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
         const templateData = await getTemplateById(data.uuid);
         templateData.uuid = newUUID;
         setCurrentBlueprintInfo({
-          ...data,
+          name: 'My BluePrint',
+          scope: 'PRIVATE',
+          status: 'PENDING',
           uuid: newUUID,
         });
         setTemplate({ data: templateData, isTemplate: true });
@@ -82,7 +84,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   return (
     <div className='w-1/3 h-2/5 p-4'>
       <div
-        className='ImageWrapper w-full h-3/4 relative rounded-t-2xl'
+        className='ImageWrapper w-full h-3/4 relative rounded-t-xl'
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
         onClick={(e) => {
@@ -120,22 +122,22 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
             </div>
           </>
         )}
-        <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-2xl'>
-          <div className='absolute left-5 top-4 border-2 text-sm border-solid border-gray-400 w-fit p-1 rounded-md'>
+        <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-xl'>
+          <div className='absolute left-5 top-4 border-2 text-sm border-solid border-gray-400 w-fit p-1 rounded-xl'>
             {data.scope}
           </div>
-          <svg className='w-full  h-full rounded-t-2xl'>
+          <svg className='w-full  h-full rounded-t-xl'>
             {svgData && <g dangerouslySetInnerHTML={{ __html: svgData }} />}
             {isHover && <rect width='100%' height='100%' className='fill-blue-950 opacity-50' />}
           </svg>
         </div>
       </div>
-      <div className='flex justify-between items-center p-4 h-1/4 rounded-b-2xl border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
+      <div className='flex justify-between items-center p-4 h-1/4 rounded-b-xl border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
         <div>
-          <div className='h-6 mb-1 text-lg md:text-base max-w-[250px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
+          <div className='h-6 mb-1 lg:text-xl md:text-base max-w-[250px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
             {data.name}
           </div>
-          <div className='text-base md:text-sm'>{moment(data.createdAt).format('YYYY-MM-DD')}</div>
+          <div className='lg:text-lg md:text-sm'>{moment(data.createdAt).format('YYYY-MM-DD')}</div>
         </div>
         {data.status && (
           <div className='flex items-center gap-x-2'>

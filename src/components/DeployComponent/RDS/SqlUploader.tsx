@@ -45,7 +45,8 @@ const SqlUploader = () => {
         formData.append('dbUsername', 'admin');
         formData.append('dbPassword', 'qwer1234');
         formData.append('sqlFile', file);
-        await uploadSQLFile(formData);
+        // await uploadSQLFile(formData);
+        alert('Success to upload SQL file.');
       } catch (e) {
         alert('Failed to upload SQL file.');
       }

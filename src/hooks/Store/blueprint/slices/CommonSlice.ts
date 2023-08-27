@@ -248,7 +248,7 @@ export const useCommonSlice: StateCreator<
             ) {
               if (currentArea.type === 'SUBNET') {
                 if (currentArea.scope === 'PRIVATE') {
-                  if (currentService.type === 'RDS_MYSQL') {
+                  if (currentService.type === 'RDS_MYSQL' || currentService.type === 'ELASTIC_CACHE') {
                     containRDS = true;
                     currentArea.scope = 'DATABASE';
                     currentCount['database'] += 1;
@@ -258,7 +258,7 @@ export const useCommonSlice: StateCreator<
                     currentOption['subnetType'] = 'PRIVATE';
                   }
                 } else if (currentArea.scope === 'DATABASE') {
-                  if (currentService.type !== 'RDS_MYSQL') {
+                  if (currentService.type !== 'RDS_MYSQL' && currentService.type !== 'ELASTIC_CACHE') {
                     currentArea.scope = 'PRIVATE';
                     currentCount['database'] -= 1;
                     currentCount['private'] += 1;

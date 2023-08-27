@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand';
 
 import { UserBlueprintState } from '@/src/hooks/Store/auth/state/UserBlueprintState';
+import { BlueprintInfo } from '@/src/types/Blueprint';
 
 export const useUserBlueprintSlice: StateCreator<
   UserBlueprintState,
@@ -31,5 +32,11 @@ export const useUserBlueprintSlice: StateCreator<
         });
         return state;
       }),
+    editUserBlueprints: (userBlueprint: BlueprintInfo) => {
+      set((state) => {
+        state.userBlueprints[userBlueprint.uuid] = { ...userBlueprint, saved: true };
+        return state;
+      });
+    },
   },
 });

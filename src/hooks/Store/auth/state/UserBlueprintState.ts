@@ -11,5 +11,6 @@ export interface UserBlueprintState {
     addUserBlueprint: (blueprint: BlueprintInfo, saved: boolean) => void;
     deleteUserBlueprint: (blueprintId: string) => void;
     setUserBlueprints: (blueprints: BlueprintInfo[], saved: boolean) => void;
+    editUserBlueprints: (blueprint: BlueprintInfo, saved: boolean) => void;
   };
 }

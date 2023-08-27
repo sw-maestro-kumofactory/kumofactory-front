@@ -178,8 +178,8 @@ const Grid = ({ id }: IProps) => {
               {Object.keys(services).map((key) => {
                 const serviceName = services[key].type;
 
-                const serviceNameWidth = serviceName.length * 12;
-                const xAdjustment = (80 - serviceNameWidth) / 2;
+                const serviceNameWidth = serviceName.length * 13;
+                const xAdjustment = (90 - serviceNameWidth) / 2;
                 return (
                   <g key={services[key].id}>
                     <Service
