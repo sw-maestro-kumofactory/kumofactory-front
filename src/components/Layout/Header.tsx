@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { current } from 'immer';
 
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import useStore from '@/src/hooks/useStore';
@@ -14,8 +13,6 @@ import { DeployState } from '@/src/types/Deploy';
 import Status from '@/src/components/Layout/Status';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import BlueprintNamePopover from '@/src/components/common/Popover/BlueprintNamePopover';
-
-const stateList = ['SUCCESS', 'FAIL', 'PENDING', 'PROVISIONING'];
 
 export const Header = () => {
   const isLogin = useStore(useLoginStore, (state) => state.isLogin);
@@ -33,8 +30,6 @@ export const Header = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const onClickRefresh = () => {
-    const randomNumber = Math.floor(Math.random() * 4);
-    // setCurrentDeployState(stateList[randomNumber] as DeployState);
     editUserBlueprints({ ...currentBlueprintInfo, status: 'SUCCESS' }, true);
     setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'SUCCESS' as DeployState });
     setCurrentDeployState('SUCCESS' as DeployState);

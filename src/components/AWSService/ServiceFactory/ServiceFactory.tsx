@@ -17,15 +17,23 @@ interface IServiceFactory {
   type: ServicesString;
 }
 
+interface ICreateService {
+  x: number;
+  y: number;
+  type: ServicesString;
+}
+
 interface IFactory {
-  createService: ({ type }: IServiceFactory) => IComponent;
+  createService: ({ type, x, y }: ICreateService) => IComponent;
   getSvg: ({ type }: IServiceFactory) => React.ReactNode;
 }
 
 export class ServiceFactory implements IFactory {
-  public createService({ type }: IServiceFactory): IComponent {
+  public createService({ type, x, y }: ICreateService): IComponent {
     return {
       ...CommonInfo,
+      x: x + 50,
+      y: y + 50,
       type: type,
       options: {},
     };

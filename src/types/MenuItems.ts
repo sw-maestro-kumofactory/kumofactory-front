@@ -1,7 +1,7 @@
 import { AccessScope, AvailabilityZone, ServicesString } from '@/src/types/Services';
 import { Areas, AreaTypes } from '@/src/types/Area';
 
-interface ServiceItemInterface {
+export interface ServiceItemInterface {
   name: string;
   type: ServicesString;
 }

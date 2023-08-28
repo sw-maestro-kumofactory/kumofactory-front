@@ -1,11 +1,12 @@
 'use client';
 import { PropsWithChildren, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
+import { getBlueprintListById } from '@/src/api/blueprint';
+import Loading from '@/src/components/common/Loading';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
-import Loading from '@/src/components/common/Loading';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
-import { getBlueprintListById } from '@/src/api/blueprint';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface IProps extends PropsWithChildren {
@@ -13,12 +14,12 @@ interface IProps extends PropsWithChildren {
 }
 
 const GridWrapper = ({ blueprintId, children }: IProps) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const blueprintList = useBlueprintStore((state) => state.blueprintList);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
-  const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
   const { setTargetInstanceId, setTargetInstanceType } = useDeployStore((state) => state.DeployAction);
-  const { initState, setCurrentBlueprintInfo } = useBlueprintStore((state) => state.CommonAction);
+  const { initState, setCurrentBlueprintInfo, initMouseState } = useBlueprintStore((state) => state.CommonAction);
   const { setTemplate } = useSetTemplate();
 
   const setData = async (id: string) => {
@@ -31,27 +32,23 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
         setTemplate({ data: data, isTemplate: false });
       } catch (e) {}
     }
-    console.log(userBlueprints[id]);
-    if (!userBlueprints[id]) {
-      setCurrentBlueprintInfo({
-        uuid: blueprintId,
-        name: 'New Blueprint',
-        scope: 'PRIVATE',
-        status: 'PENDING',
-      });
-    } else {
-      setCurrentBlueprintInfo({
-        uuid: blueprintId,
-        name: userBlueprints[id].name,
-        scope: userBlueprints[id].scope,
-        status: userBlueprints[id].status,
-      });
-    }
+    setCurrentBlueprintInfo({
+      uuid: blueprintId,
+      name: userBlueprints[id].name,
+      scope: userBlueprints[id].scope,
+      status: userBlueprints[id].status,
+    });
     setIsLoading(false);
   };
 
   useEffect(() => {
-    setData(blueprintId);
+    if (!Object.keys(userBlueprints).includes(blueprintId)) {
+      alert('잘못된 접근입니다.');
+      router.push('/blueprint');
+    } else {
+      initMouseState();
+      setData(blueprintId);
+    }
     return () => {};
   }, []);
 

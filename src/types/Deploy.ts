@@ -17,16 +17,20 @@ export interface EnvironmentVariables {
 
 export interface DeployResponse {
   repoCount: number;
-  repoInfo: PersonalRepo[];
+  repoInfo: PersonalRepoResponse[];
   orgCount: number;
   orgList: string[];
 }
 
-export interface PersonalRepo {
+export interface PersonalRepoResponse {
   name: string;
   fullName: string;
   private: boolean;
   fork: boolean;
+}
+
+export interface PersonalRepo extends PersonalRepoResponse {
+  environmentVariables: EnvironmentVariables[];
 }
 
 export interface DeployRequest {

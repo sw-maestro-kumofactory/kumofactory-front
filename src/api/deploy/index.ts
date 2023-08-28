@@ -1,5 +1,5 @@
 import { authAxiosInstance } from '@/src/api';
-import { DeployRequest, DeployResponse } from '@/src/types/Deploy';
+import { DeployRequest, DeployResponse, PersonalRepoResponse } from '@/src/types/Deploy';
 
 export const getUserRepositories = async () => {
   const { data } = await authAxiosInstance.get<DeployResponse>(`/api/build/list`);
@@ -7,7 +7,7 @@ export const getUserRepositories = async () => {
 };
 
 export const getOrgRepositories = async (org: string) => {
-  const { data } = await authAxiosInstance.get(`/api/build/list/${org}/repo`);
+  const { data } = await authAxiosInstance.get<PersonalRepoResponse[]>(`/api/build/list/${org}/repo`);
   return data;
 };
 

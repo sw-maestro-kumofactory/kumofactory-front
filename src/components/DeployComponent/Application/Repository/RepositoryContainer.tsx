@@ -1,10 +1,8 @@
 'use client';
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import Repository from '@/src/components/DeployComponent/Application/Repository/Repository';
 import { PersonalRepo } from '@/src/types/Deploy';
-import { getUserRepositories } from '@/src/api/deploy';
 
 interface IProps {
   id: string;

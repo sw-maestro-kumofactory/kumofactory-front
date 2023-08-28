@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand';
 
 import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import { IComponent, ServiceOptions, ServicesString } from '@/src/types/Services';
+import { IComponent, ServiceOptions } from '@/src/types/Services';
 
 export const useServiceSlice: StateCreator<
   AllBluePrintStates,

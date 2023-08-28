@@ -18,7 +18,7 @@ export const useOptionSlice: StateCreator<
     user: '',
     branch: '',
   },
-  environmentVariables: [],
+  environmentVariables: {},
   DeployAction: {
     setTargetInstanceId: (targetInstanceId: string) => {
       set((state) => ({ ...state, targetInstanceId }));
@@ -32,32 +32,53 @@ export const useOptionSlice: StateCreator<
     setTargetInstanceType: (targetInstanceType: string) => {
       set((state) => ({ ...state, targetInstanceType }));
     },
-    setEnvironmentVariables: (environmentVariables: EnvironmentVariables) => {
+    addEnvironmentVariables: (id: string, environmentVariables: EnvironmentVariables) => {
       set((state) => {
         return {
           ...state,
-          environmentVariables: [...state.environmentVariables, environmentVariables],
+          environmentVariables: {
+            ...state.environmentVariables,
+            [id]: [...state.environmentVariables[id], environmentVariables],
+          },
         };
       });
     },
-    updateEnvironmentVariables: (environmentVariables: EnvironmentVariables, index: number) => {
+    initEnvironmentVariables: (id: string) => {
       set((state) => {
         return {
           ...state,
-          environmentVariables: state.environmentVariables.map((item, i) => {
-            if (i === index) {
-              return environmentVariables;
-            }
-            return item;
-          }),
+          environmentVariables: {
+            ...state.environmentVariables,
+            [id]: [],
+          },
         };
       });
     },
-    removeEnvironmentVariables: (key: string) => {
+    updateEnvironmentVariables: (id: string, environmentVariables: EnvironmentVariables, index: number) => {
+      set((state) => {
+        // If there are matched environment id and key, remove it.
+        return {
+          ...state,
+          environmentVariables: {
+            ...state.environmentVariables,
+            [id]: state.environmentVariables[id].map((item, i) => {
+              if (i === index) {
+                return environmentVariables;
+              }
+              return item;
+            }),
+          },
+        };
+      });
+    },
+    removeEnvironmentVariables: (id: string, key: string) => {
       set((state) => {
         return {
           ...state,
-          environmentVariables: state.environmentVariables.filter((item) => item.key !== key),
+          environmentVariables: {
+            ...state.environmentVariables,
+            [id]: state.environmentVariables[id].filter((item) => item.key !== key),
+          },
         };
       });
     },

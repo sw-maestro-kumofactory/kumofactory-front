@@ -30,6 +30,7 @@ export interface CommonState {
   };
   CommonAction: {
     initState: (id: string) => void;
+    initMouseState: () => void;
     setBlueprintId: (id: string) => void;
     setBlueprintScope: (id: string, scope: BlueprintScope) => void;
     setCurrentBlueprintInfo: (info: BlueprintInfo) => void;
