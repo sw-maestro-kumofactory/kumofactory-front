@@ -30,6 +30,7 @@ export const Header = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const onClickRefresh = () => {
+    // setCurrentDeployState(stateList[randomNumber] as DeployState);
     editUserBlueprints({ ...currentBlueprintInfo, status: 'SUCCESS' }, true);
     setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'SUCCESS' as DeployState });
     setCurrentDeployState('SUCCESS' as DeployState);
@@ -45,7 +46,10 @@ export const Header = () => {
       setBlueprintId(d[2]);
       if (Object.keys(userBlueprints).includes(d[2])) setCurrentDeployState(userBlueprints[d[2]].status);
       if (d[3] === 'deploy') setIsBlueprint(false);
-    } else setBlueprintId('');
+    } else {
+      setIsBlueprint(true);
+      setBlueprintId('');
+    }
   }, [pathname]);
 
   useEffect(() => {
