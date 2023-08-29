@@ -3,13 +3,15 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'next/navigation';
 
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import useInput from '@/src/hooks/useInput';
 
 const EnvironmentVariableComponent = () => {
+  const { repoId } = useParams();
   const EnvironmentVariables = useDeployStore((state) => state.environmentVariables);
-  const setEnvironmentVariables = useDeployStore((state) => state.DeployAction.setEnvironmentVariables);
+  const addEnvironmentVariables = useDeployStore((state) => state.DeployAction.addEnvironmentVariables);
   const updateEnvironmentVariables = useDeployStore((state) => state.DeployAction.updateEnvironmentVariables);
   const removeEnvironmentVariables = useDeployStore((state) => state.DeployAction.removeEnvironmentVariables);
   const { value: key, setValue: setKey, onHandleChange: onKeyChange } = useInput<string>('');
@@ -27,11 +29,11 @@ const EnvironmentVariableComponent = () => {
     };
     setKey('');
     setValue('');
-    setEnvironmentVariables(newVariable);
+    addEnvironmentVariables(repoId, newVariable);
   };
 
   const handleDeleteEnvironmentVariables = (key: string) => {
-    removeEnvironmentVariables(key);
+    removeEnvironmentVariables(repoId, key);
   };
 
   const handleEditEnvironmentVariables = (index: number) => {
@@ -43,7 +45,7 @@ const EnvironmentVariableComponent = () => {
       key: editedKey,
       value: editedValue,
     };
-    updateEnvironmentVariables(updatedVariable, editIndex!);
+    updateEnvironmentVariables(repoId, updatedVariable, editIndex!);
     setEditIndex(null);
     setKey('');
     setValue('');
@@ -73,14 +75,14 @@ const EnvironmentVariableComponent = () => {
         </div>
       </div>
       <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Variable List</div>
-      {EnvironmentVariables.length !== 0 && (
+      {EnvironmentVariables[repoId].length !== 0 && (
         <div className='w-full flex px-4 py-2'>
           <div className='w-5/12 mr-5'>Key</div>
           <div className='w-5/12'>Value</div>
         </div>
       )}
       <div>
-        {EnvironmentVariables.map((variable, index) => (
+        {EnvironmentVariables[repoId].map((variable, index) => (
           <div key={index} className='flex mb-4'>
             <input
               className={`w-5/12 mr-4 p-4 rounded-2xl bg-white ${

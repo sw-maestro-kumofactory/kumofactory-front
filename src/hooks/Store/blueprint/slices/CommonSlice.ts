@@ -74,16 +74,6 @@ export const useCommonSlice: StateCreator<
   CommonAction: {
     initState: (id: string) => {
       set((state) => {
-        state.isShowOption = false;
-        state.doubleClickedServiceId = null;
-        state.selectedServiceId = null;
-        state.selectedAreaId = null;
-        state.isMoving = false;
-        state.isDrag = false;
-        state.isLineDrawing = false;
-        state.linkedServiceId = undefined;
-        state.selectedLineId = null;
-        state.isEdit = false;
         state.blueprintList.push(id);
         state.subnetCount[id] = {
           public: 0,
@@ -98,6 +88,21 @@ export const useCommonSlice: StateCreator<
         state.services[id] = {};
         state.lines[id] = {};
         state.areas[id] = {};
+        return state;
+      });
+    },
+    initMouseState: () => {
+      set((state) => {
+        state.isShowOption = false;
+        state.doubleClickedServiceId = null;
+        state.selectedServiceId = null;
+        state.selectedAreaId = null;
+        state.isMoving = false;
+        state.isDrag = false;
+        state.isLineDrawing = false;
+        state.linkedServiceId = undefined;
+        state.selectedLineId = null;
+        state.isEdit = false;
         return state;
       });
     },

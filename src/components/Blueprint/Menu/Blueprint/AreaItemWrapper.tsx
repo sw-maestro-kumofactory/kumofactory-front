@@ -16,17 +16,19 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const azCount = useBlueprintStore((state) => state.azCount[currentBlueprintInfo.uuid]);
+  const viewBox = useBlueprintStore((state) => state.viewBox);
   const subnetCount = useBlueprintStore((state) => state.subnetCount[currentBlueprintInfo.uuid]);
-
+  const initMouseState = useBlueprintStore((state) => state.CommonAction.initMouseState);
   const createAreaByType = () => {
+    initMouseState();
     const id = 'v' + v1().toString();
 
     const area: IArea = {
       id: id,
       width: 125,
       height: 125,
-      x: 40,
-      y: 40,
+      x: viewBox.x + 50,
+      y: viewBox.y + 50,
       type: type,
       scope: null,
       az: null,

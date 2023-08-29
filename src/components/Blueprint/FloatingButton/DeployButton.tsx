@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faPalette, faRocket } from '@fortawesome/free-solid-svg-icons';
@@ -12,14 +12,15 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 const DeployButton = () => {
-  const [deploying, setDeploying] = useState<boolean>(false);
-  const [open, setOpen] = useState(false);
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const scope = useBlueprintStore((state) => state.blueprintScope[currentBlueprintInfo.uuid]);
   const options = useBlueprintStore((state) => state.options);
   const setCurrentBlueprintInfo = useBlueprintStore((state) => state.CommonAction.setCurrentBlueprintInfo);
   const editUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.editUserBlueprints);
+
+  const [open, setOpen] = useState(false);
+  const [btnDisabled, setBtnDisabled] = useState<boolean>(currentBlueprintInfo.status === 'PROVISIONING');
 
   const getData = () => {
     const body = blueprintToJson({
@@ -33,6 +34,7 @@ const DeployButton = () => {
     body.scope = scope;
     const encodedSVG = getSvgBlob();
     body['svgFile'] = encodedSVG;
+    console.log(body);
     return body;
   };
 
@@ -56,20 +58,38 @@ const DeployButton = () => {
   const onClickDeployButton = async () => {
     try {
       const data = getData();
-      await postDeployBlueprintData(data);
+      // await postDeployBlueprintData(data);
       editUserBlueprints({ ...currentBlueprintInfo, status: 'PROVISIONING' }, true);
       setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'PROVISIONING' });
       alert('Deploy Success!, You can see the status in the header.');
+      setOpen(false);
     } catch (e) {
       alert('Deploy Failed!');
     }
   };
+
+  const handlePopoverTrigger = () => {
+    if (btnDisabled) {
+      setOpen(false);
+    } else {
+      setOpen((v) => !v);
+    }
+  };
+
+  useEffect(() => {
+    if (currentBlueprintInfo.status === 'PROVISIONING') {
+      setBtnDisabled(true);
+    } else {
+      setBtnDisabled(false);
+    }
+  }, [currentBlueprintInfo]);
+
   return (
     <div className='absolute right-4 top-20'>
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger onClick={() => setOpen((v) => !v)}>
+        <PopoverTrigger onClick={handlePopoverTrigger}>
           <div className='p-2 bg-[#799ACF] text-white rounded-md cursor-pointer'>
-            {deploying ? 'Deploying' : 'Deploy'}
+            {btnDisabled ? 'Deploying' : 'Deploy'}
           </div>
         </PopoverTrigger>
         <PopoverContent className='bg-white justify-center items-center rounded-2xl shadow-lg'>

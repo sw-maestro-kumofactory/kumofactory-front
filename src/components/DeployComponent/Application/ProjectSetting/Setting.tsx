@@ -29,14 +29,15 @@ const Setting = () => {
       repo: repoId,
       language: language,
       branch: curBranch,
-      env: environmentVariables,
+      env: environmentVariables[repoId],
     };
-    try {
-      const d = postDeploy(data);
-      alert('deploy Success!');
-    } catch (e) {
-      alert('deploy Fail!');
-    }
+    // console.log(data);
+    // try {
+    //   const d = postDeploy(data);
+    //   alert('deploy Success!');
+    // } catch (e) {
+    //   alert('deploy Fail!');
+    // }
   };
 
   const getBranchList = async () => {
@@ -69,7 +70,7 @@ const Setting = () => {
             Heading={'Application Deploy'}
             Description={'Your Repository will be Deployed Selected Instance'}
             onClickConfirm={() => {
-              //   TODO: Deploy API 호출
+              onClickDeployButton();
               alert('Deploy Success!');
             }}
           >

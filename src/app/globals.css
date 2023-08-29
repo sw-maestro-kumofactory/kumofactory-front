@@ -4,7 +4,10 @@
 
 @font-face {
   font-family: 'G Market Sans';
-  src: url('../../public/fonts/GmarketSansMedium.otf') format('opentype');
+  src: local('G Market Sans'),
+  url('../../public/fonts/GmarketSansMedium.otf') format('opentype'),
+  url('../../public/fonts/GmarketSansBold.otf') format('opentype'),
+  url('../../public/fonts/GmarketSansLight.otf') format('opentype');
 }
 
 

@@ -2,7 +2,6 @@
 import { useEffect, useRef } from 'react';
 
 import { IComponent, ServicesString } from '@/src/types/Services';
-import { ServiceFactory } from '@/src/components/AWSService/ServiceFactory/ServiceFactory';
 import { ServiceFactoryInstance } from '@/src/components/AWSService/ServiceFactory/ServiceFactory';
 
 interface IProps extends IComponent {

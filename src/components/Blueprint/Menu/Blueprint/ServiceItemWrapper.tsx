@@ -6,6 +6,7 @@ import { ServiceFactory } from '@/src/components/AWSService/ServiceFactory/Servi
 import ItemButtonContainer from '@/src/components/common/Button/ItemButton';
 import { MenuItemList } from '@/src/assets/MenuItems';
 import { OptionFactory } from '@/src/components/AWSService/OptionFactory/OptionFactory';
+import { ServiceItemInterface, ServiceItemType } from '@/src/types/MenuItems';
 
 interface IProps {
   type: string;
@@ -15,23 +16,24 @@ interface IProps {
 const ServiceItemWrapper = ({ type, children }: IProps) => {
   const createService = useBlueprintStore((state) => state.ServiceAction.createService);
   const createOption = useBlueprintStore((state) => state.OptionAction.createOption);
+  const viewBox = useBlueprintStore((state) => state.viewBox);
+  const initMouseState = useBlueprintStore((state) => state.CommonAction.initMouseState);
   const serviceFactory = new ServiceFactory();
   const optionFactory = new OptionFactory();
   const items = MenuItemList[type];
+
+  const onClickCreateService = (item: ServiceItemInterface) => {
+    initMouseState();
+    const id = 'v' + v1().toString();
+    createService(serviceFactory.createService({ type: item.type, x: viewBox.x, y: viewBox.y }), id);
+    createOption(optionFactory.createOption(item.type, id));
+  };
 
   return (
     <div className='flex flex-wrap '>
       {items &&
         items.map((item) => (
-          <ItemButtonContainer
-            key={item.type}
-            type={item.type}
-            onClick={() => {
-              const id = 'v' + v1().toString();
-              createService(serviceFactory.createService({ type: item.type }), id);
-              createOption(optionFactory.createOption(item.type, id));
-            }}
-          >
+          <ItemButtonContainer key={item.type} type={item.type} onClick={() => onClickCreateService(item)}>
             <svg
               cursor='pointer'
               width={64}

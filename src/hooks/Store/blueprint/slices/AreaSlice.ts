@@ -1,11 +1,8 @@
 import { StateCreator } from 'zustand';
-import { v1 } from 'uuid';
-import { current } from 'immer';
 
 import { AreaState } from '@/src/hooks/Store/blueprint/state/AreaState';
 import { AreaTypes, IArea } from '@/src/types/Area';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import blueprintMenuList from '@/src/components/Blueprint/Menu/Blueprint/BlueprintMenuList';
 
 export const useAreaSlice: StateCreator<
   AllBluePrintStates,

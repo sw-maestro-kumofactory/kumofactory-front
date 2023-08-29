@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import RepositoryContainer from '@/src/components/DeployComponent/Application/Repository/RepositoryContainer';
 import { getOrgRepositories, getUserRepositories } from '@/src/api/deploy';
-import { PersonalRepo } from '@/src/types/Deploy';
+import { PersonalRepo, PersonalRepoResponse } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import SqlUploader from '@/src/components/DeployComponent/RDS/SqlUploader';
 import Loading from '@/src/components/common/Loading';
@@ -14,15 +14,18 @@ import SkeletonRepositoryContainer from '@/src/components/DeployComponent/Applic
 const DeployComponent = () => {
   const targetInstanceType = useDeployStore((state) => state.targetInstanceType);
   const repositoryList = useDeployStore((state) => state.repositoryList);
-  const setRepositoryList = useDeployStore((state) => state.DeployAction.setRepositoryList);
+  const { setRepositoryList, initEnvironmentVariables } = useDeployStore((state) => state.DeployAction);
   const username = useLoginStore((state) => state.username);
   const [isLoading, setIsLoading] = useState(true);
 
   const getRepo = async () => {
     try {
       const d = await getUserRepositories();
-      const tmp: Record<string, PersonalRepo[]> = {};
+      const tmp: Record<string, PersonalRepoResponse[]> = {};
       if (d.repoCount > 0) {
+        for (const repo of d.repoInfo) {
+          initEnvironmentVariables(repo.name);
+        }
         tmp[username] = d.repoInfo;
       }
 
@@ -34,6 +37,9 @@ const DeployComponent = () => {
 
         const orgResults = await Promise.all(orgPromises);
         orgResults.forEach(({ org, orgRepo }) => {
+          orgRepo.forEach((repo) => {
+            initEnvironmentVariables(repo.name);
+          });
           tmp[org] = orgRepo;
         });
       }

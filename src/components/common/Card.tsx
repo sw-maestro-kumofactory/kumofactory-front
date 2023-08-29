@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { v1 } from 'uuid';
@@ -11,7 +11,6 @@ import { StatusStyle } from '@/src/assets/StatusStyle';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { getTemplateById } from '@/src/api/template';
-import { deleteBlueprint, getBlueprintList } from '@/src/api/blueprint';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface IProps {
@@ -25,7 +24,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   const [isHover, setIsHover] = useState(false);
   const [svgData, setSvgData] = useState<string>('');
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
-  const setUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.setUserBlueprints);
+  const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
   const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const { setTemplate } = useSetTemplate();
 
@@ -36,14 +35,16 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
         initState(newUUID);
         const templateData = await getTemplateById(data.uuid);
         templateData.uuid = newUUID;
-        setCurrentBlueprintInfo({
-          name: 'My BluePrint',
+
+        const templateInfo: BlueprintInfo = {
+          name: data.name,
           scope: 'PRIVATE',
           status: 'PENDING',
           uuid: newUUID,
-        });
+        };
+        setCurrentBlueprintInfo(templateInfo);
+        addUserBlueprint(templateInfo, false);
         setTemplate({ data: templateData, isTemplate: true });
-        setBlueprintScope(newUUID, 'PRIVATE');
         router.push(`/blueprint/${newUUID}`);
       } catch (e) {
         console.log(e);
@@ -66,14 +67,6 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
       setSvgData(response.data);
     } catch (error) {
       console.error('Error fetching SVG data:', error);
-    }
-  };
-
-  const onClickTrashCan = async () => {
-    try {
-      await deleteBlueprint(data.uuid);
-    } catch (e) {
-      alert('Delete Failed');
     }
   };
 
@@ -108,7 +101,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
                     !isTemplate ? 'mb-4 p-2' : 'p-4'
                   }`}
                 >
-                  Load {isTemplate ? 'Template' : 'Blueprint'}
+                  Load
                 </div>
               </div>
 
@@ -123,10 +116,10 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
           </>
         )}
         <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-xl'>
-          <div className='absolute left-5 top-4 border-2 text-sm border-solid border-gray-400 w-fit p-1 rounded-xl'>
+          <div className='absolute left-5 top-4 border-2 text-xs border-solid border-gray-400 w-fit p-1 rounded-xl'>
             {data.scope}
           </div>
-          <svg className='w-full  h-full rounded-t-xl'>
+          <svg className='w-full  h-full rounded-t-lg '>
             {svgData && <g dangerouslySetInnerHTML={{ __html: svgData }} />}
             {isHover && <rect width='100%' height='100%' className='fill-blue-950 opacity-50' />}
           </svg>
@@ -134,15 +127,18 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
       </div>
       <div className='flex justify-between items-center p-4 h-1/4 rounded-b-xl border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
         <div>
-          <div className='h-6 mb-1 lg:text-xl md:text-base max-w-[250px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
+          <div className='h-6 mb-1 font-bold text-base max-w-[250px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
             {data.name}
           </div>
-          <div className='lg:text-lg md:text-sm'>{moment(data.createdAt).format('YYYY-MM-DD')}</div>
+          <div className='text-sm'>{moment(data.createdAt).format('YYYY-MM-DD')}</div>
         </div>
         {data.status && (
           <div className='flex items-center gap-x-2'>
-            <div className={`w-6 h-6 rounded-full`} style={{ backgroundColor: StatusStyle[data.status].fill }}></div>
-            <div className='w-fit flex justify-center'>{data.status}</div>
+            <div
+              className='w-6 h-6 rounded-full cursor-pointer'
+              style={{ backgroundColor: StatusStyle[data.status].fill }}
+            ></div>
+            {/*<div className='w-fit text-xs flex justify-center'>{data.status}</div>*/}
           </div>
         )}
       </div>

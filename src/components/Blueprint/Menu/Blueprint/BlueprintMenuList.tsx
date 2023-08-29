@@ -10,7 +10,7 @@ import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemW
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 const Title = ({ title }: { title: string }) => (
-  <div className='w-full h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
+  <div className='w-full font-bold h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
 );
 
 const BlueprintMenuList = () => {
