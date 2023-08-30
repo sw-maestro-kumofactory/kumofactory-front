@@ -34,9 +34,19 @@ export interface CommonState {
     setBlueprintId: (id: string) => void;
     setBlueprintScope: (id: string, scope: BlueprintScope) => void;
     setCurrentBlueprintInfo: (info: BlueprintInfo) => void;
-    setName: (name: string) => void;
+    setInfo: (name: string, description: string) => void;
     setIsEdit: (flag: boolean) => void;
-    blueprintToJson: ({ id, name }: { id: string; name: string; scope: BlueprintScope }) => BlueprintResponse;
+    blueprintToJson: ({
+      id,
+      name,
+      description,
+      scope,
+    }: {
+      id: string;
+      name: string;
+      description: string;
+      scope: BlueprintScope;
+    }) => BlueprintResponse;
     setBlueprintSrc: (x: number, y: number) => void;
     setGridSrc: () => void;
     setViewBox: (width: number, height: number) => void;

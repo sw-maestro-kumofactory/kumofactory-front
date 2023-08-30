@@ -16,20 +16,21 @@ const BlueprintNamePopover = ({ children }: IProps) => {
   const [open, setOpen] = useState(false);
 
   const name = useBlueprintStore((state) => state.currentBlueprintInfo.name);
-  const setName = useBlueprintStore((state) => state.CommonAction.setName);
+  const description = useBlueprintStore((state) => state.currentBlueprintInfo.description);
+  const setInfo = useBlueprintStore((state) => state.CommonAction.setInfo);
   const setIsEdit = useBlueprintStore((state) => state.CommonAction.setIsEdit);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const setCurrentBlueprintInfo = useBlueprintStore((state) => state.CommonAction.setCurrentBlueprintInfo);
   const editUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.editUserBlueprints);
 
   const { value: nameValue, onHandleChange: onHandleNameChange } = useInput(name);
-  const { value: description, onHandleChange: onHandleDescriptionChange } = useInput('');
+  const { value: descriptionValue, onHandleChange: onHandleDescriptionChange } = useInput(description);
 
   const onClickConfirm = () => {
     setOpen(false);
-    setName(nameValue);
-    editUserBlueprints({ ...currentBlueprintInfo, name: nameValue }, true);
-    setCurrentBlueprintInfo({ ...currentBlueprintInfo, name: nameValue });
+    setInfo(nameValue, descriptionValue);
+    editUserBlueprints({ ...currentBlueprintInfo, name: nameValue, description: descriptionValue }, true);
+    setCurrentBlueprintInfo({ ...currentBlueprintInfo, name: nameValue, description: descriptionValue });
     setIsEdit(false);
   };
 
@@ -47,7 +48,7 @@ const BlueprintNamePopover = ({ children }: IProps) => {
           <label>Blueprint Description</label>
           <input
             className='w-full p-2 bg-gray-100 rounded-md'
-            value={description}
+            value={descriptionValue}
             onChange={onHandleDescriptionChange}
           />
         </form>

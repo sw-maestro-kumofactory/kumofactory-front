@@ -6,6 +6,8 @@ import { DeployState } from '@/src/types/Deploy';
 export interface BlueprintResponse {
   uuid: string;
   name: string;
+  description: string;
+  downloadCount: number;
   scope: BlueprintScope;
   components: Omit<IComponent, 'lines'>[];
   links: Line[];
@@ -17,6 +19,8 @@ export interface BlueprintInfo {
   id?: number;
   uuid: string;
   name: string;
+  description: string;
+  downloadCount?: number;
   scope: BlueprintScope;
   createdAt?: string;
   status: DeployState;

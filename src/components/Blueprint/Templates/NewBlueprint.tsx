@@ -21,6 +21,7 @@ const NewBlueprint = () => {
     initState(id);
     const blueprintData: BlueprintInfo = {
       name: 'New Blueprint',
+      description: '',
       scope: 'PRIVATE',
       status: 'PENDING',
       uuid: id,

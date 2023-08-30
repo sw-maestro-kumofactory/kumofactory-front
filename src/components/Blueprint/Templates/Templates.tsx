@@ -5,10 +5,10 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 
 import { getAllTemplates } from '@/src/api/template';
+import { commonAxiosInstance } from '@/src/api';
 import NewBlueprint from '@/src/components/Blueprint/Templates/NewBlueprint';
 import TemplateCard from '@/src/components/Blueprint/Templates/TemplateCard';
 import { BlueprintInfo } from '@/src/types/Blueprint';
-import { commonAxiosInstance } from '@/src/api';
 
 const Templates = () => {
   const [templates, setTemplates] = useState<Record<string, BlueprintInfo>>({});

@@ -6,8 +6,6 @@ import { getOrgRepositories, getUserRepositories } from '@/src/api/deploy';
 import { PersonalRepo, PersonalRepoResponse } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import SqlUploader from '@/src/components/DeployComponent/RDS/SqlUploader';
-import Loading from '@/src/components/common/Loading';
-import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import SkeletonRepositoryContainer from '@/src/components/DeployComponent/Application/Repository/SkeletonRepositoryContainer';
 

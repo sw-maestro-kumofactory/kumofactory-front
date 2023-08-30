@@ -9,9 +9,9 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 
 import { getTemplateById } from '@/src/api/template';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
-import { BlueprintInfo } from '@/src/types/Blueprint';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { BlueprintInfo } from '@/src/types/Blueprint';
 
 interface IProps {
   data: BlueprintInfo;
@@ -37,7 +37,8 @@ const TemplateCard = ({ data, onClick, thumbnail }: IProps) => {
       templateData.uuid = newUUID;
 
       const templateInfo: BlueprintInfo = {
-        name: data.name,
+        name: 'New Blueprint',
+        description: '',
         scope: 'PRIVATE',
         status: 'PENDING',
         uuid: newUUID,
@@ -70,7 +71,7 @@ const TemplateCard = ({ data, onClick, thumbnail }: IProps) => {
         ) : null}
         <div className='w-full h-[190px]'>
           <svg className='w-full h-full rounded-t-lg '>
-            {thumbnail && <g dangerouslySetInnerHTML={{ __html: thumbnail }} />}
+            <g dangerouslySetInnerHTML={{ __html: thumbnail }} />
           </svg>
         </div>
         <hr />

@@ -1,17 +1,13 @@
-import { useEffect, useState } from 'react';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { v1 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 import { commonAxiosInstance } from '@/src/api';
 import { BlueprintInfo } from '@/src/types/Blueprint';
 import { StatusStyle } from '@/src/assets/StatusStyle';
-import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import { getTemplateById } from '@/src/api/template';
-import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 interface IProps {
   data: BlueprintInfo;
