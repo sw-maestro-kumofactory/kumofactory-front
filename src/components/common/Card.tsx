@@ -23,36 +23,11 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   const router = useRouter();
   const [isHover, setIsHover] = useState(false);
   const [svgData, setSvgData] = useState<string>('');
-  const initState = useBlueprintStore((state) => state.CommonAction.initState);
-  const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
   const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
-  const { setTemplate } = useSetTemplate();
 
   const onClickLoad = async () => {
-    if (isTemplate) {
-      try {
-        const newUUID = v1().toString();
-        initState(newUUID);
-        const templateData = await getTemplateById(data.uuid);
-        templateData.uuid = newUUID;
-
-        const templateInfo: BlueprintInfo = {
-          name: data.name,
-          scope: 'PRIVATE',
-          status: 'PENDING',
-          uuid: newUUID,
-        };
-        setCurrentBlueprintInfo(templateInfo);
-        addUserBlueprint(templateInfo, false);
-        setTemplate({ data: templateData, isTemplate: true });
-        router.push(`/blueprint/${newUUID}`);
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      setCurrentBlueprintInfo(data);
-      router.push(`/blueprint/${data.uuid}`);
-    }
+    setCurrentBlueprintInfo(data);
+    router.push(`/blueprint/${data.uuid}`);
   };
 
   const onClickToDeploy = () => {
@@ -86,32 +61,24 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
       >
         {isHover && (
           <>
-            {!isTemplate && (
-              <div
-                className='absolute right-5 top-4 w-8 h-8 rounded-full border-solid border-2 border-gray-400 flex justify-center items-center cursor-pointer'
-                onClick={onClickDelete}
-              >
-                <FontAwesomeIcon style={{ color: 'white' }} icon={faTrashCan} />
-              </div>
-            )}
+            <div
+              className='absolute right-5 top-4 w-8 h-8 rounded-full border-solid border-2 border-gray-400 flex justify-center items-center cursor-pointer'
+              onClick={onClickDelete}
+            >
+              <FontAwesomeIcon style={{ color: 'white' }} icon={faTrashCan} />
+            </div>
             <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
               <div className='cursor-pointer' onClick={onClickLoad}>
-                <div
-                  className={`flex justify-center items-center bg-black text-white h-10 rounded-xl ${
-                    !isTemplate ? 'mb-4 p-2' : 'p-4'
-                  }`}
-                >
-                  Load
+                <div className={`flex justify-center items-center bg-black text-white h-10 rounded-xl ${'mb-4 p-2'}`}>
+                  Load Blueprint
                 </div>
               </div>
 
-              {!isTemplate && (
-                <div onClick={onClickToDeploy}>
-                  <div className='flex justify-center items-center w-fit p-2 h-10 text-white border-white border-2 rounded-xl cursor-pointer'>
-                    Application Deploy
-                  </div>
+              <div onClick={onClickToDeploy}>
+                <div className='flex justify-center items-center w-fit p-2 h-10 text-white border-white border-2 rounded-xl cursor-pointer'>
+                  Application Deploy
                 </div>
-              )}
+              </div>
             </div>
           </>
         )}

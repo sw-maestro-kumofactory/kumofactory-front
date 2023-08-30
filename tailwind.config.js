@@ -22,9 +22,18 @@ module.exports = {
             transform: 'translate(var(--translate-x, 0), var(--translate-y, 0))',
           },
         },
+        shiftBottom: {
+          from: {
+            bottom: '64px',
+          },
+          to: {
+            bottom: '68px',
+          },
+        },
       },
       animation: {
         'service-animation': 'serviceAnimation 1s ease-in-out',
+        'shift-bottom': 'shiftBottom 0.3s ease-in-out forwards',
       },
     },
   },

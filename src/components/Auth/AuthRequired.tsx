@@ -1,3 +1,4 @@
+'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -18,9 +19,9 @@ const AuthRequired = ({ children }: IProps) => {
     }
   }, []);
 
-  if (!accessToken) {
-    return <></>;
-  }
+  // if (!accessToken) {
+  //   return <></>;
+  // }
 
   return <>{children}</>;
 };
