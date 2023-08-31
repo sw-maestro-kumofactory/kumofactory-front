@@ -31,6 +31,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   };
 
   const fetchSvgData = async () => {
+    if (!data.presignedUrl) return;
     try {
       const urlParts = data.presignedUrl!.split('/');
       const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
