@@ -1,4 +1,5 @@
 import { authAxiosInstance } from '@/src/api';
+import { BlueprintInfo } from '@/src/types/Blueprint';
 
 export const getTemplateById = async (id: string) => {
   const { data } = await authAxiosInstance.get(`/api/template/${id}`);
@@ -16,6 +17,6 @@ export const getKumofactoryTemplate = async () => {
 };
 
 export const getAllTemplates = async () => {
-  const { data } = await authAxiosInstance.get(`/api/template`);
+  const { data } = await authAxiosInstance.get<BlueprintInfo[]>(`/api/template`);
   return data;
 };

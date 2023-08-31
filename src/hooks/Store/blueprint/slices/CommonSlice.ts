@@ -7,7 +7,6 @@ import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStor
 import { EC2Options } from '@/src/types/Services';
 import { DeployState } from '@/src/types/Deploy';
 
-// 그리드 내에서의 상대 좌표를 얻는다.
 const getGirdPoint = (
   e: React.MouseEvent,
   scale: number,
@@ -37,6 +36,7 @@ export const useCommonSlice: StateCreator<
     uuid: '',
     scope: 'PRIVATE',
     status: 'FAIL',
+    description: '',
   },
   blueprintList: [],
   offset: {
@@ -106,7 +106,13 @@ export const useCommonSlice: StateCreator<
         return state;
       });
     },
-    setCurrentBlueprintInfo: (info: { name: string; uuid: string; scope: BlueprintScope; status: DeployState }) => {
+    setCurrentBlueprintInfo: (info: {
+      name: string;
+      uuid: string;
+      scope: BlueprintScope;
+      status: DeployState;
+      description: string;
+    }) => {
       set((state) => {
         state.currentBlueprintInfo = info;
         return state;
@@ -115,6 +121,7 @@ export const useCommonSlice: StateCreator<
     setBlueprintScope: (id: string, scope: BlueprintScope) => {
       set((state) => {
         state.blueprintScope[id] = scope;
+        state.currentBlueprintInfo.scope = scope;
         return state;
       });
     },
@@ -124,9 +131,10 @@ export const useCommonSlice: StateCreator<
         return state;
       });
     },
-    setName: (name: string) => {
+    setInfo: (name: string, description: string) => {
       set((state) => {
         state.currentBlueprintInfo.name = name;
+        state.currentBlueprintInfo.description = description;
         return state;
       });
     },
@@ -136,10 +144,22 @@ export const useCommonSlice: StateCreator<
         return state;
       });
     },
-    blueprintToJson: ({ id, name, scope }: { id: string; name: string; scope: BlueprintScope }) => {
+    blueprintToJson: ({
+      id,
+      name,
+      description,
+      scope,
+    }: {
+      id: string;
+      name: string;
+      description: string;
+      scope: BlueprintScope;
+    }) => {
       const json: BlueprintResponse = {
         name: name,
         uuid: id,
+        description: description,
+        downloadCount: 0,
         scope: scope,
         components: [],
         links: [],

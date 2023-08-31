@@ -36,6 +36,7 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
       uuid: blueprintId,
       name: userBlueprints[id].name,
       scope: userBlueprints[id].scope,
+      description: userBlueprints[id].description,
       status: userBlueprints[id].status,
     });
     setIsLoading(false);

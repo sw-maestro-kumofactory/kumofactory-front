@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faPalette, faRocket } from '@fortawesome/free-solid-svg-icons';
-import { current } from 'immer';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/src/components/common/Popover';
 import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
@@ -26,6 +25,7 @@ const DeployButton = () => {
     const body = blueprintToJson({
       id: currentBlueprintInfo.uuid,
       name: currentBlueprintInfo.name,
+      description: currentBlueprintInfo.description,
       scope: currentBlueprintInfo.scope,
     });
     body.components.map((component, index) => {
@@ -34,7 +34,6 @@ const DeployButton = () => {
     body.scope = scope;
     const encodedSVG = getSvgBlob();
     body['svgFile'] = encodedSVG;
-    console.log(body);
     return body;
   };
 
