@@ -121,6 +121,7 @@ export const useCommonSlice: StateCreator<
     setBlueprintScope: (id: string, scope: BlueprintScope) => {
       set((state) => {
         state.blueprintScope[id] = scope;
+        state.currentBlueprintInfo.scope = scope;
         return state;
       });
     },

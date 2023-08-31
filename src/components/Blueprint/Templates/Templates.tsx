@@ -3,17 +3,29 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
+import moment from 'moment';
+import { v1 } from 'uuid';
+import { useRouter } from 'next/navigation';
 
-import { getAllTemplates } from '@/src/api/template';
+import { getAllTemplates, getTemplateById } from '@/src/api/template';
 import { commonAxiosInstance } from '@/src/api';
 import NewBlueprint from '@/src/components/Blueprint/Templates/NewBlueprint';
 import TemplateCard from '@/src/components/Blueprint/Templates/TemplateCard';
 import { BlueprintInfo } from '@/src/types/Blueprint';
+import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 
 const Templates = () => {
+  const router = useRouter();
   const [templates, setTemplates] = useState<Record<string, BlueprintInfo>>({});
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
   const [showDetail, setShowDetail] = useState<string>('');
+  const initState = useBlueprintStore((state) => state.CommonAction.initState);
+  const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
+  const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
+
+  const { setTemplate } = useSetTemplate();
 
   const fetchSvgData = async (data: string) => {
     try {
@@ -43,6 +55,32 @@ const Templates = () => {
     }
   };
 
+  const onClickLoad = async (e: any, id: string) => {
+    e.stopPropagation();
+    try {
+      const newUUID = v1().toString();
+      const templateData = await getTemplateById(id);
+      initState(newUUID);
+      templateData.uuid = newUUID;
+
+      const templateInfo: BlueprintInfo = {
+        name: 'New Blueprint',
+        description: '',
+        scope: 'PRIVATE',
+        status: 'PENDING',
+        uuid: newUUID,
+      };
+
+      setCurrentBlueprintInfo(templateInfo);
+      setTemplate({ data: templateData, isTemplate: true });
+      addUserBlueprint(templateInfo, false);
+
+      router.push(`/blueprint/${newUUID}`);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     loadTemplates();
   }, []);
@@ -60,17 +98,20 @@ const Templates = () => {
               <svg className='w-full rounded-t-lg p-4 mb-4 rounded-md border-solid border-2 border-gray-400'>
                 <g dangerouslySetInnerHTML={{ __html: thumbnails[showDetail] }} />
               </svg>
-              <div className='text-sm'>Created At</div>
-              <div className='text-sm'>Updated At</div>
+              <div className='text-sm'>Created At : {moment(templates[showDetail].createdAt).format('MM/D, YYYY')}</div>
+              <div className='text-sm'>Updated At : {moment(templates[showDetail].updatedAt).format('MM/D, YYYY')}</div>
             </div>
             <div className='w-4/5 h-full pl-2'>
               <div className='text-2xl mb-2'>{templates[showDetail].name}</div>
-              <div className='text-xs text-gray-400 mb-4'>누가 만들었게?</div>
+              <div className='text-xs text-gray-400 mb-4'>Create by {templates[showDetail].username}</div>
               <hr />
-              <div className='flex w-fit gap-x-4 items-center mt-4 p-2 text-sm text-[#6e58f6] border-solid border-2 border-[#6e58f6] rounded-lg'>
+              <div
+                className='flex w-fit gap-x-4 items-center mt-4 p-2 text-sm text-[#6e58f6] border-solid border-2 border-[#6e58f6] rounded-lg cursor-pointer'
+                onClick={(e) => onClickLoad(e, templates[showDetail].uuid)}
+              >
                 <div className='flex items-center gap-x-2 '>
                   <FontAwesomeIcon icon={faCopy} />
-                  123
+                  {templates[showDetail].downloadCount}
                 </div>
                 <div className='w-[2px] h-[28px] bg-gray-400' />
                 <div className='font-bold'>copy</div>
@@ -79,6 +120,7 @@ const Templates = () => {
                 Description
               </div>
               <hr />
+              <div className='mt-2'>{templates[showDetail].description}</div>
             </div>
           </div>
         </div>
@@ -99,6 +141,7 @@ const Templates = () => {
                     onClick={() => {
                       setShowDetail(templates[key].uuid);
                     }}
+                    onClickLoad={onClickLoad}
                   />
                 );
               })}

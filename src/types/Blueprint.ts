@@ -19,10 +19,12 @@ export interface BlueprintInfo {
   id?: number;
   uuid: string;
   name: string;
+  username?: string;
   description: string;
   downloadCount?: number;
   scope: BlueprintScope;
   createdAt?: string;
+  updatedAt?: string;
   status: DeployState;
   presignedUrl?: string;
 }

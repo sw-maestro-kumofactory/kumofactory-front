@@ -1,58 +1,21 @@
 'use client';
-import { v1 } from 'uuid';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import { faAws } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 
-import { getTemplateById } from '@/src/api/template';
-import { useSetTemplate } from '@/src/hooks/useSetTemplate';
-import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { BlueprintInfo } from '@/src/types/Blueprint';
 
 interface IProps {
   data: BlueprintInfo;
   onClick: () => void;
+  onClickLoad: (e: any, id: string) => void;
   thumbnail: string;
 }
 
-const TemplateCard = ({ data, onClick, thumbnail }: IProps) => {
-  const router = useRouter();
+const TemplateCard = ({ data, onClick, thumbnail, onClickLoad }: IProps) => {
   const [isHover, setIsHover] = useState(false);
-  const initState = useBlueprintStore((state) => state.CommonAction.initState);
-  const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
-  const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
-
-  const { setTemplate } = useSetTemplate();
-
-  const onClickLoad = async (e: any) => {
-    e.stopPropagation();
-    try {
-      const newUUID = v1().toString();
-      const templateData = await getTemplateById(data.uuid);
-      initState(newUUID);
-      templateData.uuid = newUUID;
-
-      const templateInfo: BlueprintInfo = {
-        name: 'New Blueprint',
-        description: '',
-        scope: 'PRIVATE',
-        status: 'PENDING',
-        uuid: newUUID,
-      };
-
-      setCurrentBlueprintInfo(templateInfo);
-      setTemplate({ data: templateData, isTemplate: true });
-      addUserBlueprint(templateInfo, false);
-
-      router.push(`/blueprint/${newUUID}`);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   return (
     <div className='w-1/3 h-[290px] p-4'>
@@ -66,7 +29,7 @@ const TemplateCard = ({ data, onClick, thumbnail }: IProps) => {
           <FontAwesomeIcon
             icon={faCopy}
             className='absolute bottom-16 left-2 p-2 cursor-pointer bg-[#6e58f6] rounded-lg text-white hover:animate-shift-bottom'
-            onClick={(e) => onClickLoad(e)}
+            onClick={(e) => onClickLoad(e, data.uuid)}
           />
         ) : null}
         <div className='w-full h-[190px]'>
@@ -81,9 +44,9 @@ const TemplateCard = ({ data, onClick, thumbnail }: IProps) => {
               <div>{data.name}</div>
               <div className='text-xs text-gray-600'>Kumo factory</div>
             </div>
-            <div className='flex pr-2 text-gray-400'>
+            <div className='flex items-center pr-2 text-gray-400'>
               <FontAwesomeIcon className='pr-2 cursor-pointer' icon={faCopy} />
-              <div>123</div>
+              <div>{data.downloadCount}</div>
             </div>
           </div>
         </div>
