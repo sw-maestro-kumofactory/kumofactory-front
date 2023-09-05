@@ -28,7 +28,7 @@ const ConfirmModal = ({ onClick, show, setShow }: IProps) => {
   }, []);
 
   return (
-    <ModalContainer isShow={show}>
+    <ModalContainer isShow={show} setShow={setShow}>
       <div className='w-1/3 h-1/3 bg-white p-8 flex flex-col justify-center items-center rounded-xl'>
         <div className='text-2xl mb-4'>Confirm Deploy?</div>
         <div className='mb-8'>Your architecture will Deployed in AWS.</div>
