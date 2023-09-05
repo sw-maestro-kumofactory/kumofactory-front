@@ -12,7 +12,7 @@ import { BlueprintInfo } from '@/src/types/Blueprint';
 const NewBlueprint = () => {
   const router = useRouter();
   const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
-  const setCurrentBlueprintInfo = useBlueprintStore((state) => state.CommonAction.setCurrentBlueprintInfo);
+  const { setCurrentBlueprintInfo, setIsTemplateOpen } = useBlueprintStore((state) => state.CommonAction);
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
 
   const onClick = () => {
@@ -29,6 +29,7 @@ const NewBlueprint = () => {
 
     setCurrentBlueprintInfo(blueprintData);
     addUserBlueprint(blueprintData, false);
+    setIsTemplateOpen(false);
     router.push(`/blueprint/${id}`);
   };
 

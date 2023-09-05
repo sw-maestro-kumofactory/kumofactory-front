@@ -21,9 +21,10 @@ const Templates = () => {
   const [templates, setTemplates] = useState<Record<string, BlueprintInfo>>({});
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
   const [showDetail, setShowDetail] = useState<string>('');
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
   const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
-  const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
+  const { setCurrentBlueprintInfo, setIsTemplateOpen } = useBlueprintStore((state) => state.CommonAction);
 
   const { setTemplate } = useSetTemplate();
 
@@ -44,8 +45,8 @@ const Templates = () => {
       const tmp: Record<string, string> = {};
       const templateObj: Record<string, BlueprintInfo> = {};
       for (let i = 0; i < data.length; i++) {
-        let t = await fetchSvgData(data[i].presignedUrl!);
-        tmp[data[i].uuid] = t;
+        // let t = await fetchSvgData(data[i].presignedUrl!);
+        // tmp[data[i].uuid] = t;
         templateObj[data[i].uuid] = data[i];
       }
       setThumbnails(tmp);
@@ -57,25 +58,28 @@ const Templates = () => {
 
   const onClickLoad = async (e: any, id: string) => {
     e.stopPropagation();
+    const flag = currentBlueprintInfo.uuid === '';
     try {
       const newUUID = v1().toString();
       const templateData = await getTemplateById(id);
-      initState(newUUID);
-      templateData.uuid = newUUID;
+      if (flag) {
+        initState(newUUID);
+        templateData.uuid = newUUID;
 
-      const templateInfo: BlueprintInfo = {
-        name: 'New Blueprint',
-        description: '',
-        scope: 'PRIVATE',
-        status: 'PENDING',
-        uuid: newUUID,
-      };
+        const templateInfo: BlueprintInfo = {
+          name: 'New Blueprint',
+          description: '',
+          scope: 'PRIVATE',
+          status: 'PENDING',
+          uuid: newUUID,
+        };
+        setCurrentBlueprintInfo(templateInfo);
+        addUserBlueprint(templateInfo, false);
+      }
 
-      setCurrentBlueprintInfo(templateInfo);
       setTemplate({ data: templateData, isTemplate: true });
-      addUserBlueprint(templateInfo, false);
-
-      router.push(`/blueprint/${newUUID}`);
+      setIsTemplateOpen(false);
+      if (flag) router.push(`/blueprint/${newUUID}`);
     } catch (e) {
       console.log(e);
     }

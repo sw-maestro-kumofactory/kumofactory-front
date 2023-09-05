@@ -34,3 +34,12 @@ export const uploadSQLFile = async (body: FormData) => {
   });
   return data;
 };
+
+export const getResourceId = async (blueprintId: string) => {
+  const { data } = await authAxiosInstance.get(`/api/build/resource/${blueprintId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return data;
+};

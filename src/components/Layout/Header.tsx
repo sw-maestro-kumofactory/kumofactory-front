@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
@@ -13,13 +13,18 @@ import { DeployState } from '@/src/types/Deploy';
 import Status from '@/src/components/Layout/Status';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import BlueprintNamePopover from '@/src/components/common/Popover/BlueprintNamePopover';
+import { getResourceId } from '@/src/api/deploy';
+import ModalContainer from '@/src/components/common/Modal/ModalContainer';
+import Templates from '@/src/components/Blueprint/Templates/Templates';
 
 export const Header = () => {
   const isLogin = useStore(useLoginStore, (state) => state.isLogin);
+  const isTemplateOpen = useBlueprintStore((state) => state.isTemplateOpen);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
-  const setBlueprintId = useBlueprintStore((state) => state.CommonAction.setBlueprintId);
-  const setCurrentBlueprintInfo = useBlueprintStore((state) => state.CommonAction.setCurrentBlueprintInfo);
+  const { setBlueprintId, setCurrentBlueprintInfo, setIsTemplateOpen } = useBlueprintStore(
+    (state) => state.CommonAction,
+  );
   const [currentDeployState, setCurrentDeployState] = useState<DeployState>(currentBlueprintInfo.status);
   const editUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.editUserBlueprints);
 
@@ -30,10 +35,16 @@ export const Header = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const onClickRefresh = () => {
-    // setCurrentDeployState(stateList[randomNumber] as DeployState);
     editUserBlueprints({ ...currentBlueprintInfo, status: 'SUCCESS' }, true);
     setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'SUCCESS' as DeployState });
     setCurrentDeployState('SUCCESS' as DeployState);
+  };
+
+  const getResourceIds = async () => {
+    try {
+      const data = await getResourceId(currentBlueprintInfo.uuid);
+      console.log(data);
+    } catch (e) {}
   };
 
   const onClickEdit = () => {
@@ -45,7 +56,10 @@ export const Header = () => {
     if (d.length >= 3 && d[1] === 'blueprint') {
       setBlueprintId(d[2]);
       if (Object.keys(userBlueprints).includes(d[2])) setCurrentDeployState(userBlueprints[d[2]].status);
-      if (d[3] === 'deploy') setIsBlueprint(false);
+      if (d[3] === 'deploy') {
+        setIsBlueprint(false);
+        getResourceIds();
+      }
     } else {
       setIsBlueprint(true);
       setBlueprintId('');
@@ -95,14 +109,23 @@ export const Header = () => {
                 isBlueprint ? 'bg-white text-[#799ACF]' : 'bg-[#799ACF] text-white'
               } px-4 cursor-pointer`}
               onClick={() => {
-                setIsBlueprint(false);
-                router.push(`/blueprint/${currentBlueprintInfo.uuid}/deploy`);
+                if (currentBlueprintInfo.status === 'SUCCESS') {
+                  setIsBlueprint(false);
+                  router.push(`/blueprint/${currentBlueprintInfo.uuid}/deploy`);
+                } else {
+                  alert('배포가 완료되지 않았습니다.');
+                }
               }}
             >
               Deploy
             </div>
+            <button className='ml-12' onClick={() => setIsTemplateOpen(true)}>
+              template
+            </button>
           </div>
-          <Status onClick={onClickRefresh} currentState={currentDeployState} />
+          <div className='flex gap-x-8'>
+            <Status onClick={onClickRefresh} currentState={currentDeployState} />
+          </div>
         </>
       )}
 
@@ -125,6 +148,9 @@ export const Header = () => {
             </Link>
           </>
         ))}
+      <ModalContainer isShow={isTemplateOpen} setShow={setIsTemplateOpen}>
+        <Templates />
+      </ModalContainer>
     </div>
   );
 };

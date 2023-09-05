@@ -19,7 +19,9 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   const router = useRouter();
   const [isHover, setIsHover] = useState(false);
   const [svgData, setSvgData] = useState<string>('');
-  const { setCurrentBlueprintInfo, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
+  const { setCurrentBlueprintInfo, setBlueprintScope, setIsTemplateOpen } = useBlueprintStore(
+    (state) => state.CommonAction,
+  );
 
   const onClickLoad = async () => {
     setCurrentBlueprintInfo(data);
@@ -102,7 +104,6 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
               className='w-6 h-6 rounded-full cursor-pointer'
               style={{ backgroundColor: StatusStyle[data.status].fill }}
             ></div>
-            {/*<div className='w-fit text-xs flex justify-center'>{data.status}</div>*/}
           </div>
         )}
       </div>

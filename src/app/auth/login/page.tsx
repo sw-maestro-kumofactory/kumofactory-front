@@ -1,6 +1,4 @@
 'use client';
-import { useStore } from 'zustand';
-
 import useGoogleAuth from '@/src/hooks/Auth/useGoogleAuth';
 import useGithubAuth from '@/src/hooks/Auth/useGithubAuth';
 import KakaoAuthButton from '@/src/components/Auth/Button/kakaoAuthButton';

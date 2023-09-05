@@ -12,6 +12,7 @@ export interface CommonState {
   isDrag: boolean;
   isMoving: boolean;
   isShowOption: boolean;
+  isTemplateOpen: boolean;
   scale: number;
   quarterPoint: number;
   viewBox: {
@@ -31,6 +32,7 @@ export interface CommonState {
   CommonAction: {
     initState: (id: string) => void;
     initMouseState: () => void;
+    setIsTemplateOpen: (flag: boolean) => void;
     setBlueprintId: (id: string) => void;
     setBlueprintScope: (id: string, scope: BlueprintScope) => void;
     setCurrentBlueprintInfo: (info: BlueprintInfo) => void;

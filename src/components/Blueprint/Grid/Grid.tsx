@@ -42,6 +42,7 @@ const Grid = ({ id }: IProps) => {
     clearComponent,
     setIsEdit,
     setBlueprintId,
+    setIsTemplateOpen,
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();

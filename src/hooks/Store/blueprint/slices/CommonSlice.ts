@@ -71,6 +71,7 @@ export const useCommonSlice: StateCreator<
     height: 0,
   },
   isShowOption: false,
+  isTemplateOpen: false,
   CommonAction: {
     initState: (id: string) => {
       set((state) => {
@@ -88,6 +89,12 @@ export const useCommonSlice: StateCreator<
         state.services[id] = {};
         state.lines[id] = {};
         state.areas[id] = {};
+        return state;
+      });
+    },
+    setIsTemplateOpen: (flag: boolean) => {
+      set((state) => {
+        state.isTemplateOpen = flag;
         return state;
       });
     },
@@ -279,8 +286,10 @@ export const useCommonSlice: StateCreator<
                     currentCount['database'] += 1;
                     currentCount['private'] -= 1;
                     currentOption['subnetType'] = 'DATABASE';
+                    currentOption.securityGroupType = 'DATABASE';
                   } else {
                     currentOption['subnetType'] = 'PRIVATE';
+                    currentOption.securityGroupType = 'PRIVATE';
                   }
                 } else if (currentArea.scope === 'DATABASE') {
                   if (currentService.type !== 'RDS_MYSQL' && currentService.type !== 'ELASTIC_CACHE') {
@@ -288,12 +297,15 @@ export const useCommonSlice: StateCreator<
                     currentCount['database'] -= 1;
                     currentCount['private'] += 1;
                     currentOption['subnetType'] = 'PRIVATE';
+                    currentOption.securityGroupType = 'PRIVATE';
                   } else {
                     containRDS = true;
                     currentOption['subnetType'] = 'DATABASE';
+                    currentOption.securityGroupType = 'DATABASE';
                   }
                 } else {
                   currentOption['subnetType'] = 'PUBLIC';
+                  currentOption.securityGroupType = 'PUBLIC';
                 }
               } else if (currentArea.type === 'AZ') {
                 currentOption['availabilityZone'] = currentArea.az;
