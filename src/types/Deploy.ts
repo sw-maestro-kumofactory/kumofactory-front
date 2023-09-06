@@ -42,4 +42,16 @@ export interface DeployRequest {
   env: EnvironmentVariables[];
 }
 
+export interface RecourseResponse {
+  id: string;
+  key: string;
+  result: Record<string, Resource>;
+}
+
+export interface Resource {
+  instanceId: string;
+  instanceName: string;
+  privateIp: string;
+}
+
 export type DeployState = 'PROVISIONING' | 'PENDING' | 'SUCCESS' | 'FAIL';

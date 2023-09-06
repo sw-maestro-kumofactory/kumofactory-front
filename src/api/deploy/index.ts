@@ -1,5 +1,5 @@
 import { authAxiosInstance } from '@/src/api';
-import { DeployRequest, DeployResponse, PersonalRepoResponse } from '@/src/types/Deploy';
+import { DeployRequest, DeployResponse, PersonalRepoResponse, RecourseResponse } from '@/src/types/Deploy';
 
 export const getUserRepositories = async () => {
   const { data } = await authAxiosInstance.get<DeployResponse>(`/api/build/list`);
@@ -36,10 +36,6 @@ export const uploadSQLFile = async (body: FormData) => {
 };
 
 export const getResourceId = async (blueprintId: string) => {
-  const { data } = await authAxiosInstance.get(`/api/build/resource/${blueprintId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const { data } = await authAxiosInstance.get<RecourseResponse>(`/api/build/resource/${blueprintId}`);
   return data;
 };

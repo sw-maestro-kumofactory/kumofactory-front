@@ -16,6 +16,7 @@ import BlueprintNamePopover from '@/src/components/common/Popover/BlueprintNameP
 import { getResourceId } from '@/src/api/deploy';
 import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
+import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 
 export const Header = () => {
   const isLogin = useStore(useLoginStore, (state) => state.isLogin);
@@ -27,6 +28,7 @@ export const Header = () => {
   );
   const [currentDeployState, setCurrentDeployState] = useState<DeployState>(currentBlueprintInfo.status);
   const editUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.editUserBlueprints);
+  const addDeployedResource = useDeployStore((state) => state.DeployAction.addDeployedResource);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -43,7 +45,9 @@ export const Header = () => {
   const getResourceIds = async () => {
     try {
       const data = await getResourceId(currentBlueprintInfo.uuid);
-      console.log(data);
+      Object.keys(data.result).map((key) => {
+        addDeployedResource(key, data.result[key]);
+      });
     } catch (e) {}
   };
 

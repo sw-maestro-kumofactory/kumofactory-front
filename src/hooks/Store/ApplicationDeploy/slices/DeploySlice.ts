@@ -1,7 +1,8 @@
 import { StateCreator } from 'zustand';
+import { stat } from 'fs';
 
 import { DeployState } from '@/src/hooks/Store/ApplicationDeploy/state/DeployState';
-import { EnvironmentVariables } from '@/src/types/Deploy';
+import { EnvironmentVariables, Resource } from '@/src/types/Deploy';
 
 export const useOptionSlice: StateCreator<
   DeployState,
@@ -19,7 +20,14 @@ export const useOptionSlice: StateCreator<
     branch: '',
   },
   environmentVariables: {},
+  deployedResourceList: {},
   DeployAction: {
+    addDeployedResource: (id: string, resource: Resource) => {
+      set((state) => {
+        state.deployedResourceList[id] = resource;
+        return state;
+      });
+    },
     setTargetInstanceId: (targetInstanceId: string) => {
       set((state) => ({ ...state, targetInstanceId }));
     },
