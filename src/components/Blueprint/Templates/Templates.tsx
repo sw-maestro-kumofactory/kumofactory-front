@@ -45,8 +45,8 @@ const Templates = () => {
       const tmp: Record<string, string> = {};
       const templateObj: Record<string, BlueprintInfo> = {};
       for (let i = 0; i < data.length; i++) {
-        // let t = await fetchSvgData(data[i].presignedUrl!);
-        // tmp[data[i].uuid] = t;
+        let t = await fetchSvgData(data[i].presignedUrl!);
+        tmp[data[i].uuid] = t;
         templateObj[data[i].uuid] = data[i];
       }
       setThumbnails(tmp);
@@ -76,7 +76,6 @@ const Templates = () => {
         setCurrentBlueprintInfo(templateInfo);
         addUserBlueprint(templateInfo, false);
       }
-
       setTemplate({ data: templateData, isTemplate: true });
       setIsTemplateOpen(false);
       if (flag) router.push(`/blueprint/${newUUID}`);

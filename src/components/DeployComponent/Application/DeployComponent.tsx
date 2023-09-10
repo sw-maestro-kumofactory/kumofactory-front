@@ -51,9 +51,6 @@ const DeployComponent = () => {
     }
   };
 
-  console.log(deployedResourceList);
-  console.log(targetInstanceId);
-
   useEffect(() => {
     if (Object.keys(repositoryList).length === 0) {
       getRepo();
@@ -79,9 +76,9 @@ const DeployComponent = () => {
       <div className='w-11/12 h-full'>
         <div className='pb-4 text-2xl '>
           <div>Instance Info</div>
-          {/*<div className='pl-10'>{deployedResourceList[targetInstanceId].instanceId}</div>*/}
-          {/*<div className='pl-10'>{deployedResourceList[targetInstanceId].instanceName}</div>*/}
-          {/*<div className='pl-10'>{deployedResourceList[targetInstanceId].privateIp}</div>*/}
+          <div className='pl-2 text-sm'>Instance ID : {deployedResourceList[targetInstanceId].instanceId}</div>
+          <div className='pl-2 text-sm'>Instance Name : {deployedResourceList[targetInstanceId].instanceName}</div>
+          <div className='pl-2 text-sm'>Instance Private IP : {deployedResourceList[targetInstanceId].privateIp}</div>
         </div>
         <div className='pb-4 text-2xl'>Repositories</div>
         <div className=' pb-4 text-md text-gray-500'>Select Repository to Deploy</div>

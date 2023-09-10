@@ -30,3 +30,8 @@ export const deleteBlueprint = async (id: string) => {
   const { data } = await authAxiosInstance.delete(`/api/blueprint/aws/${id}`);
   return data;
 };
+
+export const getBlueprintDeployStatus = async (id: string) => {
+  const { data } = await authAxiosInstance.get(`/api/blueprint/aws/status/${id}`);
+  return data;
+};

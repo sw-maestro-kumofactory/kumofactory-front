@@ -17,6 +17,7 @@ import { getResourceId } from '@/src/api/deploy';
 import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
+import { getBlueprintDeployStatus } from '@/src/api/blueprint';
 
 export const Header = () => {
   const isLogin = useStore(useLoginStore, (state) => state.isLogin);
@@ -36,10 +37,11 @@ export const Header = () => {
   const [isBlueprint, setIsBlueprint] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
 
-  const onClickRefresh = () => {
-    editUserBlueprints({ ...currentBlueprintInfo, status: 'SUCCESS' }, true);
-    setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'SUCCESS' as DeployState });
-    setCurrentDeployState('SUCCESS' as DeployState);
+  const onClickRefresh = async () => {
+    const data = await getBlueprintDeployStatus(currentBlueprintInfo.uuid);
+    editUserBlueprints({ ...currentBlueprintInfo, status: data }, true);
+    setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: data as DeployState });
+    setCurrentDeployState(data as DeployState);
   };
 
   const getResourceIds = async () => {
@@ -123,9 +125,11 @@ export const Header = () => {
             >
               Deploy
             </div>
-            <button className='ml-12' onClick={() => setIsTemplateOpen(true)}>
-              template
-            </button>
+            {isBlueprint && (
+              <button className='ml-12' onClick={() => setIsTemplateOpen(true)}>
+                template
+              </button>
+            )}
           </div>
           <div className='flex gap-x-8'>
             <Status onClick={onClickRefresh} currentState={currentDeployState} />

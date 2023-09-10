@@ -1,5 +1,5 @@
 import { authAxiosInstance } from '@/src/api';
-import { DeployRequest, DeployResponse, PersonalRepoResponse, RecourseResponse } from '@/src/types/Deploy';
+import { DeployRequest, DeployResponse, PersonalRepoResponse, RecourseResponse, Resource } from '@/src/types/Deploy';
 
 export const getUserRepositories = async () => {
   const { data } = await authAxiosInstance.get<DeployResponse>(`/api/build/list`);
@@ -37,5 +37,10 @@ export const uploadSQLFile = async (body: FormData) => {
 
 export const getResourceId = async (blueprintId: string) => {
   const { data } = await authAxiosInstance.get<RecourseResponse>(`/api/build/resource/${blueprintId}`);
+  const newObj: Record<string, Resource> = {};
+  Object.keys(data.result).forEach((key) => {
+    newObj[data.result[key].uuid] = data.result[key];
+  });
+  data.result = newObj;
   return data;
 };

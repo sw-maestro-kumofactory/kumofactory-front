@@ -52,6 +52,7 @@ export interface Resource {
   instanceId: string;
   instanceName: string;
   privateIp: string;
+  uuid: string;
 }
 
 export type DeployState = 'PROVISIONING' | 'PENDING' | 'SUCCESS' | 'FAIL';
