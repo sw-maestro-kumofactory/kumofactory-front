@@ -33,6 +33,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
       alert('You can deploy only when the blueprint is successfully deployed.');
       return;
     }
+    setCurrentBlueprintInfo(data);
     router.push(`/blueprint/${data.uuid}/deploy`);
   };
 

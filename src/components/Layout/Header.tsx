@@ -23,6 +23,7 @@ export const Header = () => {
   const isLogin = useStore(useLoginStore, (state) => state.isLogin);
   const isTemplateOpen = useBlueprintStore((state) => state.isTemplateOpen);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
+  const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
   const { setBlueprintId, setCurrentBlueprintInfo, setIsTemplateOpen } = useBlueprintStore(
     (state) => state.CommonAction,
@@ -44,9 +45,9 @@ export const Header = () => {
     setCurrentDeployState(data as DeployState);
   };
 
-  const getResourceIds = async () => {
+  const getResourceIds = async (id: string) => {
     try {
-      const data = await getResourceId(currentBlueprintInfo.uuid);
+      const data = await getResourceId(id);
       Object.keys(data.result).map((key) => {
         addDeployedResource(key, data.result[key]);
       });
@@ -64,13 +65,18 @@ export const Header = () => {
       if (Object.keys(userBlueprints).includes(d[2])) setCurrentDeployState(userBlueprints[d[2]].status);
       if (d[3] === 'deploy') {
         setIsBlueprint(false);
-        getResourceIds();
+        console.log('header 68 line', currentBlueprintInfo.uuid);
+        getResourceIds(currentBlueprintInfo.uuid);
       }
     } else {
       setIsBlueprint(true);
       setBlueprintId('');
     }
   }, [pathname]);
+
+  useEffect(() => {
+    if (targetInstanceId) getResourceIds(targetInstanceId);
+  }, [targetInstanceId]);
 
   useEffect(() => {
     setCurrentDeployState(currentBlueprintInfo.status);

@@ -25,13 +25,13 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
   const setData = async (id: string) => {
     if (!blueprintList.includes(id)) {
       initState(blueprintId);
-      setTargetInstanceId('');
       setTargetInstanceType('');
       try {
         const data = await getBlueprintListById(id);
         setTemplate({ data: data, isTemplate: false });
       } catch (e) {}
     }
+    setTargetInstanceId('');
     setCurrentBlueprintInfo({
       uuid: blueprintId,
       name: userBlueprints[id].name,

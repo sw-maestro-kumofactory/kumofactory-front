@@ -67,18 +67,20 @@ const DeployComponent = () => {
     );
   }
 
-  if (targetInstanceType === 'RDS') {
-    return <SqlUploader />;
-  }
-
   return (
     <div className='w-full h-full pl-[294px] flex flex-col p-8 overflow-y-scroll items-center'>
       <div className='w-11/12 h-full'>
         <div className='pb-4 text-2xl '>
           <div>Instance Info</div>
-          <div className='pl-2 text-sm'>Instance ID : {deployedResourceList[targetInstanceId].instanceId}</div>
-          <div className='pl-2 text-sm'>Instance Name : {deployedResourceList[targetInstanceId].instanceName}</div>
-          <div className='pl-2 text-sm'>Instance Private IP : {deployedResourceList[targetInstanceId].privateIp}</div>
+          {deployedResourceList[targetInstanceId] && (
+            <>
+              <div className='pl-2 text-sm'>Instance ID : {deployedResourceList[targetInstanceId].instanceId}</div>
+              <div className='pl-2 text-sm'>Instance Name : {deployedResourceList[targetInstanceId].instanceName}</div>
+              <div className='pl-2 text-sm'>
+                Instance Private IP : {deployedResourceList[targetInstanceId].privateIp}
+              </div>
+            </>
+          )}
         </div>
         <div className='pb-4 text-2xl'>Repositories</div>
         <div className=' pb-4 text-md text-gray-500'>Select Repository to Deploy</div>

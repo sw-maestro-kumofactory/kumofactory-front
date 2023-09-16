@@ -9,6 +9,7 @@ import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import useInput from '@/src/hooks/useInput';
 
 const Setting = () => {
   const params = useParams();
@@ -21,8 +22,13 @@ const Setting = () => {
   const [language, setLanguage] = useState<string>('');
   const [curBranch, setCurBranch] = useState<string>('');
   const [branches, setBranches] = useState<string[]>([]);
+  const { value: dockerFilePath, onHandleChange: onChangeDockerFilePath } = useInput('');
 
   const onClickDeployButton = async () => {
+    if (dockerFilePath === '' || language) {
+      alert('You should select dockerFilePath of framework');
+      return;
+    }
     const data: DeployRequest = {
       targetInstance: 'i-02b5064a1e36be086',
       user: username,
@@ -71,7 +77,6 @@ const Setting = () => {
             Description={'Your Repository will be Deployed Selected Instance'}
             onClickConfirm={() => {
               onClickDeployButton();
-              alert('Deploy Success!');
             }}
           >
             <div className='p-4 bg-white border-solid border-2 border-[#799ACF] text-[#799ACF] rounded-xl cursor-pointer'>
@@ -100,9 +105,14 @@ const Setting = () => {
             ))}
           </select>
         </div>
-        <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Select Framework</div>
+        {/* Framework */}
+        <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Deploy Option</div>
+        <div className='mt-4 text-[#195091]'>
+          For Application Deploy, You should select framework or input dockerfile path.
+        </div>
         <div className='py-4 px-2'>
-          <div className='flex gap-x-8'>
+          <div className='font-bold'>Select Framework</div>
+          <div className='flex gap-x-8 text-sm'>
             <div
               className='cursor-pointer'
               onClick={() => {
@@ -122,7 +132,16 @@ const Setting = () => {
               <label htmlFor='node'>Express</label>
             </div>
           </div>
+          <hr className='my-4 w-1/2' />
+          <div className='font-bold mb-2'>Dockerfile Path</div>
+          <input
+            className='p-2 rounded-lg w-1/2 text-sm'
+            value={dockerFilePath}
+            onChange={onChangeDockerFilePath}
+            placeholder='ex) /dockerfile'
+          />
         </div>
+        {/* Environment Variable */}
         <EnvironmentVariableComponent />
       </div>
     </div>
