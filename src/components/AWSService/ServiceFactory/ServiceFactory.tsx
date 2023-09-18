@@ -1,3 +1,5 @@
+import { Inter } from 'next/font/google';
+
 import { IComponent, ServicesString } from '@/src/types/Services';
 import EC2SVG from '@/public/icons/Compute/Arch_Amazon-EC2_64.svg';
 import RDSSVG from '@/public/icons/Database/Arch_Amazon-RDS_64.svg';
@@ -12,6 +14,9 @@ import ELBSVG from '@/public/icons/Network/Arch_Elastic-Load-Balancing_64.svg';
 import ALBSVG from '@/public/icons/Network/Res_Elastic-Load-Balancing_Application-Load-Balancer_48.svg';
 import NLBSVG from '@/public/icons/Network/Res_Elastic-Load-Balancing_Network-Load-Balancer_48.svg';
 import AutoScalingSVG from '@/public/icons/Compute/Arch_Amazon-EC2-Auto-Scaling_64.svg';
+import InternetGatewaySVG from '@/public/icons/Visualization/Res_Amazon-VPC_Internet-Gateway_48.svg';
+import UserSVG from '@/public/icons/Visualization/Res_User_48_Light.svg';
+import SQSSVG from '@/public/icons/Etc/Arch_Amazon-Simple-Queue-Service_64.svg';
 import { CommonInfo } from '@/src/components/AWSService/ServiceFactory/CommonInfo';
 interface IServiceFactory {
   type: ServicesString;
@@ -66,6 +71,12 @@ export class ServiceFactory implements IFactory {
         return <NLBSVG />;
       case 'AUTO_SCALING':
         return <AutoScalingSVG />;
+      case 'INTERNET_GATEWAY':
+        return <InternetGatewaySVG />;
+      case 'USER':
+        return <UserSVG />;
+      case 'SQS':
+        return <SQSSVG />;
     }
   }
 }

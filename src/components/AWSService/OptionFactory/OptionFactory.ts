@@ -56,6 +56,18 @@ export class OptionFactory implements IFactory {
         return ALBOption(id);
       case 'AUTO_SCALING':
         return AutoScalingOption(id);
+      case 'INTERNET_GATEWAY':
+        return {
+          id: id,
+        };
+      case 'USER':
+        return {
+          id: id,
+        };
+      case 'SQS':
+        return {
+          id: id,
+        };
     }
   }
   public getFormOfService(type: ServicesString, id: string): React.ReactNode {

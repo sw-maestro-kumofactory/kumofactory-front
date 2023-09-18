@@ -12,6 +12,7 @@ const OptionContainer = ({ id, type }: props) => {
   const isShowOption = useBlueprintStore((state) => state.isShowOption);
 
   if (!isShowOption) return null;
+
   return (
     <div
       className='absolute top-16 right-0 w-60 h-[calc(100%-64px)] bg-white border-black select-none bg-opacity-90 z-50 px-4'

@@ -1,6 +1,12 @@
 import { AreaItemInterface, ServiceItemType } from '@/src/types/MenuItems';
 
 export const MenuItemList: ServiceItemType = {
+  Visualization: [
+    {
+      name: 'User',
+      type: 'USER',
+    },
+  ],
   Compute: [
     {
       name: 'EC2',
@@ -30,8 +36,16 @@ export const MenuItemList: ServiceItemType = {
       name: 'ElastiCache',
       type: 'ELASTIC_CACHE',
     },
+    {
+      name: 'SQS',
+      type: 'SQS',
+    },
   ],
   Network: [
+    {
+      name: 'Internet_gateway',
+      type: 'INTERNET_GATEWAY',
+    },
     {
       name: 'ROUTE53',
       type: 'ROUTE53',

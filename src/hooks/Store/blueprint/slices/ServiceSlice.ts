@@ -2,7 +2,8 @@ import { StateCreator } from 'zustand';
 
 import { ServiceState } from '@/src/hooks/Store/blueprint/state/ServiceState';
 import { AllBluePrintStates } from '@/src/hooks/Store/blueprint/useBlueprintStore';
-import { IComponent, ServiceOptions } from '@/src/types/Services';
+import { ConfigurableService, IComponent, ServiceOptions } from '@/src/types/Services';
+import { ConfigurableServices } from '@/src/assets/ConfigurableServices';
 
 export const useServiceSlice: StateCreator<
   AllBluePrintStates,
@@ -42,6 +43,7 @@ export const useServiceSlice: StateCreator<
             if (state.linkedServiceId && state.curLineId) {
               state.lines[state.currentBlueprintInfo.uuid][state.curLineId].dst.componentId = state.linkedServiceId;
               state.services[state.currentBlueprintInfo.uuid][state.linkedServiceId].lines.push(state.curLineId);
+              state.services[state.currentBlueprintInfo.uuid][state.linkedServiceId].lines.push(state.curLineId);
               state.services[state.currentBlueprintInfo.uuid][
                 state.lines[state.currentBlueprintInfo.uuid][state.curLineId].src.componentId
               ].lines.push(state.curLineId);
@@ -69,8 +71,9 @@ export const useServiceSlice: StateCreator<
       });
     },
     onDoubleClickService: (e, service) => {
+      e.stopPropagation();
       set((state) => {
-        if (service && e.detail === 2) {
+        if (service && e.detail === 2 && ConfigurableServices.includes(service.type as ConfigurableService)) {
           state.doubleClickedServiceId = service.id;
           state.isShowOption = true;
         }
