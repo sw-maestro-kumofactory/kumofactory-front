@@ -3,7 +3,7 @@ import { Areas, AreaTypes } from '@/src/types/Area';
 
 export interface ServiceItemInterface {
   name: string;
-  type: ServicesString;
+  type: Partial<ServicesString>;
 }
 
 export interface AreaItemInterface {

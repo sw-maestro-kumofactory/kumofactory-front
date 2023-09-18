@@ -10,6 +10,8 @@ import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 import { AreaTypes, IArea } from '@/src/types/Area';
 import DeployButton from '@/src/components/Blueprint/FloatingButton/DeployButton';
+import service from '@/src/components/AWSService/Service';
+import { ConfigurableService } from '@/src/types/Services';
 
 interface IProps {
   id: string;
@@ -178,14 +180,12 @@ const Grid = ({ id }: IProps) => {
             <g id='services'>
               {Object.keys(services).map((key) => {
                 const serviceName = services[key].type;
-
                 const serviceNameWidth = serviceName.length * 13;
                 const xAdjustment = (90 - serviceNameWidth) / 2;
                 return (
                   <g key={services[key].id}>
                     <Service
                       onClick={(e) => {
-                        e.stopPropagation();
                         onDoubleClickService(e, services[key]);
                       }}
                       onMouseDown={(e) => {

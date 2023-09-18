@@ -10,13 +10,13 @@ const App = () => {
   const [donation, setDonation] = useState<Donation>({ user: 0, amount: 0 });
 
   useEffect(() => {
-    const source = new EventSource(`http://localhost:4650/dashboard`);
+    const source = new EventSource(`${process.env.NEXT_PUBLIC_SERVER_URL}/build/buildStatus/i-020762bcb5322ef4e`);
 
     source.addEventListener('open', () => {
       console.log('SSE opened!');
     });
 
-    source.addEventListener('message', (e) => {
+    source.addEventListener('status', (e) => {
       console.log(e.data);
       const data: Donation = JSON.parse(e.data);
 

@@ -15,22 +15,26 @@ const Setting = () => {
   const params = useParams();
   const { currentBlueprintId, repoId, userName } = params;
   const router = useRouter();
+  const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
   const environmentVariables = useDeployStore((state) => state.environmentVariables);
   const targetInstanceName = useDeployStore((state) => state.targetInstanceName);
   const username = useLoginStore((state) => state.username);
+  const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
 
   const [language, setLanguage] = useState<string>('');
   const [curBranch, setCurBranch] = useState<string>('');
   const [branches, setBranches] = useState<string[]>([]);
+  const [isEtc, setIsEtc] = useState<boolean>(false);
   const { value: dockerFilePath, onHandleChange: onChangeDockerFilePath } = useInput('');
 
   const onClickDeployButton = async () => {
-    if (dockerFilePath === '' || language) {
-      alert('You should select dockerFilePath of framework');
-      return;
-    }
+    // if (dockerFilePath === '' || !language) {
+    //   alert('You should select dockerFilePath of framework');
+    //   return;
+    // }
+
     const data: DeployRequest = {
-      targetInstance: 'i-02b5064a1e36be086',
+      targetInstance: deployedResourceList[targetInstanceId!].instanceId,
       user: username,
       repo: repoId,
       language: language,
@@ -38,12 +42,20 @@ const Setting = () => {
       env: environmentVariables[repoId],
     };
     // console.log(data);
-    // try {
-    //   const d = postDeploy(data);
-    //   alert('deploy Success!');
-    // } catch (e) {
-    //   alert('deploy Fail!');
-    // }
+    try {
+      const d = await postDeploy(data);
+      const reader = d.body.pipeThrough(new TextDecoderStream()).getReader();
+      console.log(reader);
+      while (true) {
+        const { value, done } = await reader.read();
+        console.log(value);
+        if (done) break;
+        console.log('Received', value);
+      }
+      alert('deploy Success!');
+    } catch (e) {
+      alert('deploy Fail!');
+    }
   };
 
   const getBranchList = async () => {
@@ -64,6 +76,32 @@ const Setting = () => {
   useEffect(() => {
     getBranchList();
   }, []);
+
+  // useEffect(() => {
+  //   const source = new EventSource(`/api/build/buildStatus/i-020762bcb5322ef4e`);
+  //
+  //   source.addEventListener('open', () => {
+  //     console.log('SSE opened!');
+  //   });
+  //
+  //   source.addEventListener('status', (e) => {
+  //     console.log(e.data);
+  //   });
+  //   source.addEventListener('message', (e) => {
+  //     console.log(e.data);
+  //   });
+  //   source.addEventListener('success', (e) => {
+  //     console.log(e.data);
+  //   });
+  //
+  //   source.addEventListener('error', (e) => {
+  //     console.error('Error: ', e);
+  //   });
+  //
+  //   return () => {
+  //     source.close();
+  //   };
+  // }, []);
 
   return (
     <div className='w-full h-full pl-[294px] flex flex-col items-center overflow-y-scroll'>
@@ -114,8 +152,8 @@ const Setting = () => {
           <div className='font-bold'>Select Framework</div>
           <div className='flex gap-x-8 text-sm'>
             <div
-              className='cursor-pointer'
               onClick={() => {
+                setIsEtc(false);
                 setLanguage('java');
               }}
             >
@@ -123,23 +161,36 @@ const Setting = () => {
               <label htmlFor='java'>Spring</label>
             </div>
             <div
-              className='cursor-pointer'
               onClick={() => {
+                setIsEtc(false);
                 setLanguage('node');
               }}
             >
               <input className='m-2' type='radio' name='language' value='node' id='node' />
               <label htmlFor='node'>Express</label>
             </div>
+            <div
+              onClick={() => {
+                setIsEtc(true);
+                setLanguage('');
+              }}
+            >
+              <input className='m-2' type='radio' name='language' value='etc' id='etc' />
+              <label htmlFor='etc'>dockerfile path</label>
+            </div>
           </div>
-          <hr className='my-4 w-1/2' />
-          <div className='font-bold mb-2'>Dockerfile Path</div>
-          <input
-            className='p-2 rounded-lg w-1/2 text-sm'
-            value={dockerFilePath}
-            onChange={onChangeDockerFilePath}
-            placeholder='ex) /dockerfile'
-          />
+          {isEtc && (
+            <>
+              <hr className='my-4 w-1/2' />
+              <div className='font-bold mb-2'>Dockerfile Path</div>
+              <input
+                className='p-2 rounded-lg w-1/2 text-sm'
+                value={dockerFilePath}
+                onChange={onChangeDockerFilePath}
+                placeholder='ex) /dockerfile'
+              />
+            </>
+          )}
         </div>
         {/* Environment Variable */}
         <EnvironmentVariableComponent />
