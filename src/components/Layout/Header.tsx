@@ -159,7 +159,7 @@ export const Header = () => {
             <div className='h-[19px] border-r-2 ml-[16px] border-[#E2E9F0]'></div>
             {isBlueprint && (
               <button
-                className='border-[#E2E9F0] border-2 w-[110px] h-[30px] text-black '
+                className='border-[#E2E9F0] border-2 w-[110px] h-[30px] text-black ml-[16px] rounded-md'
                 onClick={() => setIsTemplateOpen(true)}
               >
                 Template
@@ -186,7 +186,7 @@ export const Header = () => {
           </>
         ) : (
           <>
-            <Link className='bg-[#799ACF] px-4 py-2 rounded-2xl' href='/auth/login'>
+            <Link className='bg-[#00C0B5] text-white px-4 py-2 rounded-2xl' href='/auth/login'>
               SignIn
             </Link>
           </>

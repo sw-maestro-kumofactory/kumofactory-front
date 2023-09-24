@@ -8,7 +8,7 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 
 const Title = ({ title }: { title: string }) => (
-  <div className='w-full font-bold h-16 text-lg flex items-center mx-4 mt-2'>{title}</div>
+  <div className='w-full font-semibold h-16 text-[12px] flex items-center mx-4 mt-2'>{title}</div>
 );
 
 const BlueprintMenuList = () => {
@@ -18,7 +18,7 @@ const BlueprintMenuList = () => {
   const scope = useBlueprintStore((state) => state.currentBlueprintInfo.scope);
 
   return (
-    <div className='overflow-x-hidden w-[300px] min-w-[300px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
+    <div className='overflow-x-hidden w-[272px] min-w-[272px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
       <Title title='Scope' />
       <div className='text-sm text-gray-500 mx-4 -mt-2 mb-4'>공개 범위를 설정하세요!</div>
       <label className='relative inline-flex items-center cursor-pointer mx-4'>

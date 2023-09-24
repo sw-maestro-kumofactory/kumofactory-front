@@ -15,12 +15,17 @@ interface IProps extends IComponent {
 
 const Service = (props: IProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const textRef = useRef<SVGTextElement>(null);
 
   useEffect(() => {
     if (svgRef.current) {
       svgRef.current.setAttribute('x', props.x.toString());
       svgRef.current.setAttribute('y', props.y.toString());
     }
+    // if (textRef.current) {
+    //   textRef.current.setAttribute('x', props.x.toString());
+    //   textRef.current.setAttribute('y', props.y.toString());
+    // }
   }, [props.x, props.y]);
 
   return (
@@ -36,6 +41,9 @@ const Service = (props: IProps) => {
       {props.isActive && (
         <path d='M1 1 L 1 79 L 79 79 L 79 1z' stroke='#19509155' fill='transparent' fillOpacity='0.5' strokeWidth='3' />
       )}
+      {/*<text ref={textRef} textAnchor='middle' alignmentBaseline='middle' className='text-[11px]'>*/}
+      {/*  {props.type}*/}
+      {/*</text>*/}
     </svg>
   );
 };
