@@ -22,7 +22,7 @@ export const getRepoBranches = async (owner: string, repo: string) => {
 };
 
 export const postDeploy = async (body: DeployRequest) => {
-  const { data } = await authAxiosInstance.post(`/api/build/deployAsync`, body);
+  const { data } = await authAxiosInstance.post(`/api/build/deployAsync/v2`, body);
   return data;
 };
 

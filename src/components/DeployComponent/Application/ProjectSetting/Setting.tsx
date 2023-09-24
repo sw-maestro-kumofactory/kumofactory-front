@@ -44,15 +44,8 @@ const Setting = () => {
     // console.log(data);
     try {
       const d = await postDeploy(data);
-      const reader = d.body.pipeThrough(new TextDecoderStream()).getReader();
-      console.log(reader);
-      while (true) {
-        const { value, done } = await reader.read();
-        console.log(value);
-        if (done) break;
-        console.log('Received', value);
-      }
-      alert('deploy Success!');
+      console.log('deploy : ', d);
+      alert('deploy Started! You can check the status in the Deploy List page.');
     } catch (e) {
       alert('deploy Fail!');
     }
@@ -77,31 +70,31 @@ const Setting = () => {
     getBranchList();
   }, []);
 
-  // useEffect(() => {
-  //   const source = new EventSource(`/api/build/buildStatus/i-020762bcb5322ef4e`);
-  //
-  //   source.addEventListener('open', () => {
-  //     console.log('SSE opened!');
-  //   });
-  //
-  //   source.addEventListener('status', (e) => {
-  //     console.log(e.data);
-  //   });
-  //   source.addEventListener('message', (e) => {
-  //     console.log(e.data);
-  //   });
-  //   source.addEventListener('success', (e) => {
-  //     console.log(e.data);
-  //   });
-  //
-  //   source.addEventListener('error', (e) => {
-  //     console.error('Error: ', e);
-  //   });
-  //
-  //   return () => {
-  //     source.close();
-  //   };
-  // }, []);
+  useEffect(() => {
+    const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[targetInstanceId!].instanceId}`);
+
+    source.addEventListener('open', () => {
+      console.log('SSE opened!');
+    });
+
+    source.addEventListener('status', (e) => {
+      console.log('status : ', e.data);
+    });
+    source.addEventListener('message', (e) => {
+      console.log('message : ', e.data);
+    });
+    source.addEventListener('success', (e) => {
+      console.log('success : ', e.data);
+    });
+
+    source.addEventListener('error', (e) => {
+      console.error('Error: ', e);
+    });
+
+    return () => {
+      source.close();
+    };
+  }, []);
 
   return (
     <div className='w-full h-full pl-[294px] flex flex-col items-center overflow-y-scroll'>

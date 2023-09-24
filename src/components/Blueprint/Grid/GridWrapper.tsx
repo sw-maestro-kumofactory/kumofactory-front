@@ -18,6 +18,7 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const blueprintList = useBlueprintStore((state) => state.blueprintList);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
+  const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
   const { setTargetInstanceId, setTargetInstanceType } = useDeployStore((state) => state.DeployAction);
   const { initState, setCurrentBlueprintInfo, initMouseState } = useBlueprintStore((state) => state.CommonAction);
   const { setTemplate } = useSetTemplate();
@@ -31,7 +32,7 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
         setTemplate({ data: data, isTemplate: false });
       } catch (e) {}
     }
-    setTargetInstanceId('');
+    if (!targetInstanceId) setTargetInstanceId('');
     setCurrentBlueprintInfo({
       uuid: blueprintId,
       name: userBlueprints[id].name,

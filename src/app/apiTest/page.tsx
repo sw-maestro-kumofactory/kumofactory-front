@@ -10,7 +10,8 @@ const App = () => {
   const [donation, setDonation] = useState<Donation>({ user: 0, amount: 0 });
 
   useEffect(() => {
-    const source = new EventSource(`${process.env.NEXT_PUBLIC_SERVER_URL}/build/buildStatus/i-020762bcb5322ef4e`);
+    // const source = new EventSource(`${process.env.NEXT_PUBLIC_SERVER_URL}/build/buildStatus/i-020762bcb5322ef4e`);
+    const source = new EventSource('http://localhost:4650/dashboard');
 
     source.addEventListener('open', () => {
       console.log('SSE opened!');
