@@ -19,6 +19,7 @@ const EC2Info = ({ option, active }: IProps) => {
   const setTargetInstanceId = useDeployStore((state) => state.DeployAction.setTargetInstanceId);
   const setTargetInstanceName = useDeployStore((state) => state.DeployAction.setTargetInstanceName);
   const setTargetInstanceType = useDeployStore((state) => state.DeployAction.setTargetInstanceType);
+  const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
   const onClickArea = () => {
     if (!disableEvent) {
       setTargetInstanceId(showOptions ? '' : option.id);
@@ -61,6 +62,7 @@ const EC2Info = ({ option, active }: IProps) => {
         <div className='text-black'>
           <Info content={`Subnet : ${option.subnetType}`} />
           <Info content={`Availability Zone : ${option.availabilityZone}`} />
+          <Info content={`Public IP : ${deployedResourceList[option.id]?.publicIp}`} />
         </div>
       )}
     </div>

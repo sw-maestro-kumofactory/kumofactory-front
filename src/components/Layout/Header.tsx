@@ -66,7 +66,6 @@ export const Header = () => {
       if (Object.keys(userBlueprints).includes(d[2])) setCurrentDeployState(userBlueprints[d[2]].status);
       if (d[3] === 'deploy') {
         setIsBlueprint(false);
-        console.log('header 68 line', currentBlueprintInfo.uuid);
         getResourceIds(currentBlueprintInfo.uuid);
       }
     } else {
@@ -156,14 +155,17 @@ export const Header = () => {
                 Deploy
               </div>
             </div>
-            <div className='h-[19px] border-r-2 ml-[16px] border-[#E2E9F0]'></div>
+
             {isBlueprint && (
-              <button
-                className='border-[#E2E9F0] border-2 w-[110px] h-[30px] text-black ml-[16px] rounded-md'
-                onClick={() => setIsTemplateOpen(true)}
-              >
-                Template
-              </button>
+              <>
+                <div className='h-[19px] border-r-2 ml-[16px] border-[#E2E9F0]'></div>
+                <button
+                  className='border-[#E2E9F0] border-2 w-[110px] h-[30px] text-black ml-[16px] rounded-md'
+                  onClick={() => setIsTemplateOpen(true)}
+                >
+                  Template
+                </button>
+              </>
             )}
           </div>
           <div className='flex gap-x-8'>

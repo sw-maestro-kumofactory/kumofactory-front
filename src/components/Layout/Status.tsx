@@ -14,7 +14,7 @@ const Status = ({ currentState, onClick }: IProps) => {
     <div className='flex gap-x-2 w-fit h-8 items-center justify-start'>
       <div className={`w-8 h-8 rounded-full`} style={{ backgroundColor: StatusStyle[currentState].fill }}></div>
       <div className='w-32 flex justify-center'>{currentState}</div>
-      <div className='p-2 border-[#E2E9F0] border-2 rounded-xl text-[#323438]'>
+      <div className='flex justify-center items-center w-8 h-8 border-[#E2E9F0] border-2 rounded-xl text-[#323438]'>
         <FontAwesomeIcon className='cursor-pointer' icon={faRotate} onClick={onClick} />
       </div>
     </div>

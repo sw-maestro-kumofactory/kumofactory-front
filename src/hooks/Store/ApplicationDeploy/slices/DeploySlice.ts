@@ -1,5 +1,4 @@
 import { StateCreator } from 'zustand';
-import { stat } from 'fs';
 
 import { DeployState } from '@/src/hooks/Store/ApplicationDeploy/state/DeployState';
 import { EnvironmentVariables, Resource } from '@/src/types/Deploy';
