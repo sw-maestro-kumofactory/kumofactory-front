@@ -115,12 +115,17 @@ export const Header = () => {
           </svg>
         </Link>
         {currentBlueprintInfo.uuid && (
-          <BlueprintNamePopover>
-            <div className='flex gap-x-4 items-center'>
-              <div className='max-w-xs overflow-x-hidden '>{currentBlueprintInfo.name}</div>
-              <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
-            </div>
-          </BlueprintNamePopover>
+          <>
+            <div className='h-[19px] border-r-2 border-[#E2E9F0]'></div>
+            <BlueprintNamePopover>
+              <div className='flex gap-x-4 items-center text-[#323438]'>
+                <div className='max-w-xs overflow-x-hidden '>{currentBlueprintInfo.name}</div>
+                <div className='w-[29px] h-29px] rounded-md border-solid border-2 border-[#DAE2EC]'>
+                  <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
+                </div>
+              </div>
+            </BlueprintNamePopover>
+          </>
         )}
       </div>
 
