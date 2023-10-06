@@ -34,13 +34,15 @@ const NewBlueprint = () => {
   };
 
   return (
-    <div
-      className='flex flex-col items-center justify-center w-full h-full text-sky-700 bg-gray-200 border-4 hover:border-sky-700 rounded-2xl cursor-pointer'
-      onClick={onClick}
-    >
-      <FontAwesomeIcon icon={faSquarePlus} className='text-4xl mb-4' />
-      New BluePrint
-    </div>
+    <>
+      <div
+        className='flex flex-col items-center justify-center w-full h-[174px] text-[#96ABBB] bg-[#F9FAFC] border-2 border-[#DAE2EC] rounded-2xl cursor-pointer'
+        onClick={onClick}
+      >
+        <FontAwesomeIcon icon={faSquarePlus} className='text-2xl' />
+      </div>
+      <div className='font-semibold  text-[#323438] text-[13px] pt-[10px]'> New Project</div>
+    </>
   );
 };
 

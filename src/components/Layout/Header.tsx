@@ -136,18 +136,24 @@ export const Header = () => {
               <div
                 className={`flex items-center rounded-l-md h-[30px] ${
                   isBlueprint ? 'bg-white text-[#00C0B5]' : 'bg-[#EAF0F4] text-[#96ABBB]'
-                } px-4 cursor-pointer`}
+                } px-4 cursor-pointer gap-x-1`}
                 onClick={() => {
                   setIsBlueprint(true);
                   router.push(`/blueprint/${currentBlueprintInfo.uuid}`);
                 }}
               >
+                <Image
+                  src={isBlueprint ? '/icons/Design/blueprint.svg' : '/icons/Design/blueprint_gray.svg'}
+                  width={16}
+                  height={17}
+                  alt={'blueprint_icon'}
+                />
                 Blueprint
               </div>
               <div
                 className={`flex items-center rounded-r-md h-[30px] ${
                   isBlueprint ? 'bg-[#EAF0F4] text-[#96ABBB]' : 'bg-white text-[#00C0B5]'
-                } px-4 cursor-pointer`}
+                } px-4 cursor-pointer gap-x-1`}
                 onClick={() => {
                   if (currentBlueprintInfo.status === 'SUCCESS') {
                     setIsBlueprint(false);
@@ -157,6 +163,12 @@ export const Header = () => {
                   }
                 }}
               >
+                <Image
+                  src={isBlueprint ? '/icons/Design/rocket_gray.svg' : '/icons/Design/rocket.svg'}
+                  width={20}
+                  height={20}
+                  alt={'blueprint_icon'}
+                />
                 Deploy
               </div>
             </div>
@@ -165,10 +177,11 @@ export const Header = () => {
               <>
                 <div className='h-[19px] border-r-2 ml-[16px] border-[#E2E9F0]'></div>
                 <button
-                  className='border-[#E2E9F0] border-2 w-[110px] h-[30px] text-black ml-[16px] rounded-md'
+                  className='border-[#E2E9F0] border-2 w-[110px] h-[30px] text-black ml-[16px] rounded-md flex items-center justify-center gap-x-1'
                   onClick={() => setIsTemplateOpen(true)}
                 >
-                  Template
+                  <Image src='/icons/Design/catalog_black.svg' width={15} height={15} alt='catalog' />
+                  <div>Template</div>
                 </button>
               </>
             )}

@@ -13,7 +13,7 @@ const DropDown = ({ title, children, absolute }: IProps) => {
   const [showDropdown, setShowDropdown] = useState(true);
 
   return (
-    <div className='m-3 max-w-sm '>
+    <div className='mt-8 ml-5'>
       <div className='flex justify-between text-center' onClick={() => setShowDropdown(!showDropdown)}>
         <label className='text-[12px] font-semibold'>{title}</label>
         <div>

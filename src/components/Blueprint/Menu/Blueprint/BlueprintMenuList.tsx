@@ -20,7 +20,7 @@ const BlueprintMenuList = () => {
   return (
     <div className='overflow-x-hidden w-[272px] min-w-[272px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
       <div className='flex justify-between items-center text-[12px] font-semibold w-full mt-5'>
-        <div className='w-full font-semibold flex items-center mx-4'>Scope</div>
+        <div className='w-full font-semibold flex items-center mx-5'>Scope</div>
         <div className='flex gap-x-2'>
           <div>{scope}</div>
           <label className='relative inline-flex items-center cursor-pointer'>
@@ -37,7 +37,6 @@ const BlueprintMenuList = () => {
           </label>
         </div>
       </div>
-      <label className='relative inline-flex items-center cursor-pointer mx-4'></label>
       <DropDown title={'Areas'} key={'Areas'} absolute={false}>
         {AreaItemList.map((AreaItem) => (
           <AreaItemWrapper key={AreaItem.name} type={AreaItem.type} name={AreaItem.name} scope={AreaItem.scope} />

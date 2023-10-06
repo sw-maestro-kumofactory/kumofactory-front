@@ -6,6 +6,7 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import moment from 'moment';
 import { v1 } from 'uuid';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 import { getAllTemplates, getTemplateById } from '@/src/api/template';
 import { commonAxiosInstance } from '@/src/api';
@@ -89,51 +90,106 @@ const Templates = () => {
   }, []);
 
   return (
-    <div className='w-[90%] h-[90%] bg-white rounded-2xl p-8' onClick={(e) => e.stopPropagation()}>
+    <div className='w-[1365px] h-[685px] bg-white rounded-2xl' onClick={(e) => e.stopPropagation()}>
       {showDetail ? (
         <div className='w-full h-full'>
-          <div className='flex items-center gap-x-2 text-2xl font-bold'>
-            <FontAwesomeIcon onClick={() => setShowDetail('')} icon={faArrowLeft} />
-            Template List
-          </div>
-          <div className='w-full h-[95%] flex pt-4'>
-            <div className='w-1/5 h-full pr-4'>
-              <svg className='w-full rounded-t-lg p-4 mb-4 rounded-md border-solid border-2 border-gray-400'>
-                <g dangerouslySetInnerHTML={{ __html: thumbnails[showDetail] }} />
-              </svg>
-              <div className='text-sm'>Created At : {moment(templates[showDetail].createdAt).format('MM/D, YYYY')}</div>
-              <div className='text-sm'>Updated At : {moment(templates[showDetail].updatedAt).format('MM/D, YYYY')}</div>
+          <div className='flex justify-between py-[17px] pl-[27px]'>
+            <div className='font-bold flex gap-x-4 items-center justify-center'>
+              <FontAwesomeIcon onClick={() => setShowDetail('')} icon={faArrowLeft} />
+              <div>Template Catalog</div>
             </div>
-            <div className='w-4/5 h-full pl-2'>
-              <div className='text-2xl mb-2'>{templates[showDetail].name}</div>
-              <div className='text-xs text-gray-400 mb-4'>Create by {templates[showDetail].username}</div>
-              <hr />
-              <div
-                className='flex w-fit gap-x-4 items-center mt-4 p-2 text-sm text-[#6e58f6] border-solid border-2 border-[#6e58f6] rounded-lg cursor-pointer'
-                onClick={(e) => onClickLoad(e, templates[showDetail].uuid)}
-              >
-                <div className='flex items-center gap-x-2 '>
-                  <FontAwesomeIcon icon={faCopy} />
-                  {templates[showDetail].downloadCount}
+            <div className='flex gap-x-2 mr-[20px]'>
+              <div>X</div>
+            </div>
+          </div>
+          <hr />
+          <div className='pt-9 px-48'>
+            <div className='w-full flex  gap-x-6'>
+              <div className='w-4/5 h-full pl-2'>
+                <div className='flex justify-between items-center'>
+                  <div className='font-extrabold text-xl'>{templates[showDetail].name}</div>
+                  <div
+                    className='flex w-fit gap-x-1.5 items-center text-sm text-[#323438]'
+                    onClick={(e) => onClickLoad(e, templates[showDetail].uuid)}
+                  >
+                    <div className='flex items-center gap-x-2 border-2 border-[#DAE2EC] rounded-md py-2 px-2'>
+                      <FontAwesomeIcon icon={faCopy} />
+                      {templates[showDetail].downloadCount}
+                    </div>
+                    <div className='font-bold p-2 border-2 border-[#DAE2EC] rounded-md'>copy</div>
+                  </div>
                 </div>
-                <div className='w-[2px] h-[28px] bg-gray-400' />
-                <div className='font-bold'>copy</div>
+                <div className='flex items-center gap-x-2.5 pt-1.5'>
+                  <div className='w-8 h-8 rounded-full bg-gray-500'></div>
+                  <div className='text-xs text-gray-400'>Create by {templates[showDetail].username}</div>
+                </div>
+                <div className='flex gap-x-4 pt-3 h-8 text-sm'>
+                  <div className='flex'>
+                    <div>AWS</div>
+                    <div>Public</div>
+                  </div>
+                  <div>hr</div>
+                  <div className='flex'>
+                    <div>❤</div>
+                    <div>123</div>
+                  </div>
+                </div>
+                <div className='py-11'>
+                  <div className='text-[11px]'>
+                    Created At : {moment(templates[showDetail].createdAt).format('MM/D, YYYY')}
+                  </div>
+                  <div className='text-[11px]'>
+                    Updated At : {moment(templates[showDetail].updatedAt).format('MM/D, YYYY')}
+                  </div>
+                </div>
               </div>
-              <div className='w-fit text-lg text-[#6e58f6] p-2 mt-8 border-b-2 border-solid border-[#6e58f6] hover:bg-gray-100'>
-                Description
+              <div>
+                <svg className='w-[290px] h-[174px] rounded-t-lg p-4 mb-4 rounded-md border-solid border-2 border-gray-400'>
+                  <g dangerouslySetInnerHTML={{ __html: thumbnails[showDetail] }} />
+                </svg>
               </div>
-              <hr />
+            </div>
+            <hr />
+            <div>
+              <div className='pt-8 pb-7 font-extrabold text-xl'>Description</div>
               <div className='mt-2'>{templates[showDetail].description}</div>
             </div>
           </div>
         </div>
       ) : (
         <>
-          <div className='text-2xl font-bold'>Templates</div>
-          <div className='flex flex-wrap w-full h-[95%] overflow-y-scroll mt-4 '>
-            <div className='w-1/3 h-2/5 p-4'>
-              <NewBlueprint />
+          <div className='flex justify-between py-[17px] pl-[27px] items-center'>
+            <div className='flex'>
+              <Image width={18} height={18} alt={'catalog'} src='/icons/Design/catalog.svg' />
+              <div className='ml-3 font-bold'>Cloud Infrastructure Templates Catalog</div>
             </div>
+
+            <div className='flex items-center gap-x-2 mr-[20px]'>
+              <Seperator />
+              <div className='flex gap-x-1'>
+                <div className='flex items-center justify-center w-8 h-8 rounded-md'>
+                  <Image width={21} height={14} src='/icons/Design/logo.svg' alt='kumo' />
+                </div>
+                <div className='flex items-center justify-center w-8 h-8 rounded-md'>
+                  <Image width={26} height={15} src='/icons/Design/public.svg' alt='public' />
+                </div>
+              </div>
+              <Seperator />
+              <div className='relative w-56 h-8 border-2 border-[#DAE2EC] rounded-md'>
+                <div className='h-7 absolute right-2 flex items-center'>
+                  <Image width={12} height={13} alt='search' src='/icons/Design/search.svg' />
+                </div>
+              </div>
+              <Image width={11} height={11} alt={'quit'} src='/icons/Design/cancel.svg' />
+            </div>
+          </div>
+          <hr />
+          <div className='flex flex-wrap w-full h-[620px] overflow-y-scroll gap-x-9 gap-y-11 px-12 py-9 '>
+            {currentBlueprintInfo.uuid === '' && (
+              <div className='w-[290px] h-[218px]'>
+                <NewBlueprint />
+              </div>
+            )}
             <>
               {Object.keys(templates).map((key) => {
                 return (
@@ -157,3 +213,7 @@ const Templates = () => {
 };
 
 export default Templates;
+
+const Seperator = () => {
+  return <div className='w-0.5 h-[18px] border-s' />;
+};
