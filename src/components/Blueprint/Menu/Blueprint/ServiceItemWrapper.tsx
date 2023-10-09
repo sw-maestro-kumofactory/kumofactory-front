@@ -30,21 +30,31 @@ const ServiceItemWrapper = ({ type, children }: IProps) => {
   };
 
   return (
-    <div className='flex flex-wrap '>
+    <div className='flex flex-wrap gap-x-[11px]'>
       {items &&
         items.map((item) => (
           <ItemButtonContainer key={item.type} type={item.type} onClick={() => onClickCreateService(item)}>
             <svg
               cursor='pointer'
-              width={64}
-              height={64}
-              viewBox='0 0 80 80'
+              width={70}
+              height={70}
+              viewBox='0 0 70 70'
               xmlns='http://www.w3.org/2000/svg'
               className='service-svg animate-service'
             >
-              {serviceFactory.getSvg({ type: item.type })}
+              <rect fill='transparent' stroke='#DAE2EC' width={70} height={70} />
+              <svg x='17' y='17' width={36} height={36} viewBox='0 0 80 80'>
+                {serviceFactory.getSvg({ type: item.type })}
+              </svg>
+              <text
+                textAnchor='middle'
+                alignmentBaseline='middle'
+                transform='translate(35, 62)'
+                className=' text-[11px]'
+              >
+                {item.name.toString()}
+              </text>
             </svg>
-            <div className='text-black text-sm'>{item.name.toString()}</div>
           </ItemButtonContainer>
         ))}
     </div>

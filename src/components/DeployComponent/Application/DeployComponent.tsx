@@ -74,11 +74,16 @@ const DeployComponent = () => {
           <div>Instance Info</div>
           {deployedResourceList[targetInstanceId] && (
             <>
-              <div className='pl-2 text-sm'>Instance ID : {deployedResourceList[targetInstanceId].instanceId}</div>
+              {/*<div className='pl-2 text-sm'>Instance ID : {deployedResourceList[targetInstanceId].instanceId}</div>*/}
               <div className='pl-2 text-sm'>Instance Name : {deployedResourceList[targetInstanceId].instanceName}</div>
               <div className='pl-2 text-sm'>
                 Instance Private IP : {deployedResourceList[targetInstanceId].privateIp}
               </div>
+              {deployedResourceList[targetInstanceId].publicIp && (
+                <div className='pl-2 text-sm'>
+                  Instance Public IP : {deployedResourceList[targetInstanceId].publicIp}
+                </div>
+              )}
             </>
           )}
         </div>

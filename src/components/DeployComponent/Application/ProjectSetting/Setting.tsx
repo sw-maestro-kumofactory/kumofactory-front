@@ -25,6 +25,7 @@ const Setting = () => {
   const [curBranch, setCurBranch] = useState<string>('');
   const [branches, setBranches] = useState<string[]>([]);
   const [isEtc, setIsEtc] = useState<boolean>(false);
+  const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const { value: dockerFilePath, onHandleChange: onChangeDockerFilePath } = useInput('');
 
   const onClickDeployButton = async () => {
@@ -44,6 +45,7 @@ const Setting = () => {
     // console.log(data);
     try {
       const d = await postDeploy(data);
+      setIsDeploying(true);
       console.log('deploy : ', d);
       alert('deploy Started! You can check the status in the Deploy List page.');
     } catch (e) {
@@ -73,26 +75,19 @@ const Setting = () => {
   useEffect(() => {
     const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[targetInstanceId!].instanceId}`);
 
-    source.addEventListener('open', () => {
-      console.log('SSE opened!');
-    });
+    source.addEventListener('open', () => {});
 
     source.addEventListener('status', (e) => {
-      console.log('status : ', e.data);
-    });
-    source.addEventListener('message', (e) => {
-      console.log('message : ', e.data);
-    });
-    source.addEventListener('success', (e) => {
-      console.log('success : ', e.data);
+      if (e.data === 'success' || e.data === 'fail') {
+        alert(e.data);
+        source.close();
+      }
     });
 
-    source.addEventListener('error', (e) => {
-      console.error('Error: ', e);
-    });
+    source.addEventListener('error', (e) => {});
 
     return () => {
-      source.close();
+      if (source) source.close();
     };
   }, []);
 
@@ -107,11 +102,12 @@ const Setting = () => {
             Heading={'Application Deploy'}
             Description={'Your Repository will be Deployed Selected Instance'}
             onClickConfirm={() => {
+              setIsDeploying(true);
               onClickDeployButton();
             }}
           >
             <div className='p-4 bg-white border-solid border-2 border-[#799ACF] text-[#799ACF] rounded-xl cursor-pointer'>
-              Deploy
+              {isDeploying ? 'Deploy' : 'Deploying'}
             </div>
           </ConfirmPopover>
         </div>

@@ -19,6 +19,7 @@ const EC2Info = ({ option, active }: IProps) => {
   const setTargetInstanceId = useDeployStore((state) => state.DeployAction.setTargetInstanceId);
   const setTargetInstanceName = useDeployStore((state) => state.DeployAction.setTargetInstanceName);
   const setTargetInstanceType = useDeployStore((state) => state.DeployAction.setTargetInstanceType);
+  const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
   const onClickArea = () => {
     if (!disableEvent) {
       setTargetInstanceId(showOptions ? '' : option.id);
@@ -40,13 +41,15 @@ const EC2Info = ({ option, active }: IProps) => {
   }, [active]);
 
   return (
-    <div>
+    <div className={`${active ? 'bg-[#EAF0F4]' : ''}`}>
       <div
-        className={`p-2 w-full h-fit flex justify-between text-center ${active ? 'bg-[#799ACF]' : ''}  text-white`}
+        className={`pl-[20px] py-[10px] w-full h-fit flex justify-between text-center text-[13px] ${
+          active ? 'text-[#00C0B5]' : 'text-black'
+        }  text-white`}
         onClick={onClickArea}
       >
-        <label className={`text-lg h-fit ${showOptions ? '' : 'text-black'}`}>{option.instanceName}(EC2)</label>
-        <div className='flex items-center'>
+        <label className={`h-fit ${showOptions ? '' : 'text-black'}`}>{option.instanceName}(EC2)</label>
+        <div className='flex items-center pr-[22px]'>
           <FontAwesomeIcon
             className={`h-full transition-transform duration-300 ${
               showOptions ? '' : 'transform rotate-180 text-black'
@@ -56,13 +59,18 @@ const EC2Info = ({ option, active }: IProps) => {
         </div>
       </div>
       {showOptions && (
-        <div className='text-black p-2'>
-          <div>Subnet : {option.subnetType}</div>
-          <div>Availability Zone : {option.availabilityZone}</div>
+        <div className='text-black'>
+          <Info content={`Subnet : ${option.subnetType}`} />
+          <Info content={`Availability Zone : ${option.availabilityZone}`} />
+          <Info content={`Public IP : ${deployedResourceList[option.id]?.publicIp}`} />
         </div>
       )}
     </div>
   );
+};
+
+const Info = ({ content }: { content: string }) => {
+  return <div className='pl-[30px] py-[10px] text-[12px]'>{content}</div>;
 };
 
 export default EC2Info;

@@ -17,7 +17,7 @@ const DeployMenuList = ({ disabled }: IProps) => {
 };
 
 const Title = ({ title }: { title: string }) => {
-  return <div className='w-full flex justify-center items-center text-[#195091] h-20 font-bold text-xl'>{title}</div>;
+  return <div className='ml-[32px] my-[23px] text-[#323438] font-bold text-[#14px]'>{title}</div>;
 };
 
 export default DeployMenuList;

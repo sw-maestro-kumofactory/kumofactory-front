@@ -28,7 +28,7 @@ const AvailableInstances = () => {
   }, []);
 
   return (
-    <div className='w-full h-fit'>
+    <div className='w-full'>
       <div>
         {ec2List.map((ec2) => {
           return (

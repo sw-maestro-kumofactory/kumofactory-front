@@ -88,7 +88,7 @@ const DeployButton = () => {
     <div className='absolute right-4 top-20'>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger onClick={handlePopoverTrigger}>
-          <div className='p-2 bg-[#799ACF] text-white rounded-md cursor-pointer'>
+          <div className='p-2 bg-[#00CBBF] text-white rounded-md cursor-pointer'>
             {btnDisabled ? 'Deploying' : 'Deploy'}
           </div>
         </PopoverTrigger>

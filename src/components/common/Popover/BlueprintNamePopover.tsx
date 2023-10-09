@@ -41,26 +41,27 @@ const BlueprintNamePopover = ({ children }: IProps) => {
   return (
     <Popover placement='bottom-start' open={open} onOpenChange={setOpen}>
       <PopoverTrigger onClick={() => setOpen((v) => !v)}>{children}</PopoverTrigger>
-      <PopoverContent className='bg-white w-80 p-4 justify-center items-center rounded-md shadow-lg'>
+      <PopoverContent className='bg-white w-[285px] h-[237px] py-[22px] px-[17px] text-[11px] justify-center items-center rounded-md shadow-lg'>
         <form>
-          <label className='mb-4'>Blueprint Name</label>
-          <input className='w-full p-2 bg-gray-100 rounded-md' value={nameValue} onChange={onHandleNameChange} />
-          <label>Blueprint Description</label>
+          <label className='text-[#A5B0B9] font-bold mb-1'>Name</label>
           <input
-            className='w-full p-2 bg-gray-100 rounded-md'
+            className='w-full text-[14px] font-bold p-2 rounded-md border-solid border-2 border-[#DAE2EC] mb-[12px]'
+            value={nameValue}
+            onChange={onHandleNameChange}
+          />
+          <label className='text-[#A5B0B9] font-bold mb-1'>Blueprint Description</label>
+          <textarea
+            className='w-full text-[14px] font-bold p-2 rounded-md border-solid border-2 border-[#DAE2EC] mb-[12px]'
             value={descriptionValue}
             onChange={onHandleDescriptionChange}
           />
         </form>
         <div className='flex justify-end gap-x-2'>
-          <button
-            className='border-2 border-solid border-gray-400 text-white bg-gray-400 rounded-md p-1 mt-4'
-            onClick={onClickConfirm}
-          >
+          <button className='text-white bg-[#00CBBF] rounded-md p-1 ' onClick={onClickConfirm}>
             Confirm
           </button>
           <button
-            className='border-2 border-solid border-gray-400 text-black rounded-md p-1 mt-4'
+            className='border-2 border-solid border-[#DAE2EC] text-black rounded-md p-1 '
             onClick={onClickConfirm}
           >
             Cancel

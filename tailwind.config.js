@@ -24,10 +24,10 @@ module.exports = {
         },
         shiftBottom: {
           from: {
-            bottom: '64px',
+            bottom: '82px',
           },
           to: {
-            bottom: '68px',
+            bottom: '86px',
           },
         },
       },
