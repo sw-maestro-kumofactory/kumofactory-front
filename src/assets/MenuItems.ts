@@ -36,10 +36,6 @@ export const MenuItemList: ServiceItemType = {
       name: 'ElastiCache',
       type: 'ELASTIC_CACHE',
     },
-    {
-      name: 'SQS',
-      type: 'SQS',
-    },
   ],
   Network: [
     {

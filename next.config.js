@@ -1,3 +1,5 @@
+const removeImports = require('next-remove-imports')();
+module.exports = removeImports({});
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {

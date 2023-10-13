@@ -6,10 +6,17 @@ import ServiceItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/Servic
 import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import { postWebThreetier } from '@/src/api/template';
 
 const Title = ({ title }: { title: string }) => (
   <div className='w-full font-semibold h-16 text-[12px] flex items-center mx-4 mt-2'>{title}</div>
 );
+
+const onClickWebThreetier = async () => {
+  alert('웹 3계층 아키텍처를 배포합니다.');
+  // const data = await postWebThreetier();
+  // console.log(data);
+};
 
 const BlueprintMenuList = () => {
   const userBlueprintsIds = useAuthStore((state) => state.userBlueprintsIds);
@@ -19,6 +26,11 @@ const BlueprintMenuList = () => {
 
   return (
     <div className='overflow-x-hidden w-[272px] min-w-[272px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
+      <div className='flex items-center justify-center border-2 w-full rounded-md'>
+        <div className='w-4/5' onClick={onClickWebThreetier}>
+          Deploy web three tier architecture
+        </div>
+      </div>
       <div className='flex justify-between items-center text-[12px] font-semibold w-full mt-5'>
         <div className='w-full font-semibold flex items-center mx-5'>Scope</div>
         <div className='flex gap-x-2'>

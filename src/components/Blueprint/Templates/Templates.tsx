@@ -7,6 +7,7 @@ import moment from 'moment';
 import { v1 } from 'uuid';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 
 import { getAllTemplates, getTemplateById } from '@/src/api/template';
 import { commonAxiosInstance } from '@/src/api';
@@ -16,6 +17,8 @@ import { BlueprintInfo } from '@/src/types/Blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
+
+const MarkdownPreview = dynamic(() => import('@uiw/react-markdown-preview'), { ssr: false });
 
 const Templates = () => {
   const router = useRouter();
@@ -103,8 +106,8 @@ const Templates = () => {
             </div>
           </div>
           <hr />
-          <div className='pt-9 px-48'>
-            <div className='w-full flex  gap-x-6'>
+          <div className='pt-9 px-48 max-h-[620px] overflow-y-scroll'>
+            <div className='w-full flex gap-x-6'>
               <div className='w-4/5 h-full pl-2'>
                 <div className='flex justify-between items-center'>
                   <div className='font-extrabold text-xl'>{templates[showDetail].name}</div>
@@ -152,7 +155,13 @@ const Templates = () => {
             <hr />
             <div>
               <div className='pt-8 pb-7 font-extrabold text-xl'>Description</div>
-              <div className='mt-2'>{templates[showDetail].description}</div>
+              <MarkdownPreview
+                source={templates[showDetail].description}
+                style={{
+                  height: 'fit',
+                  padding: '20px 30px',
+                }}
+              />
             </div>
           </div>
         </div>
@@ -184,7 +193,7 @@ const Templates = () => {
             </div>
           </div>
           <hr />
-          <div className='flex flex-wrap w-full h-[620px] overflow-y-scroll gap-x-9 gap-y-11 px-12 py-9 '>
+          <div className='flex flex-wrap w-full h-[620px] overflow-y-scroll gap-x-7 gap-y-11 px-12 py-9 '>
             {currentBlueprintInfo.uuid === '' && (
               <div className='w-[290px] h-[218px]'>
                 <NewBlueprint />

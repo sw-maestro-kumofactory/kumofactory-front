@@ -9,6 +9,7 @@ import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
 import { postDeployBlueprintData, postSaveBlueprintData } from '@/src/api/blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
+import { postWebThreetier } from '@/src/api/template';
 
 const DeployButton = () => {
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
@@ -68,6 +69,36 @@ const DeployButton = () => {
     }
   };
 
+  const onClickWebThreeTier = async () => {
+    let publicCnt = 1;
+    let privateCnt = 1;
+    const body = blueprintToJson({
+      id: currentBlueprintInfo.uuid,
+      name: currentBlueprintInfo.name,
+      description: currentBlueprintInfo.description,
+      scope: currentBlueprintInfo.scope,
+    });
+    body.components.map((component, index) => {
+      component.options = options[component.id];
+      if (component.type === 'EC2') {
+        if (options[component.id].subnetType === 'PUBLIC') {
+          component.type = `PUBLIC_INSTANCE${publicCnt}`;
+          publicCnt += 1;
+        } else {
+          component.type = `PRIVATE_INSTANCE${privateCnt}`;
+        }
+        privateCnt += 1;
+      }
+    });
+    body.scope = scope;
+    const encodedSVG = getSvgBlob();
+    body['svgFile'] = encodedSVG;
+    console.log(body);
+    const data = await postWebThreetier(body);
+    console.log(data);
+    return body;
+  };
+
   const handlePopoverTrigger = () => {
     if (btnDisabled) {
       setOpen(false);
@@ -114,6 +145,13 @@ const DeployButton = () => {
           >
             <FontAwesomeIcon icon={faRocket} />
             Deploy To AWS
+          </div>
+          <div
+            className='px-4 py-2 w-full flex gap-2 items-center cursor-pointer hover:bg-gray-100'
+            onClick={onClickWebThreeTier}
+          >
+            <FontAwesomeIcon icon={faRocket} />
+            Web Three tier
           </div>
         </PopoverContent>
       </Popover>

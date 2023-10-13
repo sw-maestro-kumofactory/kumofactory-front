@@ -13,7 +13,7 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import { DeployState } from '@/src/types/Deploy';
 import Status from '@/src/components/Layout/Status';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import BlueprintNamePopover from '@/src/components/common/Popover/BlueprintNamePopover';
+import BlueprintNameModal from '@/src/components/common/Modal/BlueprintNameModal';
 import { getResourceId } from '@/src/api/deploy';
 import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
@@ -83,7 +83,13 @@ export const Header = () => {
   }, [userBlueprints]);
 
   useEffect(() => {
+    setIsEdit(false);
+    setIsTemplateOpen(false);
     setInterceptor();
+    return () => {
+      setIsEdit(false);
+      setIsTemplateOpen(false);
+    };
   }, []);
 
   return (
@@ -117,14 +123,12 @@ export const Header = () => {
         {currentBlueprintInfo.uuid && (
           <>
             <div className='h-[19px] border-r-2 border-[#E2E9F0]'></div>
-            <BlueprintNamePopover>
-              <div className='flex gap-x-4 items-center text-[#323438]'>
-                <div className='max-w-xs overflow-x-hidden '>{currentBlueprintInfo.name}</div>
-                <div className='w-[29px] h-29px] rounded-md border-solid border-2 border-[#DAE2EC]'>
-                  <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
-                </div>
+            <div className='flex gap-x-4 items-center text-[#323438]'>
+              <div className='max-w-xs font-bold overflow-x-hidden '>{currentBlueprintInfo.name}</div>
+              <div className='w-[29px] h-[29px] flex justify-center items-center rounded-md border-solid border-2 border-[#DAE2EC]'>
+                <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
               </div>
-            </BlueprintNamePopover>
+            </div>
           </>
         )}
       </div>
@@ -213,6 +217,11 @@ export const Header = () => {
         ))}
       <ModalContainer isShow={isTemplateOpen} setShow={setIsTemplateOpen}>
         <Templates />
+      </ModalContainer>
+      <ModalContainer isShow={isEdit} setShow={setIsEdit}>
+        <BlueprintNameModal isShow={isEdit} setShow={setIsEdit}>
+          Hi there
+        </BlueprintNameModal>
       </ModalContainer>
     </div>
   );

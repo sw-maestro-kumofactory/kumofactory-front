@@ -24,6 +24,10 @@ const AccessScope = {
   PUBLIC: 'PUBLIC',
   PRIVATE: 'PRIVATE',
   DATABASE: 'DATABASE',
+  PUBLIC_INSTANCE1: 'PUBLIC_INSTANCE1',
+  PUBLIC_INSTANCE2: 'PUBLIC_INSTANCE2',
+  PRIVATE_INSTANCE1: 'PRIVATE_INSTANCE1',
+  PRIVATE_INSTANCE2: 'PRIVATE_INSTANCE2',
 } as const;
 
 export type AccessScope = (typeof AccessScope)[keyof typeof AccessScope] | null;

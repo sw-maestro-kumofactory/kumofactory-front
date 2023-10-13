@@ -16,7 +16,7 @@ const DropDown = ({ title, children, absolute }: IProps) => {
     <div className='mt-8 ml-5'>
       <div className='flex justify-between text-center' onClick={() => setShowDropdown(!showDropdown)}>
         <label className='text-[12px] font-semibold'>{title}</label>
-        <div>
+        <div className='mr-2'>
           <FontAwesomeIcon
             className={`h-[4px] w-[8px] transition-transform duration-300 ${
               showDropdown ? 'transform rotate-180' : ''
