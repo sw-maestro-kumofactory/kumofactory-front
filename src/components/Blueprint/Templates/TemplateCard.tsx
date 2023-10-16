@@ -35,7 +35,7 @@ const TemplateCard = ({ data, onClick, thumbnail, onClickLoad }: IProps) => {
           )}
           <div className='w-full h-[174px] border rounded-md'>
             <svg className='w-full h-full rounded-t-lg'>
-              <g dangerouslySetInnerHTML={{ __html: thumbnail }} />
+              {/*<g dangerouslySetInnerHTML={{ __html: thumbnail }} />*/}
             </svg>
           </div>
           <div className='absolute bottom-[74px] right-2 h-[30px] p-[2px] flex gap-x-2 '>

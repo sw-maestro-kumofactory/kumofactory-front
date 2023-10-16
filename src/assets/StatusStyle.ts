@@ -2,7 +2,7 @@ import { DeployState } from '@/src/types/Deploy';
 
 export const StatusStyle: Record<DeployState, { fill: string; phrase: string }> = {
   PROVISIONING: {
-    fill: '#FF9900',
+    fill: '#F4D011',
     phrase: 'Provisioning',
   },
   PENDING: {

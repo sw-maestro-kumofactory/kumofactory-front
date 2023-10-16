@@ -182,7 +182,9 @@ export const Header = () => {
                 <div className='h-[19px] border-r-2 ml-[16px] border-[#E2E9F0]'></div>
                 <button
                   className='border-[#E2E9F0] border-2 w-[110px] h-[30px] text-black ml-[16px] rounded-md flex items-center justify-center gap-x-1'
-                  onClick={() => setIsTemplateOpen(true)}
+                  onClick={() => {
+                    setIsTemplateOpen(true);
+                  }}
                 >
                   <Image src='/icons/Design/catalog_black.svg' width={15} height={15} alt='catalog' />
                   <div>Template</div>

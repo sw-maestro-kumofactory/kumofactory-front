@@ -1,7 +1,8 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
@@ -12,6 +13,7 @@ import { deleteBlueprint, getBlueprintList } from '@/src/api/blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
 const BluePrint = () => {
+  const router = useRouter();
   const isTemplateOpen = useBlueprintStore((state) => state.isTemplateOpen);
   const setIsTemplateOpen = useBlueprintStore((state) => state.CommonAction.setIsTemplateOpen);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
@@ -41,19 +43,20 @@ const BluePrint = () => {
 
   return (
     <AuthRequired>
-      <div className=' h-full overflow-y-scroll'>
-        <div className='mx-20 my-8 text-3xl font-extrabold'>My Blueprints</div>
-        <div className='w-full h-full px-16 flex flex-wrap content-start'>
-          <div className='w-1/3 h-2/5 p-4'>
+      <div className='h-full overflow-y-scroll px-[207px] py-[50px] bg-[#F9FBFC]'>
+        <div className=' text-[26px] font-extrabold mb-10'>My Blueprints</div>
+        <div className='w-full h-full flex flex-wrap content-start gap-x-[34px] gap-y-[45px]'>
+          <div className='w-[290px] h-[232px] text-[#96ABBB]'>
             <div
-              className='flex flex-col items-center justify-center w-full h-full text-sky-700 bg-gray-200 border-4 hover:border-sky-700 rounded-2xl cursor-pointer'
+              className='flex flex-col items-center justify-center w-full h-full text-sm rounded-md cursor-pointer border-[#DAE2EC] border-2'
               onClick={(e) => {
                 e.stopPropagation();
                 setIsTemplateOpen(true);
+                router.push('/blueprint?template=true');
               }}
             >
-              <FontAwesomeIcon icon={faSquarePlus} className='text-4xl mb-4' />
-              New BluePrint
+              <FontAwesomeIcon icon={faSquarePlus} className='text-lg mb-4' />
+              New Blueprint
             </div>
           </div>
           {Object.keys(userBlueprints).map((key) => {

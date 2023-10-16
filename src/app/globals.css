@@ -10,8 +10,6 @@
   url('../../public/fonts/GmarketSansLight.otf') format('opentype');
 }
 
-#___gatsby,
-#gatsby-focus-wrapper,
 html, body{
   height: 100%;
   width: 100%;

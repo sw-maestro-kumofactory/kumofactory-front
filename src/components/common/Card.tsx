@@ -37,29 +37,29 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
     router.push(`/blueprint/${data.uuid}/deploy`);
   };
 
-  const fetchSvgData = async () => {
-    if (!data.presignedUrl) return;
-    try {
-      const urlParts = data.presignedUrl!.split('/');
-      const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
-      console.log(data.presignedUrl);
-
-      // console.log(urlParts, url);
-      const response = await commonAxiosInstance.get(url);
-      setSvgData(response.data);
-    } catch (error) {
-      console.error('Error fetching SVG data:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSvgData();
-  }, []);
+  // const fetchSvgData = async () => {
+  //   if (!data.presignedUrl) return;
+  //   try {
+  //     const urlParts = data.presignedUrl!.split('/');
+  //     const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
+  //     console.log(data.presignedUrl);
+  //
+  //     // console.log(urlParts, url);
+  //     const response = await commonAxiosInstance.get(url);
+  //     setSvgData(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching SVG data:', error);
+  //   }
+  // };
+  //
+  // useEffect(() => {
+  //   fetchSvgData();
+  // }, []);
 
   return (
-    <div className='w-1/3 h-2/5 p-4'>
+    <div className='w-[290px] h-[232px]'>
       <div
-        className='ImageWrapper w-full h-3/4 relative rounded-t-xl'
+        className='ImageWrapper w-full h-[174px] relative rounded-t-xl'
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
         onClick={(e) => {
@@ -69,49 +69,48 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
         {isHover && (
           <>
             <div
-              className='absolute right-5 top-4 w-8 h-8 rounded-full border-solid border-2 border-gray-400 flex justify-center items-center cursor-pointer'
+              className='absolute right-3 top-3 w-4 h-4 rounded-full border-solid border-2 border-gray-400 flex justify-center items-center cursor-pointer '
               onClick={onClickDelete}
             >
               <FontAwesomeIcon style={{ color: 'white' }} icon={faTrashCan} />
             </div>
-            <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+            <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[13px] w-[141px]'>
               <div className='cursor-pointer' onClick={onClickLoad}>
-                <div className={`flex justify-center items-center bg-black text-white h-10 rounded-xl ${'mb-4 p-2'}`}>
+                <div className='flex justify-center items-center bg-[#00CBBF] text-white h-8 rounded-[3px] mb-3 p-2'>
                   Load Blueprint
                 </div>
               </div>
 
               <div onClick={onClickToDeploy}>
-                <div className='flex justify-center items-center w-fit p-2 h-10 text-white border-white border-2 rounded-xl cursor-pointer'>
+                <div className='flex justify-center items-center h-8 bg-white text-[#323438] border-white border-2 rounded-[3px] cursor-pointer'>
                   Application Deploy
                 </div>
               </div>
             </div>
           </>
         )}
-        <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-xl'>
-          <div className='absolute left-5 top-4 border-2 text-xs border-solid border-gray-400 w-fit p-1 rounded-xl'>
-            {data.scope}
-          </div>
-          <svg className='w-full  h-full rounded-t-lg '>
+        <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-md'>
+          <div className='absolute right-0 bottom-0 text-xs w-fit p-1 rounded-md select-none'>{data.scope}</div>
+          <svg className='w-full h-full rounded-t-[4px]'>
             {svgData && <g dangerouslySetInnerHTML={{ __html: svgData }} />}
-            {isHover && <rect width='100%' height='100%' className='fill-blue-950 opacity-50' />}
+            {isHover && <rect width='100%' height='100%' className='fill-[#33393F] opacity-[71%]' />}
           </svg>
         </div>
       </div>
-      <div className='flex justify-between items-center p-4 h-1/4 rounded-b-xl border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
+      <div className='flex justify-between items-center p-3 h-1/4 rounded-b-md border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
         <div>
-          <div className='h-6 mb-1 font-bold text-base max-w-[250px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
+          <div className='h-6 mb-0.5 font-semibold text-[13px] max-w-[250px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
             {data.name}
           </div>
-          <div className='text-sm'>{moment(data.createdAt).format('YYYY-MM-DD')}</div>
+          <div className='text-[10px] text-[#81929F]'>last updated: {moment(data.createdAt).format('YYYY-MM-DD')}</div>
         </div>
         {data.status && (
-          <div className='flex items-center gap-x-2'>
+          <div className='flex items-center gap-x-2 text-[11px]'>
             <div
-              className='w-6 h-6 rounded-full cursor-pointer'
+              className='w-[10px] h-[10px] rounded-full cursor-pointer'
               style={{ backgroundColor: StatusStyle[data.status].fill }}
             ></div>
+            <div>{data.status}</div>
           </div>
         )}
       </div>

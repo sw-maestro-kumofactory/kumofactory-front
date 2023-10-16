@@ -72,6 +72,7 @@ export const useCommonSlice: StateCreator<
   },
   isShowOption: false,
   isTemplateOpen: false,
+  showDetail: '',
   CommonAction: {
     initState: (id: string) => {
       set((state) => {
@@ -89,6 +90,12 @@ export const useCommonSlice: StateCreator<
         state.services[id] = {};
         state.lines[id] = {};
         state.areas[id] = {};
+        return state;
+      });
+    },
+    setShowDetail: (id: string) => {
+      set((state) => {
+        state.showDetail = id;
         return state;
       });
     },

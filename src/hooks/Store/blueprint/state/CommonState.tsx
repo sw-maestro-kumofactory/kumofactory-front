@@ -13,6 +13,7 @@ export interface CommonState {
   isMoving: boolean;
   isShowOption: boolean;
   isTemplateOpen: boolean;
+  showDetail: string;
   scale: number;
   quarterPoint: number;
   viewBox: {
@@ -49,6 +50,7 @@ export interface CommonState {
       description: string;
       scope: BlueprintScope;
     }) => BlueprintResponse;
+    setShowDetail: (id: string) => void;
     setBlueprintSrc: (x: number, y: number) => void;
     setGridSrc: () => void;
     setViewBox: (width: number, height: number) => void;

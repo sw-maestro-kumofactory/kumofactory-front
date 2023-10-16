@@ -37,8 +37,8 @@ export class ServiceFactory implements IFactory {
   public createService({ type, x, y }: ICreateService): IComponent {
     return {
       ...CommonInfo,
-      x: x + 50,
-      y: y + 50,
+      x: x + 70,
+      y: y + 90,
       type: type,
       options: {},
     };

@@ -1,11 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import moment from 'moment';
 import { v1 } from 'uuid';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
@@ -22,11 +22,13 @@ const MarkdownPreview = dynamic(() => import('@uiw/react-markdown-preview'), { s
 
 const Templates = () => {
   const router = useRouter();
+  const searchParams = useSearchParams()!;
   const [templates, setTemplates] = useState<Record<string, BlueprintInfo>>({});
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
-  const [showDetail, setShowDetail] = useState<string>('');
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
+  const showDetail = useBlueprintStore((state) => state.showDetail);
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
+  const setShowDetail = useBlueprintStore((state) => state.CommonAction.setShowDetail);
   const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
   const { setCurrentBlueprintInfo, setIsTemplateOpen } = useBlueprintStore((state) => state.CommonAction);
 
@@ -42,6 +44,16 @@ const Templates = () => {
       console.error('Error fetching SVG data:', error);
     }
   };
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const loadTemplates = async () => {
     try {
@@ -88,8 +100,22 @@ const Templates = () => {
     }
   };
 
+  const historyBackHandler = () => {
+    if (showDetail) {
+      setShowDetail('');
+      return;
+    }
+    setIsTemplateOpen(false);
+  };
+
   useEffect(() => {
     loadTemplates();
+    window.addEventListener('popstate', historyBackHandler);
+    return () => {
+      setIsTemplateOpen(false);
+      setShowDetail('');
+      window.removeEventListener('popstate', historyBackHandler);
+    };
   }, []);
 
   return (
@@ -208,6 +234,7 @@ const Templates = () => {
                     thumbnail={thumbnails[templates[key].uuid]}
                     onClick={() => {
                       setShowDetail(templates[key].uuid);
+                      // router.push(pathname + '?' + createQueryString('id', templates[key].uuid));
                     }}
                     onClickLoad={onClickLoad}
                   />
