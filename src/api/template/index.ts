@@ -21,7 +21,7 @@ export const getAllTemplates = async () => {
   return data;
 };
 
-export const postWebThreetier = async (body: any) => {
+export const postWebThreeTier = async (body: any) => {
   const { data } = await authAxiosInstance.post(`/api/template/web-three-tier?provision=true`, body);
   return data;
 };

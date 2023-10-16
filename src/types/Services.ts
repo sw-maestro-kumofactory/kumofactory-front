@@ -135,6 +135,7 @@ export const MySqlEngineVersionTypeList = [
 
 export interface S3Options {
   id: string;
+  bucketName: string;
 }
 
 export interface ROUTE53Options {

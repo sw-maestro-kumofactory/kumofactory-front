@@ -12,6 +12,33 @@ interface IProps {
   name: string;
 }
 
+const size = {
+  VPC: {
+    width: 260,
+    height: 280,
+    offset: {
+      x: 10,
+      y: 10,
+    },
+  },
+  AZ: {
+    width: 160,
+    height: 180,
+    offset: {
+      x: 30,
+      y: 30,
+    },
+  },
+  SUBNET: {
+    width: 120,
+    height: 140,
+    offset: {
+      x: 50,
+      y: 50,
+    },
+  },
+};
+
 const AreaItemWrapper = ({ type, name, scope }: IProps) => {
   const createArea = useBlueprintStore((state) => state.AreaAction.createArea);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
@@ -20,15 +47,16 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
   const subnetCount = useBlueprintStore((state) => state.subnetCount[currentBlueprintInfo.uuid]);
   const initMouseState = useBlueprintStore((state) => state.CommonAction.initMouseState);
   const createAreaByType = () => {
+    console.log(type);
     initMouseState();
     const id = 'v' + v1().toString();
 
     const area: IArea = {
       id: id,
-      width: 125,
-      height: 125,
-      x: viewBox.x + 50,
-      y: viewBox.y + 50,
+      width: size[type]['width'],
+      height: size[type]['height'],
+      x: viewBox.x + size[type]['offset']['x'],
+      y: viewBox.y + size[type]['offset']['y'],
       type: type,
       scope: null,
       az: null,
@@ -58,8 +86,8 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
         }
         area.scope = 'PUBLIC';
       } else if (scope === 'PRIVATE') {
-        if (subnetCount.private >= 2) {
-          alert('Private Subnet은 2개까지만 생성 가능합니다.');
+        if (subnetCount.private >= 4) {
+          alert('Private Subnet은 4개까지만 생성 가능합니다.');
           return;
         }
         area.scope = 'PRIVATE';

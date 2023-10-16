@@ -307,7 +307,7 @@ export const useCommonSlice: StateCreator<
                   currentOption['subnetType'] = 'PUBLIC';
                   currentOption.securityGroupType = 'PUBLIC';
                 }
-              } else if (currentArea.type === 'AZ') {
+              } else if (currentArea.type === 'AZ' && currentService.type === 'EC2') {
                 currentOption['availabilityZone'] = currentArea.az;
               }
             }

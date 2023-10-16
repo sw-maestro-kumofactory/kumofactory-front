@@ -9,7 +9,7 @@ import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
 import { postDeployBlueprintData, postSaveBlueprintData } from '@/src/api/blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import { postWebThreetier } from '@/src/api/template';
+import { postWebThreeTier } from '@/src/api/template';
 
 const DeployButton = () => {
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
@@ -86,15 +86,15 @@ const DeployButton = () => {
           publicCnt += 1;
         } else {
           component.type = `PRIVATE_INSTANCE${privateCnt}`;
+          privateCnt += 1;
         }
-        privateCnt += 1;
       }
     });
     body.scope = scope;
     const encodedSVG = getSvgBlob();
     body['svgFile'] = encodedSVG;
     console.log(body);
-    const data = await postWebThreetier(body);
+    const data = await postWebThreeTier(body);
     console.log(data);
     return body;
   };

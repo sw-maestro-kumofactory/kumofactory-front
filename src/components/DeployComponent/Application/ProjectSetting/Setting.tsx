@@ -11,6 +11,7 @@ import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import useInput from '@/src/hooks/useInput';
 
+// TODO : Deploy Status From SSE
 const Setting = () => {
   const params = useParams();
   const { currentBlueprintId, repoId, userName } = params;

@@ -18,7 +18,7 @@ const Area = ({ area, activate, styleKey }: IProps) => {
   const getName = (area: IArea) => {
     if (area.type === 'VPC') return 'VPC';
     if (area.type === 'SUBNET') return area.scope;
-    if (area.type === 'AZ') return area.az;
+    if (area.type === 'AZ') return 'Availability Zone';
   };
 
   useEffect(() => {
@@ -34,7 +34,6 @@ const Area = ({ area, activate, styleKey }: IProps) => {
     <>
       <svg
         ref={svgRef}
-        // viewBox={`-4 -4 ${Area.width + 8} ${Area.height + 8}`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -51,6 +50,9 @@ const Area = ({ area, activate, styleKey }: IProps) => {
           stroke={AreaStyle[styleKey].stroke}
           strokeDasharray={10}
         />
+        <text x='10' y='20' className='text-sm select-none'>
+          {getName(area)}
+        </text>
         {activate && (
           <>
             <line
@@ -108,15 +110,15 @@ const Area = ({ area, activate, styleKey }: IProps) => {
           </>
         )}
       </svg>
-      <foreignObject
-        className='-z-20 select-auto'
-        x={area.x}
-        y={area.y - 20}
-        width={getName(area)!.length * 12}
-        height='20'
-      >
-        <div className='-z-20 w-fit select-none '>{getName(area)}</div>
-      </foreignObject>
+      {/*<foreignObject*/}
+      {/*  className='-z-20 select-auto'*/}
+      {/*  x={area.x}*/}
+      {/*  y={area.y - 20}*/}
+      {/*  width={getName(area)!.length * 12}*/}
+      {/*  height='20'*/}
+      {/*>*/}
+      {/*  <div className='-z-20 w-fit select-none '>{getName(area)}</div>*/}
+      {/*</foreignObject>*/}
     </>
   );
 };

@@ -10,8 +10,6 @@ import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import OptionContainer from '@/src/components/AWSService/Options/OptionContainer';
 import { AreaTypes, IArea } from '@/src/types/Area';
 import DeployButton from '@/src/components/Blueprint/FloatingButton/DeployButton';
-import service from '@/src/components/AWSService/Service';
-import { ConfigurableService } from '@/src/types/Services';
 
 interface IProps {
   id: string;
@@ -214,14 +212,14 @@ const Grid = ({ id }: IProps) => {
                         <CreateLineContainer />
                       </foreignObject>
                     )}
-                    <foreignObject
-                      x={services[key].x + xAdjustment}
-                      y={services[key].y + 80}
-                      width={serviceNameWidth.toString()}
-                      height='21'
-                    >
-                      <div className='flex justify-center items-center select-none w-fit '>{services[key].type}</div>
-                    </foreignObject>
+                    {/*<foreignObject*/}
+                    {/*  x={services[key].x + xAdjustment}*/}
+                    {/*  y={services[key].y + 80}*/}
+                    {/*  width={serviceNameWidth.toString()}*/}
+                    {/*  height='21'*/}
+                    {/*>*/}
+                    {/*  <div className='flex justify-center items-center select-none w-fit '>{services[key].type}</div>*/}
+                    {/*</foreignObject>*/}
                   </g>
                 );
               })}

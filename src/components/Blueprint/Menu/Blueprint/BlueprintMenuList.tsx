@@ -6,7 +6,7 @@ import ServiceItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/Servic
 import AreaItemWrapper from '@/src/components/Blueprint/Menu/Blueprint/AreaItemWrapper';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import { postWebThreetier } from '@/src/api/template';
+import { postWebThreeTier } from '@/src/api/template';
 
 const Title = ({ title }: { title: string }) => (
   <div className='w-full font-semibold h-16 text-[12px] flex items-center mx-4 mt-2'>{title}</div>

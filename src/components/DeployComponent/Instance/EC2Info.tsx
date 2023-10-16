@@ -20,6 +20,9 @@ const EC2Info = ({ option, active }: IProps) => {
   const setTargetInstanceName = useDeployStore((state) => state.DeployAction.setTargetInstanceName);
   const setTargetInstanceType = useDeployStore((state) => state.DeployAction.setTargetInstanceType);
   const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
+
+  console.log(option.id, deployedResourceList);
+
   const onClickArea = () => {
     if (!disableEvent) {
       setTargetInstanceId(showOptions ? '' : option.id);
@@ -45,7 +48,7 @@ const EC2Info = ({ option, active }: IProps) => {
       <div
         className={`pl-[20px] py-[10px] w-full h-fit flex justify-between text-center text-[13px] ${
           active ? 'text-[#00C0B5]' : 'text-black'
-        }  text-white`}
+        }  text-black`}
         onClick={onClickArea}
       >
         <label className={`h-fit ${showOptions ? '' : 'text-black'}`}>{option.instanceName}(EC2)</label>

@@ -42,6 +42,9 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
     try {
       const urlParts = data.presignedUrl!.split('/');
       const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
+      console.log(data.presignedUrl);
+
+      // console.log(urlParts, url);
       const response = await commonAxiosInstance.get(url);
       setSvgData(response.data);
     } catch (error) {

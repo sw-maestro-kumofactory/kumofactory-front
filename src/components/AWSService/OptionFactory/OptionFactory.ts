@@ -1,3 +1,5 @@
+import { v1 } from 'uuid';
+
 import { EC2Option, EC2OptionComponent } from '@/src/components/AWSService/OptionFactory/Options/EC2Option';
 import { RDSOption, RDSOptionComponent } from '@/src/components/AWSService/OptionFactory/Options/RDSOption';
 import { S3Option, S3OptionComponent } from '@/src/components/AWSService/OptionFactory/Options/S3Option';
@@ -35,7 +37,7 @@ export class OptionFactory implements IFactory {
       case 'RDS_MYSQL':
         return RDSOption(id);
       case 'S3':
-        return S3Option(id);
+        return S3Option(id, 's3' + v1().toString());
       case 'ROUTE53':
         return ROUTE53Option(id);
       case 'WAF':
