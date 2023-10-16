@@ -19,22 +19,30 @@ const TemplateCard = ({ data, onClick, thumbnail, onClickLoad }: IProps) => {
 
   return (
     <div className='w-[290px] h-[218px]'>
-      <div className='relative w-full h-[250px]' onClick={onClick}>
-        {isHover ? (
-          <FontAwesomeIcon
-            icon={faCopy}
-            className='absolute bottom-[82px] left-2 p-2 cursor-pointer bg-[#6e58f6] rounded-lg text-white hover:animate-shift-bottom'
-            onClick={(e) => onClickLoad(e, data.uuid)}
-          />
-        ) : null}
-        <div
-          className='w-full h-[174px] border rounded-md'
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
-        >
-          <svg className='w-full h-full rounded-t-lg'>
-            <g dangerouslySetInnerHTML={{ __html: thumbnail }} />
-          </svg>
+      <div
+        className='relative w-full h-[250px]'
+        onClick={onClick}
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+      >
+        <div>
+          {isHover && (
+            <FontAwesomeIcon
+              icon={faCopy}
+              className='absolute bottom-[82px] left-2 p-2 cursor-pointer bg-[#6e58f6] rounded-lg text-white hover:animate-shift-bottom'
+              onClick={(e) => onClickLoad(e, data.uuid)}
+            />
+          )}
+          <div className='w-full h-[174px] border rounded-md'>
+            <svg className='w-full h-full rounded-t-lg'>
+              <g dangerouslySetInnerHTML={{ __html: thumbnail }} />
+            </svg>
+          </div>
+          <div className='absolute bottom-[74px] right-2 h-[30px] p-[2px] flex gap-x-2 '>
+            {/*@ts-ignore*/}
+            <FontAwesomeIcon icon={faAws} />
+            <FontAwesomeIcon icon={faGlobe} />
+          </div>
         </div>
         <div className='w-full h-[60px] mt-[10px]' onClick={(e) => e.stopPropagation()}>
           <div className='flex justify-between items-center text-sm'>
@@ -52,11 +60,6 @@ const TemplateCard = ({ data, onClick, thumbnail, onClickLoad }: IProps) => {
               <div className='text-[10px] text-[#A5B0B9]'>{data.username}</div>
             </div>
           </div>
-        </div>
-        <div className='absolute bottom-[74px] right-2 h-[30px] p-[2px] flex gap-x-2 '>
-          {/*@ts-ignore*/}
-          <FontAwesomeIcon icon={faAws} />
-          <FontAwesomeIcon icon={faGlobe} />
         </div>
       </div>
     </div>
