@@ -2,19 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'G Market Sans';
-  src: local('G Market Sans'),
-  url('../../public/fonts/GmarketSansMedium.otf') format('opentype'),
-  url('../../public/fonts/GmarketSansBold.otf') format('opentype'),
-  url('../../public/fonts/GmarketSansLight.otf') format('opentype');
-}
+/*@font-face {*/
+/*  font-family: 'G Market Sans';*/
+/*  src: local('G Market Sans'),*/
+/*  url('../../public/fonts/GmarketSansMedium.otf') format('opentype'),*/
+/*  url('../../public/fonts/GmarketSansBold.otf') format('opentype'),*/
+/*  url('../../public/fonts/GmarketSansLight.otf') format('opentype');*/
+/*}*/
 
 html, body{
   height: 100%;
   width: 100%;
 }
 
-body {
-  font-family: 'G Market Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'
-}
+/*body {*/
+/*  font-family: 'G Market Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'*/
+/*}*/

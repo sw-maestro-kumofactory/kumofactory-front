@@ -19,17 +19,17 @@ const Login = () => {
         <>
           <div className='font-bold text-6xl text-[#195091] -mt-12'>Login with</div>
           <div className='flex gap-16'>
-            <KakaoAuthButton onClick={() => {}} />
+            {/*<KakaoAuthButton onClick={() => {}} />*/}
             <GithubAuthButton
               onClick={() => {
                 githubAuth.login();
               }}
             />
-            <GoogleAuthButton
-              onClick={() => {
-                googleAuth.login();
-              }}
-            />
+            {/*<GoogleAuthButton*/}
+            {/*  onClick={() => {*/}
+            {/*    googleAuth.login();*/}
+            {/*  }}*/}
+            {/*/>*/}
           </div>
         </>
       )}

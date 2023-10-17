@@ -133,6 +133,7 @@ const Grid = ({ id }: IProps) => {
             <g id='background'>
               <defs>
                 <pattern id='dottedPattern' width='20' height='20' patternUnits='userSpaceOnUse'>
+                  <rect width='20' height='20' fill='#F9FBFC' />
                   <circle cx='1' cy='1' r='1' fill='gray' />
                 </pattern>
               </defs>

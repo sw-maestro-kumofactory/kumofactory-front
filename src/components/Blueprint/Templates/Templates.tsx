@@ -22,7 +22,7 @@ const MarkdownPreview = dynamic(() => import('@uiw/react-markdown-preview'), { s
 
 const Templates = () => {
   const router = useRouter();
-  const searchParams = useSearchParams()!;
+  const searchParams = useSearchParams();
   const [templates, setTemplates] = useState<Record<string, BlueprintInfo>>({});
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
