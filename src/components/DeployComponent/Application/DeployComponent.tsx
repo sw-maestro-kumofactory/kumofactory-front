@@ -19,6 +19,8 @@ const DeployComponent = () => {
   const username = useLoginStore((state) => state.username);
   const [isLoading, setIsLoading] = useState(true);
 
+  console.log(username);
+
   const getRepo = async () => {
     try {
       const d = await getUserRepositories();
@@ -68,27 +70,27 @@ const DeployComponent = () => {
   }
 
   return (
-    <div className='w-full h-full pl-[294px] flex flex-col p-8 overflow-y-scroll items-center'>
-      <div className='w-11/12 h-full'>
-        <div className='pb-4 text-2xl '>
-          <div>Instance Info</div>
+    <div className='w-full h-full pl-[294px] flex flex-col p-8 overflow-y-scroll items-center bg-[#f9fbfc]'>
+      <div className='w-[920px] h-full '>
+        <div className='pb-9 '>
+          <div className='text-xl font-bold mb-4'>Instance Info</div>
           {deployedResourceList[targetInstanceId] && (
-            <>
-              {/*<div className='pl-2 text-sm'>Instance ID : {deployedResourceList[targetInstanceId].instanceId}</div>*/}
-              <div className='pl-2 text-sm'>Instance Name : {deployedResourceList[targetInstanceId].instanceName}</div>
-              <div className='pl-2 text-sm'>
-                Instance Private IP : {deployedResourceList[targetInstanceId].privateIp}
-              </div>
-              {deployedResourceList[targetInstanceId].publicIp && (
-                <div className='pl-2 text-sm'>
-                  Instance Public IP : {deployedResourceList[targetInstanceId].publicIp}
+            <div className='bg-white'>
+              <div className='w-full border-[#DAE2EC] border rounded-t-md'>
+                <div className='text-base font-bold py-4 px-6'>
+                  {deployedResourceList[targetInstanceId].instanceName}
                 </div>
-              )}
-            </>
+              </div>
+              <div className='w-full border-[#DAE2EC] border rounded-b-md border-t-0'>
+                <ul className='pl-8 list-disc leading-8 p-3 '>
+                  <CustomList title='Private IP' content={deployedResourceList[targetInstanceId].privateIp} />
+                  <CustomList title='Public IP' content={deployedResourceList[targetInstanceId].publicIp!} />
+                </ul>
+              </div>
+            </div>
           )}
         </div>
-        <div className='pb-4 text-2xl'>Repositories</div>
-        <div className=' pb-4 text-md text-gray-500'>Select Repository to Deploy</div>
+        <div className='text-xl font-bold mb-4'>Repositories</div>
         {isLoading && (
           <>
             <SkeletonRepositoryContainer />
@@ -105,3 +107,14 @@ const DeployComponent = () => {
 };
 
 export default DeployComponent;
+
+const CustomList = ({ title, content }: { title: string; content: string }) => {
+  return (
+    <li>
+      <div className='flex gap-x-4'>
+        <div className='font-semibold'>{title}</div>
+        <div className='text-[#323438]'>{content}</div>
+      </div>
+    </li>
+  );
+};

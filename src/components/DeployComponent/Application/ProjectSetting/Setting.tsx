@@ -43,7 +43,7 @@ const Setting = () => {
       branch: curBranch,
       env: environmentVariables[repoId],
     };
-    // console.log(data);
+
     try {
       const d = await postDeploy(data);
       setIsDeploying(true);

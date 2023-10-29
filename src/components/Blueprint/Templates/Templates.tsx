@@ -45,16 +45,6 @@ const Templates = () => {
     }
   };
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams);
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
   const loadTemplates = async () => {
     try {
       const data = await getAllTemplates();
@@ -100,7 +90,8 @@ const Templates = () => {
     }
   };
 
-  const historyBackHandler = () => {
+  const historyBackHandler = (showDetail: string) => {
+    console.log('historyBack Handler : ', showDetail);
     if (showDetail) {
       setShowDetail('');
       return;
@@ -109,12 +100,30 @@ const Templates = () => {
   };
 
   useEffect(() => {
+    console.log('show Detail, ', showDetail);
+    const func = () => historyBackHandler(showDetail);
+    window.addEventListener('popstate', func);
+    return () => {
+      window.removeEventListener('popstate', func);
+    };
+  }, [showDetail]);
+
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.code === 'Escape') {
+        setIsTemplateOpen(false);
+      }
+    };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, []);
+
+  useEffect(() => {
     loadTemplates();
-    window.addEventListener('popstate', historyBackHandler);
+
     return () => {
       setIsTemplateOpen(false);
       setShowDetail('');
-      window.removeEventListener('popstate', historyBackHandler);
     };
   }, []);
 
@@ -219,7 +228,7 @@ const Templates = () => {
             </div>
           </div>
           <hr />
-          <div className='flex flex-wrap w-full h-[620px] overflow-y-scroll gap-x-7 gap-y-11 px-12 py-9 '>
+          <div className='flex flex-wrap w-full h-[610px] overflow-y-scroll gap-x-7 gap-y-11 px-12 py-9 '>
             {currentBlueprintInfo.uuid === '' && (
               <div className='w-[290px] h-[218px]'>
                 <NewBlueprint />
@@ -234,7 +243,6 @@ const Templates = () => {
                     thumbnail={thumbnails[templates[key].uuid]}
                     onClick={() => {
                       setShowDetail(templates[key].uuid);
-                      // router.push(pathname + '?' + createQueryString('id', templates[key].uuid));
                     }}
                     onClickLoad={onClickLoad}
                   />

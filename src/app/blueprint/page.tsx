@@ -43,9 +43,9 @@ const BluePrint = () => {
 
   return (
     <AuthRequired>
-      <div className='h-full overflow-y-scroll px-[207px] py-[50px] bg-[#F9FBFC]'>
+      <div className='h-full flex flex-col items-center overflow-y-scroll px-[207px] py-[50px] bg-[#F9FBFC]'>
         <div className=' text-[26px] font-extrabold mb-10'>My Blueprints</div>
-        <div className='w-full h-full flex flex-wrap content-start gap-x-[34px] gap-y-[45px]'>
+        <div className='w-full h-full flex flex-wrap content-start justify-center gap-x-[34px] gap-y-[45px]'>
           <div className='w-[290px] h-[232px] text-[#96ABBB]'>
             <div
               className='flex flex-col items-center justify-center w-full h-full text-sm rounded-md cursor-pointer border-[#DAE2EC] border-2'

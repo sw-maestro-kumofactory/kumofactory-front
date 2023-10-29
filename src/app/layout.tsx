@@ -11,11 +11,6 @@ const notoSansKr = Noto_Sans_KR({
   weight: ['100', '400', '700', '900'], // 가변 폰트가 아닌 경우, 사용할 fontWeight 배열
 });
 
-// @ts-ignore
-export const cls = (...classnames: string[]) => {
-  return classnames.join(' ');
-};
-
 export const metadata = {
   title: 'Kumo Factory',
   description: 'Easy Architecture Management Tool',
@@ -24,7 +19,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
-      <body className={cls(notoSansKr.className)}>
+      <body className={notoSansKr.className}>
         <Header />
         <div className='w-full h-full pt-[50px]'>{children}</div>
       </body>

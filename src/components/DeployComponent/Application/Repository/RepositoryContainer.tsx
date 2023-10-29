@@ -11,8 +11,8 @@ interface IProps {
 
 const RepositoryContainer = ({ id, repoInfo }: IProps) => {
   return (
-    <div className='w-full max-h-[600px] min-h-fit pb-8 mb-12'>
-      <div className='flex items-center py-8 px-4 gap-x-4 h-12 bg-blue-100 w-full rounded-t-xl'>
+    <div className='w-full max-h-[600px] min-h-fit pb-8 mb-12 '>
+      <div className='flex items-center py-3 px-6 gap-x-4 border-[#DAE2EC] border bg-white rounded-t-md'>
         <Image
           src='https://avatars.githubusercontent.com/u/59858440?v=4'
           className='rounded-full'
@@ -22,7 +22,7 @@ const RepositoryContainer = ({ id, repoInfo }: IProps) => {
         />
         <div>{id}</div>
       </div>
-      <div className='bg-white h-fit max-h-[552px] rounded-b-xl overflow-y-scroll'>
+      <div className='h-fit max-h-[552px] rounded-b-md overflow-y-scroll border-[#DAE2EC] border bg-white border-t-0 flex flex-col items-center py-6 gap-y-3'>
         {repoInfo.map((repo, index) => (
           <Repository key={repo.fullName} id={id} name={repo.name} />
         ))}

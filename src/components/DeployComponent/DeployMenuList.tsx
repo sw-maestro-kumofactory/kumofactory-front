@@ -17,7 +17,7 @@ const DeployMenuList = ({ disabled }: IProps) => {
 };
 
 const Title = ({ title }: { title: string }) => {
-  return <div className='ml-[32px] my-[23px] text-[#323438] font-bold text-[#14px]'>{title}</div>;
+  return <div className='ml-[32px] my-[23px] text-[#323438] font-bold text-[#15px]'>{title}</div>;
 };
 
 export default DeployMenuList;

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
+import { current } from 'immer';
 
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import useStore from '@/src/hooks/useStore';
@@ -184,6 +185,7 @@ export const Header = () => {
                   className='border-[#E2E9F0] border-2 w-[110px] h-[30px] text-black ml-[16px] rounded-md flex items-center justify-center gap-x-1'
                   onClick={() => {
                     setIsTemplateOpen(true);
+                    router.push(`/blueprint/${currentBlueprintInfo.uuid}/?template=true`);
                   }}
                 >
                   <Image src='/icons/Design/catalog_black.svg' width={15} height={15} alt='catalog' />

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 import { commonAxiosInstance } from '@/src/api';
 import { BlueprintInfo } from '@/src/types/Blueprint';
@@ -37,24 +38,24 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
     router.push(`/blueprint/${data.uuid}/deploy`);
   };
 
-  // const fetchSvgData = async () => {
-  //   if (!data.presignedUrl) return;
-  //   try {
-  //     const urlParts = data.presignedUrl!.split('/');
-  //     const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
-  //     console.log(data.presignedUrl);
-  //
-  //     // console.log(urlParts, url);
-  //     const response = await commonAxiosInstance.get(url);
-  //     setSvgData(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching SVG data:', error);
-  //   }
-  // };
-  //
-  // useEffect(() => {
-  //   fetchSvgData();
-  // }, []);
+  const fetchSvgData = async () => {
+    if (!data.presignedUrl) return;
+    try {
+      const urlParts = data.presignedUrl!.split('/');
+      const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
+      console.log(data.presignedUrl);
+
+      // console.log(urlParts, url);
+      const response = await commonAxiosInstance.get(url);
+      setSvgData(response.data);
+    } catch (error) {
+      console.error('Error fetching SVG data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSvgData();
+  }, []);
 
   return (
     <div className='w-[290px] h-[232px]'>
@@ -90,7 +91,13 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
           </>
         )}
         <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-md'>
-          <div className='absolute right-0 bottom-0 text-xs w-fit p-1 rounded-md select-none'>{data.scope}</div>
+          <div className='absolute right-0 bottom-0 text-xs w-fit p-1 rounded-md select-none'>
+            {data.scope === 'PUBLIC' ? (
+              <Image width={20} height={20} src={'/icons/Design/public.svg'} alt={'public'} />
+            ) : (
+              <Image width={20} height={20} src={'/icons/Design/private.svg'} alt={'private'} />
+            )}
+          </div>
           <svg className='w-full h-full rounded-t-[4px]'>
             {svgData && <g dangerouslySetInnerHTML={{ __html: svgData }} />}
             {isHover && <rect width='100%' height='100%' className='fill-[#33393F] opacity-[71%]' />}
