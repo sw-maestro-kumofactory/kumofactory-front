@@ -94,7 +94,7 @@ export const Header = () => {
   }, []);
 
   return (
-    <div className='fixed flex justify-between w-full text-sm text-[#00C0B5] border-b-2 border-[#DAE2EC] h-[50px] p-4 select-none items-center'>
+    <div className='fixed flex justify-between w-full text-sm text-[#00C0B5] border-b-2 border-[#DAE2EC] h-[50px] p-4 select-none items-center z-20 bg-white'>
       <div className='flex gap-x-4 content-center p-4 items-center'>
         {/*<KumoLogo />*/}
         <Link className='rounded-2xl' href='/'>

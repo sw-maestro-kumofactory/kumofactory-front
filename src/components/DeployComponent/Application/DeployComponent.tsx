@@ -8,6 +8,9 @@ import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import SqlUploader from '@/src/components/DeployComponent/RDS/SqlUploader';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import SkeletonRepositoryContainer from '@/src/components/DeployComponent/Application/Repository/SkeletonRepositoryContainer';
+import CustomList from '@/src/components/common/List/CustomList';
+
+//TODO : Environment Variable Design
 
 const DeployComponent = () => {
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
@@ -18,8 +21,6 @@ const DeployComponent = () => {
 
   const username = useLoginStore((state) => state.username);
   const [isLoading, setIsLoading] = useState(true);
-
-  console.log(username);
 
   const getRepo = async () => {
     try {
@@ -107,14 +108,3 @@ const DeployComponent = () => {
 };
 
 export default DeployComponent;
-
-const CustomList = ({ title, content }: { title: string; content: string }) => {
-  return (
-    <li>
-      <div className='flex gap-x-4'>
-        <div className='font-semibold'>{title}</div>
-        <div className='text-[#323438]'>{content}</div>
-      </div>
-    </li>
-  );
-};

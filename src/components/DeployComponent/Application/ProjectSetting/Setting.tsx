@@ -1,6 +1,8 @@
 'use client';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faRocket } from '@fortawesome/free-solid-svg-icons';
 
 import EnvironmentVariableComponent from '@/src/components/DeployComponent/Application/ProjectSetting/EnvironmentVariableComponent';
 import { getOrgRepoBranches, getRepoBranches, postDeploy } from '@/src/api/deploy';
@@ -10,6 +12,8 @@ import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import useInput from '@/src/hooks/useInput';
+import CustomList from '@/src/components/common/List/CustomList';
+import DeployConfirmModal from '@/src/components/common/Modal/DeployConfirmModal';
 
 // TODO : Deploy Status From SSE
 const Setting = () => {
@@ -28,6 +32,7 @@ const Setting = () => {
   const [isEtc, setIsEtc] = useState<boolean>(false);
   const [isDeploying, setIsDeploying] = useState<boolean>(false);
   const { value: dockerFilePath, onHandleChange: onChangeDockerFilePath } = useInput('');
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onClickDeployButton = async () => {
     // if (dockerFilePath === '' || !language) {
@@ -75,98 +80,100 @@ const Setting = () => {
 
   useEffect(() => {
     const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[targetInstanceId!].instanceId}`);
-
     source.addEventListener('open', () => {});
-
     source.addEventListener('status', (e) => {
       if (e.data === 'success' || e.data === 'fail') {
         alert(e.data);
         source.close();
       }
     });
-
     source.addEventListener('error', (e) => {});
-
     return () => {
       if (source) source.close();
     };
   }, []);
 
   return (
-    <div className='w-full h-full pl-[294px] flex flex-col items-center overflow-y-scroll'>
-      <div className='w-11/12 h-full flex flex-col py-4 px-8'>
-        <div className=' flex justify-between items-center'>
-          <div className='text-gray-600 cursor-pointer' onClick={() => router.back()}>
-            back
-          </div>
-          <ConfirmPopover
-            Heading={'Application Deploy'}
-            Description={'Your Repository will be Deployed Selected Instance'}
-            onClickConfirm={() => {
-              setIsDeploying(true);
-              onClickDeployButton();
-            }}
-          >
-            <div className='p-4 bg-white border-solid border-2 border-[#799ACF] text-[#799ACF] rounded-xl cursor-pointer'>
+    <div className='w-full h-full pl-[294px] bg-[#F9FBFC] overflow-y-scroll'>
+      <div className='absolute flex gap-x-2 items-center cursor-pointer ml-7 pt-4' onClick={() => router.back()}>
+        <FontAwesomeIcon icon={faArrowLeft} />
+        <div>back</div>
+      </div>
+      <div className='w-full h-full mt-7 flex flex-col items-center py-4 px-8'>
+        <div className='w-[920px] text-[#323438]'>
+          <div className='flex justify-between items-center'>
+            <div className='text-3xl font-semibold'>Settings</div>
+            <div
+              className='flex items-center justify-center gap-x-1 px-3 py-2 text-sm bg-[#00CBBF] text-white rounded-md cursor-pointer'
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <FontAwesomeIcon icon={faRocket} />
               {isDeploying ? 'Deploy' : 'Deploying'}
             </div>
-          </ConfirmPopover>
-        </div>
-        <div className='w-full text-lg p-2 mt-4 bg-[#799ACF] rounded-md text-white'>Current Information</div>
-        <div className='py-4 px-2'>
-          <div className=' pb-4'>Current Repository : {repoId}</div>
-          <div className=''>Current Target Instance : {targetInstanceName}</div>
-        </div>
-        <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Select Branch To Deploy</div>
-        <div className='py-4 mx-2'>
-          <select
-            className='w-1/2 p-4 border border-gray-300 rounded-md'
-            value={curBranch}
-            onChange={(e) => {
-              setCurBranch(e.target.value);
-            }}
-          >
-            {branches.map((branch) => (
-              <option key={branch} value={branch}>
-                {branch}
-              </option>
-            ))}
-          </select>
-        </div>
-        {/* Framework */}
-        <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Deploy Option</div>
-        <div className='mt-4 text-[#195091]'>
-          For Application Deploy, You should select framework or input dockerfile path.
-        </div>
-        <div className='py-4 px-2'>
-          <div className='font-bold'>Select Framework</div>
-          <div className='flex gap-x-8 text-sm'>
-            <div
-              onClick={() => {
-                setIsEtc(false);
-                setLanguage('java');
+          </div>
+          <div className='w-full text-xl mt-7 font-bold'>Current Information</div>
+          <div className='border border-[#DAE2EC] rounded-md mt-4 py-5 px-4 bg-white'>
+            <ul className='pl-4 list-disc leading-8'>
+              <CustomList title='User' content={username} />
+              <CustomList title='Repository' content={repoId} />
+              <CustomList title='Selected Instance' content={targetInstanceName!} />
+              <CustomList title='Deployed Repository' content={'None'} />
+              <CustomList title='Deploy Status' content={'asdf'} />
+            </ul>
+          </div>
+          <div className='w-full text-xl mt-7 font-bold'>Select Branch To Deploy</div>
+          <div className='p-6 mt-4 border border-[#DAE2EC] rounded-md bg-white'>
+            <select
+              className='w-full p-1 px-2 border border-gray-300 rounded-md text-base'
+              value={curBranch}
+              onChange={(e) => {
+                setCurBranch(e.target.value);
               }}
             >
-              <input className='m-2' type='radio' name='language' value='java' id='java' />
-              <label htmlFor='java'>Spring</label>
-            </div>
-            <div
-              onClick={() => {
-                setIsEtc(false);
-                setLanguage('node');
-              }}
-            >
-              <input className='m-2' type='radio' name='language' value='node' id='node' />
-              <label htmlFor='node'>Express</label>
-            </div>
-            <div
-              onClick={() => {
-                setIsEtc(true);
-                setLanguage('');
-              }}
-            >
-              <input className='m-2' type='radio' name='language' value='etc' id='etc' />
-              <label htmlFor='etc'>dockerfile path</label>
+              {branches.map((branch) => (
+                <option className='bg-white' key={branch} value={branch}>
+                  {branch}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className='w-full text-xl mt-7 font-bold'>Select Branch To Deploy</div>
+          {/* Framework */}
+          <div className='mt-4 text-[#195091]'>
+            For Application Deploy, You should select framework or input dockerfile path.
+          </div>
+          <div className='py-4 px-2'>
+            <div className='font-bold'>Select Framework</div>
+            <div className='flex gap-x-8 text-sm'>
+              <div
+                onClick={() => {
+                  setIsEtc(false);
+                  setLanguage('java');
+                }}
+              >
+                <input className='m-2' type='radio' name='language' value='java' id='java' />
+                <label htmlFor='java'>Spring</label>
+              </div>
+              <div
+                onClick={() => {
+                  setIsEtc(false);
+                  setLanguage('node');
+                }}
+              >
+                <input className='m-2' type='radio' name='language' value='node' id='node' />
+                <label htmlFor='node'>Express</label>
+              </div>
+              <div
+                onClick={() => {
+                  setIsEtc(true);
+                  setLanguage('');
+                }}
+              >
+                <input className='m-2' type='radio' name='language' value='etc' id='etc' />
+                <label htmlFor='etc'>dockerfile path</label>
+              </div>
             </div>
           </div>
           {isEtc && (
@@ -181,10 +188,10 @@ const Setting = () => {
               />
             </>
           )}
+          <EnvironmentVariableComponent />
         </div>
-        {/* Environment Variable */}
-        <EnvironmentVariableComponent />
       </div>
+      <DeployConfirmModal onClick={onClickDeployButton} show={isOpen} setShow={setIsOpen} />
     </div>
   );
 };

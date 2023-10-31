@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faPenToSquare, faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useParams } from 'next/navigation';
+import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import useInput from '@/src/hooks/useInput';
@@ -56,46 +57,51 @@ const EnvironmentVariableComponent = () => {
   };
 
   return (
-    <div className='w-full'>
-      <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Add Environmental Variable</div>
-      <div className='flex py-4 justify-between items-center'>
-        <div className='w-5/12'>
-          <div className='w-full px-4 mb-4 rounded-2xl'>Key</div>
-          <input className='w-full p-4 rounded-2xl' placeholder='key' value={key} onChange={onKeyChange} />
+    <>
+      <div className='w-full text-xl mt-7 pb-4 font-bold'>Add Environmental Variable</div>
+      <div className='flex py-4 h-[117px] px-6 mb-7 gap-x-3 justify-between items-center border border-[#DAE2EC] rounded-md bg-white'>
+        <div className='w-[394px] '>
+          <div className='w-full mb-4 rounded-2xl text-base font-bold'>Key</div>
+          <input
+            className='w-full py-1.5 px-4 border border-[#DAE2EC] rounded-md text-[15px] font-semibold'
+            placeholder='key'
+            value={key}
+            onChange={onKeyChange}
+          />
         </div>
-        <div className='w-5/12'>
-          <div className='w-full mr-4 px-4 mb-4 rounded-2xl'>Value</div>
-          <input className='w-full p-4 rounded-2xl mr-12' placeholder='value' value={value} onChange={onValueChange} />
+        <div className='w-[394px]'>
+          <div className='w-full mr-4 mb-4 rounded-2xl text-base font-bold'>Value</div>
+          <input
+            className='w-full py-1.5 px-4 border border-[#DAE2EC] rounded-md text-[15px] font-semibold'
+            placeholder='value'
+            value={value}
+            onChange={onValueChange}
+          />
         </div>
-        <div
-          className='p-4 h-fit mr-4 rounded-2xl border-solid border-2 border-gray-400 cursor-pointer'
-          onClick={handleAddEnvironmentVariables}
-        >
-          Add
+        <div className='mr-4 mt-8 rounded-2xl cursor-pointer' onClick={handleAddEnvironmentVariables}>
+          <FontAwesomeIcon icon={faPlus} />
         </div>
       </div>
-      <div className='w-full text-lg p-2 bg-[#799ACF] rounded-md text-white'>Variable List</div>
       {EnvironmentVariables[repoId].length !== 0 && (
-        <div className='w-full flex px-4 py-2'>
-          <div className='w-5/12 mr-5'>Key</div>
-          <div className='w-5/12'>Value</div>
-        </div>
+        <>
+          <div className='w-full text-xl mb-4 font-bold'>Variable List</div>
+        </>
       )}
       <div>
         {EnvironmentVariables[repoId].map((variable, index) => (
-          <div key={index} className='flex mb-4'>
+          <div key={index} className='flex items-center py-4 px-6 mb-10 border border-[#DAE2EC] rounded-md'>
             <input
-              className={`w-5/12 mr-4 p-4 rounded-2xl bg-white ${
-                editIndex === index ? 'ring-2 ring-inset inset-blue-500' : ''
-              }`}
+              className={`w-[394px] mr-4 p-4 rounded-2xl bg-white
+              border border-[#DAE2EC] 
+              ${editIndex === index ? 'ring-2 ring-inset inset-black' : ''}`}
               value={editIndex === index ? editedKey : variable.key}
               onChange={(e) => setEditedKey(e.target.value)} // Store the temporary edited key in editedKey state
               disabled={editIndex !== index}
             />
             <div
-              className={`w-5/12 mr-4 rounded-2xl flex items-center p-4 bg-white ${
-                editIndex === index ? 'ring-2 ring-inset inset-blue-500' : ''
-              }`}
+              className={`w-[394px] mr-4 p-4 rounded-2xl bg-white flex items-center justify-between
+              border border-[#DAE2EC] 
+              ${editIndex === index ? 'ring-2 ring-inset inset-black' : ''}`}
             >
               <input
                 className={`w-full bg-white `}
@@ -114,7 +120,7 @@ const EnvironmentVariableComponent = () => {
               />
             </div>
             <div
-              className='flex justify-center w-20 p-4 rounded-2xl cursor-pointer mr-4 bg-white'
+              className='flex justify-center rounded-2xl cursor-pointer mr-4 '
               onClick={() => {
                 if (editIndex === index) {
                   handleUpdateEnvironmentVariables();
@@ -126,20 +132,20 @@ const EnvironmentVariableComponent = () => {
                 }
               }}
             >
-              {editIndex === index ? 'Save' : 'Edit'}
+              <FontAwesomeIcon icon={editIndex === index ? faFloppyDisk : faPenToSquare} />
             </div>
             <div
-              className='w-fit p-4 rounded-2xl bg-white cursor-pointer'
+              className='rounded-2xl  cursor-pointer'
               onClick={() => {
                 handleDeleteEnvironmentVariables(variable.key);
               }}
             >
-              Delete
+              <FontAwesomeIcon icon={faTrashCan} />
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
