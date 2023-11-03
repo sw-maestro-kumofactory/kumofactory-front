@@ -69,7 +69,7 @@ const BlueprintNameModal = ({ children, setShow }: IProps) => {
           value={nameValue}
           onChange={onHandleNameChange}
         />
-        <div className='h-[450px]'>
+        <div className='h-[450px]' data-color-mode='light'>
           <MDEditor height={450} value={descriptionValue} onChange={(val) => setDescriptionValue(val)} />
         </div>
         <div className='flex justify-end gap-x-2 mt-4'>

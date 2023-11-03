@@ -188,7 +188,7 @@ const Templates = () => {
               </div>
             </div>
             <hr />
-            <div>
+            <div data-color-mode='light'>
               <div className='pt-8 pb-7 font-extrabold text-xl'>Description</div>
               <MarkdownPreview
                 source={templates[showDetail].description}
