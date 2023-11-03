@@ -64,8 +64,8 @@ const DeployComponent = () => {
 
   if (!targetInstanceType || !targetInstanceId) {
     return (
-      <div className='w-full h-full  pl-[294px] flex justify-center items-center text-4xl -mt-12'>
-        Select Target Instance First!
+      <div className='w-full h-full pl-[294px] flex justify-center items-center text-base bg-[#F9FBFC] -mt-12 text-[#B0BCC3]'>
+        배포할 인스턴스, RDS를 먼저 선택해주세요!
       </div>
     );
   }
@@ -100,7 +100,11 @@ const DeployComponent = () => {
         )}
         {!isLoading &&
           Object.keys(repositoryList).map((key) => {
-            return <RepositoryContainer key={key} repoInfo={repositoryList[key]} id={key} />;
+            return (
+              <>
+                <RepositoryContainer key={key} repoInfo={repositoryList[key]} id={key} />{' '}
+              </>
+            );
           })}
       </div>
     </div>
