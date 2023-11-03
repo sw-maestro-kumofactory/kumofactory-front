@@ -36,12 +36,12 @@ const NewBlueprint = () => {
   return (
     <>
       <div
-        className='flex flex-col items-center justify-center w-full h-[174px] text-[#96ABBB] bg-[#F9FAFC] border-2 border-[#DAE2EC] rounded-2xl cursor-pointer'
+        className='flex flex-col items-center justify-center w-full h-[174px] text-[#96ABBB] bg-white hover:bg-[#F9FAFC] border-2 border-[#DAE2EC] rounded-2xl cursor-pointer hover:border-[#7A91A1]'
         onClick={onClick}
       >
         <FontAwesomeIcon icon={faSquarePlus} className='text-2xl' />
       </div>
-      <div className='font-semibold  text-[#323438] text-[13px] pt-[10px]'> New Project</div>
+      <div className='font-semibold text-[#323438] text-[13px] pt-[10px] hover:text-[#7A91A1] '> New Project</div>
     </>
   );
 };

@@ -46,9 +46,9 @@ const BluePrint = () => {
       <div className='h-full flex flex-col items-center overflow-y-scroll px-[207px] py-[50px] bg-[#F9FBFC]'>
         <div className=' text-[26px] font-extrabold mb-10'>My Blueprints</div>
         <div className='w-full h-full flex flex-wrap content-start justify-center gap-x-[34px] gap-y-[45px]'>
-          <div className='w-[290px] h-[232px] text-[#96ABBB]'>
+          <div className='w-[290px] h-[232px] text-[#96ABBB] hover:text-[#7A91A1]'>
             <div
-              className='flex flex-col items-center justify-center w-full h-full text-sm rounded-md cursor-pointer border-[#DAE2EC] border-2'
+              className='flex flex-col items-center justify-center w-full h-full text-sm rounded-md bg-white hover:bg-[#F9FBFC] cursor-pointer border-[#DAE2EC] hover:border-[#CCD6E2] border-2'
               onClick={(e) => {
                 e.stopPropagation();
                 setIsTemplateOpen(true);
