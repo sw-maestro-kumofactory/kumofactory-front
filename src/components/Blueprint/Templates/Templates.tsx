@@ -211,20 +211,22 @@ const Templates = () => {
             <div className='flex items-center gap-x-2 mr-[20px]'>
               <Seperator />
               <div className='flex gap-x-1'>
-                <div className='flex items-center justify-center w-8 h-8 rounded-md'>
+                <div className='flex items-center justify-center w-8 h-8 rounded-md text-[#DAE2EC] hover:bg-[#F7F8FC] p-1'>
                   <Image width={21} height={14} src='/icons/Design/logo.svg' alt='kumo' />
                 </div>
-                <div className='flex items-center justify-center w-8 h-8 rounded-md'>
+                <div className='flex items-center justify-center w-8 h-8 rounded-md text-[#DAE2EC] hover:bg-[#F7F8FC] p-1'>
                   <Image width={26} height={15} src='/icons/Design/public.svg' alt='public' />
                 </div>
               </div>
               <Seperator />
               <div className='relative w-56 h-8 border-2 border-[#DAE2EC] rounded-md'>
-                <div className='h-7 absolute right-2 flex items-center'>
+                <div className='h-7 absolute right-2 flex items-center text-[#DAE2EC] rounded-md hover:bg-[#F7F8FC] p-2'>
                   <Image width={12} height={13} alt='search' src='/icons/Design/search.svg' />
                 </div>
               </div>
-              <Image width={11} height={11} alt={'quit'} src='/icons/Design/cancel.svg' />
+              <div className='text-[#DAE2EC] rounded-md hover:bg-[#F7F8FC] p-2'>
+                <Image width={11} height={11} alt={'quit'} src='/icons/Design/cancel.svg' />
+              </div>
             </div>
           </div>
           <hr />

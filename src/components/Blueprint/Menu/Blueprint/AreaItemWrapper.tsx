@@ -102,7 +102,7 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
     createArea(area, area.type);
   };
   return (
-    <div className='flex flex-wrap cursor-pointer text-sm p-2 border-solid border-gray-400 border-t-2 '>
+    <div className='flex flex-wrap cursor-pointer text-xs p-2 border-solid border-gray-400 border-t-2 '>
       <div key={type} onClick={() => createAreaByType()}>
         {name}
       </div>

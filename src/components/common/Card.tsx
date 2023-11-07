@@ -43,9 +43,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
     try {
       const urlParts = data.presignedUrl!.split('/');
       const url = `/svg/${urlParts[3]}/${urlParts[4]}`;
-      console.log(data.presignedUrl);
 
-      // console.log(urlParts, url);
       const response = await commonAxiosInstance.get(url);
       setSvgData(response.data);
     } catch (error) {
@@ -70,7 +68,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
         {isHover && (
           <>
             <div
-              className='absolute right-3 top-3 w-4 h-4 rounded-full border-solid border-2 border-gray-400 flex justify-center items-center cursor-pointer '
+              className='absolute right-3 top-3 w-3 h-3 rounded-full border-solid border-2 border-gray-400 flex justify-center items-center cursor-pointer '
               onClick={onClickDelete}
             >
               <FontAwesomeIcon style={{ color: 'white' }} icon={faTrashCan} />
@@ -91,7 +89,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
           </>
         )}
         <div className='w-full h-full border-gray-300 border-solid border-2 rounded-t-md'>
-          <div className='absolute right-0 bottom-0 text-xs w-fit p-1 rounded-md select-none'>
+          <div className='absolute right-0 bottom-0 text-xs w-fit p-2 rounded-md select-none'>
             {data.scope === 'PUBLIC' ? (
               <Image width={20} height={20} src={'/icons/Design/public.svg'} alt={'public'} />
             ) : (

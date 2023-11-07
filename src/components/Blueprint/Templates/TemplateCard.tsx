@@ -33,7 +33,7 @@ const TemplateCard = ({ data, onClick, thumbnail, onClickLoad }: IProps) => {
               onClick={(e) => onClickLoad(e, data.uuid)}
             />
           )}
-          <div className='w-full h-[174px] border rounded-md'>
+          <div className='w-full h-[174px] border rounded-md hover:shadow-md'>
             <svg className='w-full h-full rounded-t-lg'>
               {/*<g dangerouslySetInnerHTML={{ __html: thumbnail }} />*/}
             </svg>

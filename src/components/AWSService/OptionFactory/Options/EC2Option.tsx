@@ -7,6 +7,9 @@ import Image from 'next/image';
 import { AccessScope, AccessScopeList, AvailabilityZone, EC2Options, InstanceTypeList } from '@/src/types/Services';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useInput from '@/src/hooks/useInput';
+import OptionAttributeName from '@/src/components/common/Form/OptionAttributeName';
+import OptionInput from '@/src/components/common/Form/FormInput';
+import Dropdown from '@/src/components/common/Form/Dropdown';
 
 export const EC2Option = (id: string): EC2Options => {
   return {
@@ -18,10 +21,6 @@ export const EC2Option = (id: string): EC2Options => {
     id: id,
     securityGroupType: null,
   };
-};
-
-const AttributeName = ({ text }: { text: string }) => {
-  return <div className='text-[#7f7f7f] hover:text-black my-4'>{text}</div>;
 };
 
 export const EC2OptionComponent = ({ id }: { id: string }) => {
@@ -99,40 +98,39 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      <div className='text-xl my-4 text-[#799ACF]'> EC2 Setting</div>
-      <AttributeName text='Instance Type' />
-      <div className='flex align-middle'>
-        <select value={instanceType} onChange={handleInstanceTypeChange}>
-          {instanceTypes.map((instanceType) => (
-            <option key={instanceType} value={instanceType}>
-              {instanceType}
-            </option>
-          ))}
-        </select>
-        <div className='flex items-center ml-8 w-8 h-8' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
-          <FontAwesomeIcon icon={faCircleQuestion} />
-        </div>
-        {isHover && (
-          <Image
-            width={500}
-            height={500}
-            style={{ top: `${top}px` }}
-            className='fixed bg-opacity-0 top-40 right-4'
-            src={'/typelist.png'}
-            alt={'typelist'}
-          />
-        )}
+      <OptionAttributeName text={'Instance Name'} />
+      <OptionInput value={instanceName} onChange={handleInstanceNameChange} disabled={false} />
+      <OptionAttributeName text='Instance Type' />
+      <Dropdown value={instanceType} onChange={handleInstanceTypeChange} options={instanceTypes} />
+      {/*<div className='flex w-full align-middle'>*/}
+      {/*  <select value={instanceType} onChange={handleInstanceTypeChange}>*/}
+      {/*    {instanceTypes.map((instanceType) => (*/}
+      {/*      <option key={instanceType} value={instanceType}>*/}
+      {/*        {instanceType}*/}
+      {/*      </option>*/}
+      {/*    ))}*/}
+      {/*  </select>*/}
+      {/*</div>*/}
+      <div className='flex items-center ml-8 w-8 h-8' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
+        <FontAwesomeIcon icon={faCircleQuestion} />
       </div>
-
-      <AttributeName text={'Machine Image'} />
-      <input value='amazon linux 2023' disabled />
-      <AttributeName text={'Subnet Type'} />
-      <input value={selectedOptions.subnetType ? selectedOptions.subnetType : ''} disabled />
-      <AttributeName text={'Availability Zone'} />
-      <input value={selectedOptions.availabilityZone ? selectedOptions.availabilityZone : ''} disabled />
-      <AttributeName text={'Instance Name'} />
-      <input type='text' value={instanceName} onChange={handleInstanceNameChange} />
-      <AttributeName text={'Security Group Type'} />
+      {isHover && (
+        <Image
+          width={500}
+          height={500}
+          style={{ top: `${top}px` }}
+          className='fixed bg-opacity-0 top-40 right-4'
+          src={'/typelist.png'}
+          alt={'typelist'}
+        />
+      )}
+      <OptionAttributeName text={'Machine Image'} />
+      <OptionInput value='amazon linux 2023' disabled={true} />
+      <OptionAttributeName text={'Subnet Type'} />
+      <OptionInput value={selectedOptions.subnetType ? selectedOptions.subnetType : ''} disabled={true} />
+      <OptionAttributeName text={'Availability Zone'} />
+      <OptionInput value={selectedOptions.availabilityZone ? selectedOptions.availabilityZone : ''} disabled={true} />
+      <OptionAttributeName text={'Security Group Type'} />
       <select value={securityGroupType ? securityGroupType : ''} onChange={handleSecurityGroupTypeChange}>
         {securityGroupTypes.map((securityGroupType) => (
           <option key={securityGroupType} value={securityGroupType}>

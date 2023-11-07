@@ -18,3 +18,9 @@ html, body{
 /*body {*/
 /*  font-family: 'G Market Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'*/
 /*}*/
+
+@layer base {
+  input[type='radio'] {
+    @apply accent-[#00C0B5] ring-1 ring-transparent ;
+  }
+}

@@ -15,7 +15,7 @@ const OptionContainer = ({ id, type }: props) => {
 
   return (
     <div
-      className='absolute top-16 right-0 w-60 h-[calc(100%-64px)] bg-white border-black select-none bg-opacity-90 z-50 px-4'
+      className='absolute top-[50px] right-0 w-60 h-[calc(100%-64px)] bg-white border-black select-none bg-opacity-90 z-50 px-4'
       onKeyDown={(e) => e.stopPropagation()}
     >
       {OptionFactoryInstance.getFormOfService(type, id)}

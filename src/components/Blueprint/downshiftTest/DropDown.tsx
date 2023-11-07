@@ -26,9 +26,9 @@ const DropDown = ({ title, children, absolute }: IProps) => {
         </div>
       </div>
       <div
-        className={`${absolute ? 'absolute right-2' : ''} overflow-hidden h-0 transition-all ease-in duration-300 ${
-          showDropdown ? 'h-auto' : ''
-        }`}
+        className={`${
+          absolute ? 'absolute right-2' : ''
+        } pr-4 overflow-hidden h-0 transition-all ease-in duration-300 ${showDropdown ? 'h-auto' : ''}`}
       >
         {children}
       </div>
