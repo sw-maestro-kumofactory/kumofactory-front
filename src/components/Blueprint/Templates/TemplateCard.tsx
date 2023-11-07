@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import { faAws } from '@fortawesome/free-brands-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { BlueprintInfo } from '@/src/types/Blueprint';
 
@@ -26,19 +27,19 @@ const TemplateCard = ({ data, onClick, thumbnail, onClickLoad }: IProps) => {
         onMouseLeave={() => setIsHover(false)}
       >
         <div>
-          {isHover && (
+          <div className='absolute bottom-[82px] left-1.5 p-2 w-7 h-7 cursor-pointer text-[#323438] bg-white border border-[#DAE2EC] rounded-md hover:animate-shift-bottom flex items-center justify-center'>
             <FontAwesomeIcon
-              icon={faCopy}
-              className='absolute bottom-[82px] left-2 p-2 cursor-pointer bg-[#6e58f6] rounded-lg text-white hover:animate-shift-bottom'
+              icon={faArrowUpRightFromSquare}
+              className='w-3 h-3'
               onClick={(e) => onClickLoad(e, data.uuid)}
             />
-          )}
-          <div className='w-full h-[174px] border rounded-md hover:shadow-md'>
+          </div>
+          <div className='w-full h-[174px] border rounded-md hover:shadow-md drop-shadow	'>
             <svg className='w-full h-full rounded-t-lg'>
-              {/*<g dangerouslySetInnerHTML={{ __html: thumbnail }} />*/}
+              <g dangerouslySetInnerHTML={{ __html: thumbnail }} />
             </svg>
           </div>
-          <div className='absolute bottom-[74px] right-2 h-[30px] p-[2px] flex gap-x-2 '>
+          <div className='absolute bottom-[78px] right-[3px] h-[30px] gap-x-2 bg-white p-1 flex justify-center items-center'>
             {/*@ts-ignore*/}
             <FontAwesomeIcon icon={faAws} />
             <FontAwesomeIcon icon={faGlobe} />
@@ -46,7 +47,7 @@ const TemplateCard = ({ data, onClick, thumbnail, onClickLoad }: IProps) => {
         </div>
         <div className='w-full h-[60px] mt-[10px]' onClick={(e) => e.stopPropagation()}>
           <div className='flex justify-between items-center text-sm'>
-            <div className='w-8 min-w-[32px] h-8 bg-gray-500 rounded-full mr-2'></div>
+            {/*<div className='w-8 min-w-[32px] h-8 bg-gray-500 rounded-full mr-2'></div>*/}
             <div className='flex flex-col w-full'>
               <div className='w-full flex justify-between'>
                 <div className='text-[13px] text-[#323438] cursor-pointer' onClick={onClick}>

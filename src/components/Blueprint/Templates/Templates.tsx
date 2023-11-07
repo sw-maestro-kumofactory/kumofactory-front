@@ -1,13 +1,15 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCloudArrowDown, faCross, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import moment from 'moment';
 import { v1 } from 'uuid';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { faAws } from '@fortawesome/free-brands-svg-icons';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 
 import { getAllTemplates, getTemplateById } from '@/src/api/template';
 import { commonAxiosInstance } from '@/src/api';
@@ -136,8 +138,13 @@ const Templates = () => {
               <FontAwesomeIcon onClick={() => setShowDetail('')} icon={faArrowLeft} />
               <div>Template Catalog</div>
             </div>
-            <div className='flex gap-x-2 mr-[20px]'>
-              <div>X</div>
+            <div
+              className='flex gap-x-2 mr-[20px] items-center'
+              onClick={() => {
+                setIsTemplateOpen(false);
+              }}
+            >
+              <Image width={11} height={11} alt={'quit'} src='/icons/Design/cancel.svg' />
             </div>
           </div>
           <hr />
@@ -150,39 +157,44 @@ const Templates = () => {
                     className='flex w-fit gap-x-1.5 items-center text-sm text-[#323438]'
                     onClick={(e) => onClickLoad(e, templates[showDetail].uuid)}
                   >
-                    <div className='flex items-center gap-x-2 border-2 border-[#DAE2EC] rounded-md py-2 px-2'>
+                    <div className='flex items-center gap-x-2 border border-[#DAE2EC] rounded-md p-2'>
                       <FontAwesomeIcon icon={faCopy} />
                       {templates[showDetail].downloadCount}
                     </div>
-                    <div className='font-bold p-2 border-2 border-[#DAE2EC] rounded-md'>copy</div>
+                    <div className='font-bold p-2 border border-[#DAE2EC] rounded-md'>
+                      <FontAwesomeIcon icon={faCloudArrowDown} />
+                    </div>
                   </div>
                 </div>
                 <div className='flex items-center gap-x-2.5 pt-1.5'>
                   <div className='w-8 h-8 rounded-full bg-gray-500'></div>
                   <div className='text-xs text-gray-400'>Create by {templates[showDetail].username}</div>
                 </div>
-                <div className='flex gap-x-4 pt-3 h-8 text-sm'>
-                  <div className='flex'>
-                    <div>AWS</div>
-                    <div>Public</div>
+                <div className='flex gap-x-4 pt-3 h-8 text-sm items-center'>
+                  <div className='flex justify-center gap-x-2 items-center'>
+                    {/*@ts-ignore*/}
+                    <FontAwesomeIcon className='w-5 h-5' icon={faAws} />
+                    <Image width={20} height={20} src={'/icons/Design/public.svg'} alt={'public'} />
                   </div>
-                  <div>hr</div>
-                  <div className='flex'>
-                    <div>❤</div>
+                  <div className='h-4 w-0.5 border border-[#E2E9F0]'></div>
+                  <div className='flex items-center gap-x-1'>
+                    <FontAwesomeIcon className='text-[#81929F]' icon={faHeart} />
                     <div>123</div>
                   </div>
                 </div>
-                <div className='py-11'>
-                  <div className='text-[11px]'>
-                    Created At : {moment(templates[showDetail].createdAt).format('MM/D, YYYY')}
+                <div className='py-11 w-80'>
+                  <div className='text-[11px] flex'>
+                    <div className='text-[#A5B0B9] w-16'>Created At</div>
+                    <div>{moment(templates[showDetail].createdAt).format('MM/D, YYYY')}</div>
                   </div>
-                  <div className='text-[11px]'>
-                    Updated At : {moment(templates[showDetail].updatedAt).format('MM/D, YYYY')}
+                  <div className='text-[11px] flex'>
+                    <div className='text-[#A5B0B9] w-16'>Updated At</div>
+                    <div>{moment(templates[showDetail].updatedAt).format('MM/D, YYYY')}</div>
                   </div>
                 </div>
               </div>
               <div>
-                <svg className='w-[290px] h-[174px] rounded-t-lg p-4 mb-4 rounded-md border-solid border-2 border-gray-400'>
+                <svg className='w-[290px] h-[174px] rounded-t-lg p-4 mb-4 rounded-md border border-[#DAE2EC]'>
                   <g dangerouslySetInnerHTML={{ __html: thumbnails[showDetail] }} />
                 </svg>
               </div>
@@ -201,7 +213,7 @@ const Templates = () => {
           </div>
         </div>
       ) : (
-        <>
+        <div className='w-full h-full'>
           <div className='flex justify-between py-[17px] pl-[27px] items-center'>
             <div className='flex'>
               <Image width={18} height={18} alt={'catalog'} src='/icons/Design/catalog.svg' />
@@ -224,7 +236,12 @@ const Templates = () => {
                   <Image width={12} height={13} alt='search' src='/icons/Design/search.svg' />
                 </div>
               </div>
-              <div className='text-[#DAE2EC] rounded-md hover:bg-[#F7F8FC] p-2'>
+              <div
+                className='text-[#DAE2EC] hover:bg-[#F7F8FC] flex justify-center items-center'
+                onClick={() => {
+                  setIsTemplateOpen(false);
+                }}
+              >
                 <Image width={11} height={11} alt={'quit'} src='/icons/Design/cancel.svg' />
               </div>
             </div>
@@ -252,7 +269,7 @@ const Templates = () => {
               })}
             </>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
