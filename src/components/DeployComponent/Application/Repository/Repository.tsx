@@ -24,7 +24,7 @@ const Repository = ({ id, name }: IProps) => {
   };
 
   return (
-    <div className='w-[868px] p-4 border-[#DAE2EC] border rounded-md'>
+    <div className='w-[868px] p-4 border-[#DAE2EC] border rounded-md hover:bg-[#F3F6F8]'>
       <div className='flex items-center gap-x-5'>
         <div className='text-lg font-semibold text-[#00C0B5] cursor-pointer' onClick={toSetting}>
           {name}
@@ -36,19 +36,19 @@ const Repository = ({ id, name }: IProps) => {
       </div>
       <div className='pt-3'>if description ? description</div>
       <div className='flex items-center text-xs pt-2 gap-x-3'>
-        <div className='flex items-center gap-x-1'>
+        <div className='flex items-center gap-x-1 '>
           <div className='w-2 h-2 rounded-full bg-blue-600'></div>
           <div>typescript</div>
         </div>
-        <div className='flex gap-x-1 items-center border-[#DAE2EC] border rounded-md px-2 py-1'>
+        <div className='flex gap-x-1 items-center border-[#DAE2EC] border rounded-md px-2 py-1 bg-white'>
           <div>fork icon</div>
           <div>fork count</div>
         </div>
-        <div className='flex gap-x-1 items-center border-[#DAE2EC] border rounded-md px-2 py-1'>
+        <div className='flex gap-x-1 items-center border-[#DAE2EC] border rounded-md px-2 py-1 bg-white'>
           <div>star icon</div>
           <div>star count</div>
         </div>
-        <div className='flex gap-x-1 items-center border-[#DAE2EC] border rounded-md px-2 py-1'>
+        <div className='flex gap-x-1 items-center border-[#DAE2EC] border rounded-md px-2 py-1 bg-white'>
           <div>issue icon</div>
           <div>issue count</div>
         </div>

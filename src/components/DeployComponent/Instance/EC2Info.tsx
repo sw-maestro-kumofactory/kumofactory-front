@@ -44,7 +44,7 @@ const EC2Info = ({ option, active }: IProps) => {
   }, [active]);
 
   return (
-    <div className={`${active ? 'bg-[#EAF0F4]' : ''}`}>
+    <div className={`${active ? 'bg-[#EAF0F4]' : 'hover:bg-[#F3F6F8]'} `}>
       <div
         className={`pl-[20px] py-[10px] w-full h-fit flex justify-between text-center text-[13px] ${
           active ? 'text-[#00C0B5]' : 'text-black'

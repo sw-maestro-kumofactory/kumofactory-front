@@ -52,7 +52,6 @@ const Setting = () => {
     try {
       const d = await postDeploy(data);
       setIsDeploying(true);
-      console.log('deploy : ', d);
       alert('deploy Started! You can check the status in the Deploy List page.');
     } catch (e) {
       alert('deploy Fail!');
@@ -104,13 +103,13 @@ const Setting = () => {
           <div className='flex justify-between items-center'>
             <div className='text-3xl font-semibold'>Settings</div>
             <div
-              className='flex items-center justify-center gap-x-1 px-3 py-2 text-sm bg-[#00CBBF] text-white rounded-md cursor-pointer'
+              className='flex items-center justify-center gap-x-1 px-3 py-2 text-sm bg-[#00CBBF] text-white rounded-md cursor-pointer hover:bg-[#00C0B5]'
               onClick={() => {
                 setIsOpen(true);
               }}
             >
               <FontAwesomeIcon icon={faRocket} />
-              {isDeploying ? 'Deploy' : 'Deploying'}
+              {isDeploying ? 'Deploying' : 'Deploy'}
             </div>
           </div>
           <div className='w-full text-xl mt-7 font-bold'>Current Information</div>

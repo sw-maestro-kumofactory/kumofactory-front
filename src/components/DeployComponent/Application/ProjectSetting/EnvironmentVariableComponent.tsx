@@ -63,7 +63,7 @@ const EnvironmentVariableComponent = () => {
         <div className='w-[394px] '>
           <div className='w-full mb-4 rounded-2xl text-base font-bold'>Key</div>
           <input
-            className='w-full py-1.5 px-4 border border-[#DAE2EC] rounded-md text-[15px] font-semibold'
+            className='w-full py-1.5 px-4 ring-1 ring-inset ring-[#DAE2EC] rounded-md text-[15px] font-semibold hover:ring-[#CCD6E0]'
             placeholder='key'
             value={key}
             onChange={onKeyChange}
@@ -72,7 +72,7 @@ const EnvironmentVariableComponent = () => {
         <div className='w-[394px]'>
           <div className='w-full mr-4 mb-4 rounded-2xl text-base font-bold'>Value</div>
           <input
-            className='w-full py-1.5 px-4 border border-[#DAE2EC] rounded-md text-[15px] font-semibold'
+            className='w-full py-1.5 px-4 ring-1 ring-inset ring-[#DAE2EC] rounded-md text-[15px] font-semibold hover:ring-[#CCD6E0]'
             placeholder='value'
             value={value}
             onChange={onValueChange}
@@ -87,21 +87,21 @@ const EnvironmentVariableComponent = () => {
           <div className='w-full text-xl mb-4 font-bold'>Variable List</div>
         </>
       )}
-      <div>
+      <div className=' ring-1 ring-inset ring-[#DAE2EC] rounded-md p-4 flex flex-col gap-y-3 mb-10 bg-white'>
         {EnvironmentVariables[repoId].map((variable, index) => (
-          <div key={index} className='flex items-center py-4 px-6 mb-10 border border-[#DAE2EC] rounded-md'>
+          <div key={index} className='flex items-center px-6 '>
             <input
-              className={`w-[394px] mr-4 p-4 rounded-2xl bg-white
-              border border-[#DAE2EC] 
-              ${editIndex === index ? 'ring-2 ring-inset inset-black' : ''}`}
+              className={`w-[394px] h-[42px] mr-4 p-4 rounded-md bg-white
+              ring-1 ring-inset 
+              ${editIndex === index ? 'ring-[#00CBBF]' : 'ring-[#DAE2EC] '}`}
               value={editIndex === index ? editedKey : variable.key}
               onChange={(e) => setEditedKey(e.target.value)} // Store the temporary edited key in editedKey state
               disabled={editIndex !== index}
             />
             <div
-              className={`w-[394px] mr-4 p-4 rounded-2xl bg-white flex items-center justify-between
-              border border-[#DAE2EC] 
-              ${editIndex === index ? 'ring-2 ring-inset inset-black' : ''}`}
+              className={`w-[394px] h-[42px] mr-4 p-4 rounded-md bg-white flex items-center justify-between
+              ring-1 ring-inset 
+              ${editIndex === index ? 'ring-[#00CBBF]' : 'ring-[#DAE2EC] '}`}
             >
               <input
                 className={`w-full bg-white `}
@@ -132,7 +132,10 @@ const EnvironmentVariableComponent = () => {
                 }
               }}
             >
-              <FontAwesomeIcon icon={editIndex === index ? faFloppyDisk : faPenToSquare} />
+              <FontAwesomeIcon
+                className={`${editIndex === index ? 'text-white bg-[#00CBBF] p-1 rounded-md' : ''}`}
+                icon={editIndex === index ? faFloppyDisk : faPenToSquare}
+              />
             </div>
             <div
               className='rounded-2xl  cursor-pointer'
