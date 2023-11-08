@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
 import Image from 'next/image';
@@ -31,11 +31,14 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
   const setOption = useBlueprintStore((state) => state.ServiceAction.setOption);
   const instanceTypes = InstanceTypeList;
   const securityGroupTypes = AccessScopeList;
+
   const {
     value: instanceType,
     valueRef: instanceTypeRef,
+    setValue: setInstanceType,
     onHandleChange: handleInstanceTypeChange,
   } = useInput<string>(selectedOptions?.instanceType);
+
   const {
     value: instanceName,
     valueRef: instanceNameRef,
@@ -43,9 +46,10 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
   } = useInput<string>(selectedOptions?.instanceName);
   const {
     value: securityGroupType,
+    setValue: setSecurityGroupType,
     valueRef: securityGroupTypeRef,
     onHandleChange: handleSecurityGroupTypeChange,
-  } = useInput<string | null>(selectedOptions?.subnetType);
+  } = useInput<AccessScope | null>(selectedOptions?.subnetType);
   const {
     value: subnetType,
     valueRef: subnetTypeRef,
@@ -56,6 +60,24 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
     valueRef: availabilityZoneRef,
     onHandleChange: handleAvailabilityZoneChange,
   } = useInput<AvailabilityZone | null>(selectedOptions?.availabilityZone);
+
+  const onChangeInstanceType = (val: string) => {
+    setInstanceType(val);
+    instanceTypeRef.current = val;
+    setOption(id, {
+      ...selectedOptions,
+      instanceType: val,
+    });
+  };
+
+  const onChangeSecurityType = (val: AccessScope) => {
+    setSecurityGroupType(val);
+    securityGroupTypeRef.current = val;
+    setOption(id, {
+      ...selectedOptions,
+      securityGroupType: val,
+    });
+  };
 
   const mouseEnter = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -82,7 +104,7 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
   };
 
   useEffect(() => {
-    return () =>
+    return () => {
       setOption(id, {
         id: id,
         instanceType: instanceTypeRef.current,
@@ -92,6 +114,7 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
         instanceName: instanceNameRef.current,
         securityGroupType: subnetTypeRef.current,
       } as EC2Options);
+    };
   }, []);
 
   if (!selectedOptions) return <></>;
@@ -101,16 +124,7 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
       <OptionAttributeName text={'Instance Name'} />
       <OptionInput value={instanceName} onChange={handleInstanceNameChange} disabled={false} />
       <OptionAttributeName text='Instance Type' />
-      <Dropdown value={instanceType} onChange={handleInstanceTypeChange} options={instanceTypes} />
-      {/*<div className='flex w-full align-middle'>*/}
-      {/*  <select value={instanceType} onChange={handleInstanceTypeChange}>*/}
-      {/*    {instanceTypes.map((instanceType) => (*/}
-      {/*      <option key={instanceType} value={instanceType}>*/}
-      {/*        {instanceType}*/}
-      {/*      </option>*/}
-      {/*    ))}*/}
-      {/*  </select>*/}
-      {/*</div>*/}
+      <Dropdown<string> value={instanceType} setValue={onChangeInstanceType} options={instanceTypes} />
       <div className='flex items-center ml-8 w-8 h-8' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
         <FontAwesomeIcon icon={faCircleQuestion} />
       </div>
@@ -131,13 +145,7 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
       <OptionAttributeName text={'Availability Zone'} />
       <OptionInput value={selectedOptions.availabilityZone ? selectedOptions.availabilityZone : ''} disabled={true} />
       <OptionAttributeName text={'Security Group Type'} />
-      <select value={securityGroupType ? securityGroupType : ''} onChange={handleSecurityGroupTypeChange}>
-        {securityGroupTypes.map((securityGroupType) => (
-          <option key={securityGroupType} value={securityGroupType}>
-            {securityGroupType}
-          </option>
-        ))}
-      </select>
+      <Dropdown<AccessScope> value={securityGroupType} setValue={onChangeSecurityType} options={securityGroupTypes} />
     </form>
   );
 };
