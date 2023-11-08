@@ -14,15 +14,11 @@ const AvailableInstances = () => {
   const options = useBlueprintStore((state) => state.options);
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
   const [ec2List, setEc2List] = useState<string[]>([]);
-  const [s3List, setS3List] = useState<string[]>([]);
 
   useEffect(() => {
     Object.keys(services[currentBlueprintInfo.uuid]).forEach((key) => {
       if (services[currentBlueprintInfo.uuid][key].type === 'EC2') {
         setEc2List((prev) => [...prev, key]);
-      }
-      if (services[currentBlueprintInfo.uuid][key].type === 'S3') {
-        setS3List((prev) => [...prev, key]);
       }
     });
   }, []);
@@ -33,15 +29,6 @@ const AvailableInstances = () => {
         {ec2List.map((ec2) => {
           return (
             <EC2Info key={ec2} option={options[ec2] as EC2Options} active={targetInstanceId === options[ec2].id} />
-          );
-        })}
-      </div>
-      <div>
-        {s3List.map((s3) => {
-          return (
-            <div key={s3} className={`p-2 w-full h-fit flex justify-between text-center text-white`}>
-              <div className={`text-lg h-fit text-black`}>{s3}(S3)</div>
-            </div>
           );
         })}
       </div>
