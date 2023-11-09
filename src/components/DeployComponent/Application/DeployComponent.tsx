@@ -5,12 +5,9 @@ import RepositoryContainer from '@/src/components/DeployComponent/Application/Re
 import { getOrgRepositories, getUserRepositories } from '@/src/api/deploy';
 import { PersonalRepoResponse } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
-import SqlUploader from '@/src/components/DeployComponent/RDS/SqlUploader';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import SkeletonRepositoryContainer from '@/src/components/DeployComponent/Application/Repository/SkeletonRepositoryContainer';
 import CustomList from '@/src/components/common/List/CustomList';
-
-//TODO : Environment Variable Design
 
 const DeployComponent = () => {
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
@@ -65,7 +62,7 @@ const DeployComponent = () => {
   if (!targetInstanceType || !targetInstanceId) {
     return (
       <div className='w-full h-full pl-[294px] flex justify-center items-center text-base bg-[#F9FBFC] -mt-12 text-[#B0BCC3]'>
-        배포할 인스턴스, RDS를 먼저 선택해주세요!
+        배포할 인스턴스를 먼저 선택해주세요!
       </div>
     );
   }

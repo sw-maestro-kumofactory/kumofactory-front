@@ -1,7 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import EC2Info from '@/src/components/DeployComponent/Instance/EC2Info';

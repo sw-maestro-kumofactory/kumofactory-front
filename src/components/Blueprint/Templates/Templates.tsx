@@ -1,15 +1,14 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCloudArrowDown, faCross, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCloudArrowDown, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import moment from 'moment';
 import { v1 } from 'uuid';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { faAws } from '@fortawesome/free-brands-svg-icons';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 
 import { getAllTemplates, getTemplateById } from '@/src/api/template';
 import { commonAxiosInstance } from '@/src/api';
@@ -24,7 +23,6 @@ const MarkdownPreview = dynamic(() => import('@uiw/react-markdown-preview'), { s
 
 const Templates = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [templates, setTemplates] = useState<Record<string, BlueprintInfo>>({});
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);

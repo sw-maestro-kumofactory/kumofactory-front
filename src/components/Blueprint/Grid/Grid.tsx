@@ -42,11 +42,11 @@ const Grid = ({ id }: IProps) => {
     clearComponent,
     setIsEdit,
     setBlueprintId,
-    setIsTemplateOpen,
   } = useBlueprintStore((state) => state.CommonAction);
   const { setLineDrawingMode, onClickLine } = useBlueprintStore((state) => state.LineAction);
   const { isLoading, setIsLoading, setTemplate } = useSetTemplate();
   const [sortedAreas, setSortedAreas] = useState<IArea[]>([]);
+  const [hoverId, setHoverId] = useState<string>('');
 
   const typeOrder: AreaTypes[] = ['VPC', 'AZ', 'SUBNET'];
 
@@ -199,6 +199,14 @@ const Grid = ({ id }: IProps) => {
                         e.stopPropagation();
                         onMouseLeaveService(e, services[key]);
                       }}
+                      onMouseOver={(e) => {
+                        e.stopPropagation();
+                        setHoverId(services[key].id);
+                      }}
+                      onMouseOut={(e) => {
+                        e.stopPropagation();
+                        setHoverId('');
+                      }}
                       key={services[key].id}
                       isActive={services[key].id === selectedServiceId}
                       x={services[key].x}
@@ -213,14 +221,20 @@ const Grid = ({ id }: IProps) => {
                         <CreateLineContainer />
                       </foreignObject>
                     )}
-                    {/*<foreignObject*/}
-                    {/*  x={services[key].x + xAdjustment}*/}
-                    {/*  y={services[key].y + 80}*/}
-                    {/*  width={serviceNameWidth.toString()}*/}
-                    {/*  height='21'*/}
-                    {/*>*/}
-                    {/*  <div className='flex justify-center items-center select-none w-fit '>{services[key].type}</div>*/}
-                    {/*</foreignObject>*/}
+                    {hoverId === services[key].id && (
+                      <foreignObject x={services[key].x - 30} y={services[key].y + 90} width={200} height={100}>
+                        <div className='absolute z-10'>
+                          <div className='bg-white border border-[#DAE2EC] rounded-md shadow-md p-2'>
+                            <div className='flex items-center gap-x-2'>
+                              <div className='w-4 h-4 bg-[#323438] rounded-full'></div>
+                              <div className='text-sm font-bold'>{services[key].type}</div>
+                            </div>
+                            {/*옵션 넣기*/}
+                            <div className='text-sm text-[#A5B0B9]'>Click to create line</div>
+                          </div>
+                        </div>
+                      </foreignObject>
+                    )}
                   </g>
                 );
               })}

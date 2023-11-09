@@ -40,14 +40,14 @@ const DeployConfirmModal = ({ onClick, show, setShow }: IProps) => {
           <div className='text-base mb-8'>Your Application will be Deployed in EC2.</div>
           <div className='flex justify-center gap-x-3 text-sm'>
             <div
-              className='w-[107px] h-9 flex items-center justify-center gap-x-2 cursor-pointer bg-[#00CBBF] text-white rounded-md'
+              className='w-[107px] h-9 flex items-center justify-center gap-x-2 cursor-pointer bg-[#00CBBF] text-white rounded-md hover:bg-[#00C0B5]'
               onClick={onClick}
             >
               <FontAwesomeIcon icon={faCheck} />
               Confirm
             </div>
             <div
-              className='w-[107px] h-9 flex items-center justify-center gap-x-2 cursor-pointer box-content border border-black rounded-md bg-white'
+              className='w-[107px] h-9 flex items-center justify-center gap-x-2 cursor-pointer box-content ring-1 ring-inset ring-[#E2E9F0] hover:ring-[#D4DEE7] hover:bg-[#F7F8FC] rounded-md bg-white'
               onClick={closeModal}
             >
               <FontAwesomeIcon icon={faXmark} />

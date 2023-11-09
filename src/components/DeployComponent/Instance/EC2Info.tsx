@@ -21,8 +21,6 @@ const EC2Info = ({ option, active }: IProps) => {
   const setTargetInstanceType = useDeployStore((state) => state.DeployAction.setTargetInstanceType);
   const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
 
-  console.log(option.id, deployedResourceList);
-
   const onClickArea = () => {
     if (!disableEvent) {
       setTargetInstanceId(showOptions ? '' : option.id);
@@ -42,6 +40,21 @@ const EC2Info = ({ option, active }: IProps) => {
   useEffect(() => {
     setShowOptions(active);
   }, [active]);
+
+  useEffect(() => {
+    const source = new EventSource(`/api/build/buildStatus/${option.id}`);
+    source.addEventListener('open', () => {});
+    source.addEventListener('status', (e) => {
+      if (e.data === 'success' || e.data === 'fail') {
+        alert(e.data);
+        source.close();
+      }
+    });
+    source.addEventListener('error', (e) => {});
+    return () => {
+      if (source) source.close();
+    };
+  }, []);
 
   return (
     <div className={`${active ? 'bg-[#EAF0F4]' : 'hover:bg-[#F3F6F8]'} `}>

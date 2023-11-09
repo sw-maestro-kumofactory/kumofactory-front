@@ -9,13 +9,10 @@ import { getOrgRepoBranches, getRepoBranches, postDeploy } from '@/src/api/deplo
 import { DeployRequest } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
-import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
-import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import useInput from '@/src/hooks/useInput';
 import CustomList from '@/src/components/common/List/CustomList';
 import DeployConfirmModal from '@/src/components/common/Modal/DeployConfirmModal';
 
-// TODO : Deploy Status From SSE
 const Setting = () => {
   const params = useParams();
   const { currentBlueprintId, repoId, userName } = params;
@@ -35,11 +32,6 @@ const Setting = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onClickDeployButton = async () => {
-    // if (dockerFilePath === '' || !language) {
-    //   alert('You should select dockerFilePath of framework');
-    //   return;
-    // }
-
     const data: DeployRequest = {
       targetInstance: deployedResourceList[targetInstanceId!].instanceId,
       user: username,
@@ -75,21 +67,6 @@ const Setting = () => {
 
   useEffect(() => {
     getBranchList();
-  }, []);
-
-  useEffect(() => {
-    const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[targetInstanceId!].instanceId}`);
-    source.addEventListener('open', () => {});
-    source.addEventListener('status', (e) => {
-      if (e.data === 'success' || e.data === 'fail') {
-        alert(e.data);
-        source.close();
-      }
-    });
-    source.addEventListener('error', (e) => {});
-    return () => {
-      if (source) source.close();
-    };
   }, []);
 
   return (
