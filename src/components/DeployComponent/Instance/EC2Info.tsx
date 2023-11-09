@@ -42,7 +42,7 @@ const EC2Info = ({ option, active }: IProps) => {
   }, [active]);
 
   useEffect(() => {
-    const source = new EventSource(`/api/build/buildStatus/${option.id}`);
+    const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[option.id].instanceId}`);
     source.addEventListener('open', () => {});
     source.addEventListener('status', (e) => {
       if (e.data === 'success' || e.data === 'fail') {

@@ -1,4 +1,5 @@
 import { StateCreator } from 'zustand';
+import { current } from 'immer';
 
 import { CommonState } from '@/src/hooks/Store/blueprint/state/CommonState';
 import { BlueprintResponse, BlueprintScope } from '@/src/types/Blueprint';
@@ -279,6 +280,10 @@ export const useCommonSlice: StateCreator<
           for (let serviceId in state.services[state.currentBlueprintInfo.uuid]) {
             const currentService = state.services[state.currentBlueprintInfo.uuid][serviceId];
             const currentOption = state.options[serviceId] as EC2Options;
+            currentOption['subnetType'] = 'PUBLIC';
+            currentOption['availabilityZone'] = 'AP_NORTHEAST_2A';
+            currentOption['securityGroupType'] = 'PUBLIC';
+
             if (
               currentService.x >= currentArea.x &&
               currentService.x + 80 <= currentArea.x + currentArea.width &&

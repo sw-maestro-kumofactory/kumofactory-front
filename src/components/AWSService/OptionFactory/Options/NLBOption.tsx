@@ -83,23 +83,23 @@ export const NLBOptionComponent = (id: string) => {
   }, []);
 
   if (!selectedOptions) return <></>;
-
-  return (
-    <form onSubmit={handleOnSubmit}>
-      <AttributeName text={'Name'} />
-      <input type='text' value={name} onChange={handleNameChange} />
-      <AttributeName text={'Port'} />
-      <input type='number' value={port} onChange={handlePortChange} />
-      <AttributeName text={'Target Group Port'} />
-      <input type='number' value={targetGroupPort} onChange={handleTargetGroupPortChange} />
-      <AttributeName text={'Target Group Name'} />
-      <input type='text' value={targetGroupName} onChange={handleTargetGroupNameChange} />
-      <AttributeName text={'Target Group ID'} />
-      <input type='text' value={targetGroupId} onChange={handleTargetGroupIdChange} />
-      <AttributeName text={'Health Check Path'} />
-      <input type='text' value={healthCheckPath} onChange={handleHealthCheckPathChange} />
-      <AttributeName text={'Listener ID'} />
-      <input type='text' value={listenerId} onChange={handleListenerIdChange} />
-    </form>
-  );
+  return <></>;
+  // return (
+  // <form onSubmit={handleOnSubmit}>
+  //   <AttributeName text={'Name'} />
+  //   <input type='text' value={name} onChange={handleNameChange} />
+  //   <AttributeName text={'Port'} />
+  //   <input type='number' value={port} onChange={handlePortChange} />
+  //   <AttributeName text={'Target Group Port'} />
+  //   <input type='number' value={targetGroupPort} onChange={handleTargetGroupPortChange} />
+  //   <AttributeName text={'Target Group Name'} />
+  //   <input type='text' value={targetGroupName} onChange={handleTargetGroupNameChange} />
+  //   <AttributeName text={'Target Group ID'} />
+  //   <input type='text' value={targetGroupId} onChange={handleTargetGroupIdChange} />
+  //   <AttributeName text={'Health Check Path'} />
+  //   <input type='text' value={healthCheckPath} onChange={handleHealthCheckPathChange} />
+  //   <AttributeName text={'Listener ID'} />
+  //   <input type='text' value={listenerId} onChange={handleListenerIdChange} />
+  // </form>
+  // );
 };

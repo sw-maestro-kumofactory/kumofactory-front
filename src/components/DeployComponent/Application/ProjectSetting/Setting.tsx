@@ -9,6 +9,8 @@ import { getOrgRepoBranches, getRepoBranches, postDeploy } from '@/src/api/deplo
 import { DeployRequest } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
+import ConfirmPopover from '@/src/components/common/Popover/ConfirmPopover';
+import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import useInput from '@/src/hooks/useInput';
 import CustomList from '@/src/components/common/List/CustomList';
 import DeployConfirmModal from '@/src/components/common/Modal/DeployConfirmModal';
@@ -64,6 +66,21 @@ const Setting = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[targetInstanceId!].instanceId}`);
+    source.addEventListener('open', () => {});
+    source.addEventListener('status', (e) => {
+      if (e.data === 'success' || e.data === 'fail') {
+        alert(e.data);
+        source.close();
+      }
+    });
+    source.addEventListener('error', (e) => {});
+    return () => {
+      if (source) source.close();
+    };
+  }, []);
 
   useEffect(() => {
     getBranchList();

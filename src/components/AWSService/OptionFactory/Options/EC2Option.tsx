@@ -15,11 +15,11 @@ export const EC2Option = (id: string): EC2Options => {
   return {
     instanceType: 't3.micro',
     machineImage: '',
-    subnetType: null,
-    availabilityZone: null,
+    subnetType: 'PUBLIC',
+    availabilityZone: 'AP_NORTHEAST_2A',
     instanceName: id,
     id: id,
-    securityGroupType: null,
+    securityGroupType: 'PUBLIC',
   };
 };
 
@@ -30,7 +30,6 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
   const selectedOptions = options[id] as EC2Options;
   const setOption = useBlueprintStore((state) => state.ServiceAction.setOption);
   const instanceTypes = InstanceTypeList;
-  const securityGroupTypes = AccessScopeList;
 
   const {
     value: instanceType,
@@ -123,29 +122,37 @@ export const EC2OptionComponent = ({ id }: { id: string }) => {
     <form onSubmit={handleOnSubmit}>
       <OptionAttributeName text={'Instance Name'} />
       <OptionInput value={instanceName} onChange={handleInstanceNameChange} disabled={false} />
-      <OptionAttributeName text='Instance Type' />
-      <Dropdown<string> value={instanceType} setValue={onChangeInstanceType} options={instanceTypes} />
-      <div className='flex items-center ml-8 w-8 h-8' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
-        <FontAwesomeIcon icon={faCircleQuestion} />
+      <div className='flex justify-between items-center  mb-2 mt-4'>
+        <div className='text-[#323438] text-sm font-bold'>Instance Type</div>
+        <div className='flex items-center ml-8 w-8 h-8' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
+          <FontAwesomeIcon icon={faCircleQuestion} />
+        </div>
       </div>
       {isHover && (
         <Image
           width={500}
           height={500}
           style={{ top: `${top}px` }}
-          className='fixed bg-opacity-0 top-40 right-4'
+          className='fixed bg-opacity-0 top-40 right-4 z-30'
           src={'/typelist.png'}
           alt={'typelist'}
         />
       )}
+      <Dropdown<string> value={instanceType} setValue={onChangeInstanceType} options={instanceTypes} />
       <OptionAttributeName text={'Machine Image'} />
       <OptionInput value='amazon linux 2023' disabled={true} />
       <OptionAttributeName text={'Subnet Type'} />
-      <OptionInput value={selectedOptions.subnetType ? selectedOptions.subnetType : ''} disabled={true} />
+      <OptionInput value={selectedOptions.subnetType ? selectedOptions.subnetType : 'Public'} disabled={true} />
       <OptionAttributeName text={'Availability Zone'} />
-      <OptionInput value={selectedOptions.availabilityZone ? selectedOptions.availabilityZone : ''} disabled={true} />
+      <OptionInput
+        value={selectedOptions.availabilityZone ? selectedOptions.availabilityZone : 'AP_NORTHEAST_2A'}
+        disabled={true}
+      />
       <OptionAttributeName text={'Security Group Type'} />
-      <Dropdown<AccessScope> value={securityGroupType} setValue={onChangeSecurityType} options={securityGroupTypes} />
+      <OptionInput
+        value={selectedOptions.securityGroupType ? selectedOptions.securityGroupType : 'Public'}
+        disabled={true}
+      />
     </form>
   );
 };

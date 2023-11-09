@@ -212,7 +212,7 @@ export type ServicesString =
 
 export enum ConfigurableService {
   EC2 = 'EC2',
-  RDS_MYSQL = 'RDS_MYSQL',
-  ALB = 'ALB',
-  NLB = 'NLB',
+  // RDS_MYSQL = 'RDS_MYSQL',
+  // ALB = 'ALB',
+  // NLB = 'NLB',
 }

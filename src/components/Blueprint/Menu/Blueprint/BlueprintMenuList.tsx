@@ -26,11 +26,6 @@ const BlueprintMenuList = () => {
 
   return (
     <div className='overflow-x-hidden w-[272px] min-w-[272px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
-      {/*<div className='flex items-center justify-center border-2 w-full rounded-md'>*/}
-      {/*  <div className='w-4/5' onClick={onClickWebThreetier}>*/}
-      {/*    Deploy web three tier architecture*/}
-      {/*  </div>*/}
-      {/*</div>*/}
       <div className='flex justify-between items-center text-[12px] font-semibold w-full mt-5'>
         <div className='w-full font-semibold flex items-center mx-5'>Scope</div>
         <div className='flex gap-x-2'>

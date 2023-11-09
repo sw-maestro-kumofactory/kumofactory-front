@@ -120,36 +120,37 @@ export const RDSOptionComponent = ({ id }: { id: string }) => {
 
   if (!selectedOptions) return <></>;
 
-  return (
-    <form onSubmit={handleOnSubmit}>
-      <div className='text-xl my-4 text-[#799ACF]'> RDS Setting</div>
-      <AttributeName text={'Database Name'} />
-      <input type='text' value={databaseName} onChange={handleDatabaseNameChange} />
-      <AttributeName text={'Instance Identifier'} />
-      <input type='text' value={instanceIdentifier} onChange={handleInstanceIdentifierChange} />
-      <AttributeName text={'Instance Type'} />
-      <select value={instanceType} onChange={handleInstanceTypeChange}>
-        {InstanceTypeList.map((item) => (
-          <option key={item} value={item}>
-            {item}
-          </option>
-        ))}
-      </select>
-      <AttributeName text={'Version'} />
-      <select value={version} onChange={handleVersionChange}>
-        {MySqlEngineVersionTypeList.map((item) => (
-          <option key={item} value={item}>
-            {item}
-          </option>
-        ))}
-      </select>
-      <div className='text-xl my-4 text-[#799ACF]'> Secret Setting</div>
-      <AttributeName text={'Secret Name'} />
-      <input type='text' value={secretName} onChange={handleSecretNameChange} />
-      <AttributeName text={'Username'} />
-      <input type='text' value={username} onChange={handleUsernameChange} />
-      <AttributeName text={'Password'} />
-      <input type='text' value={password} onChange={handlePasswordChange} />
-    </form>
-  );
+  return <></>;
+  // return (
+  //   <form onSubmit={handleOnSubmit}>
+  //     <div className='text-xl my-4 text-[#799ACF]'> RDS Setting</div>
+  //     <AttributeName text={'Database Name'} />
+  //     <input type='text' value={databaseName} onChange={handleDatabaseNameChange} />
+  //     <AttributeName text={'Instance Identifier'} />
+  //     <input type='text' value={instanceIdentifier} onChange={handleInstanceIdentifierChange} />
+  //     <AttributeName text={'Instance Type'} />
+  //     <select value={instanceType} onChange={handleInstanceTypeChange}>
+  //       {InstanceTypeList.map((item) => (
+  //         <option key={item} value={item}>
+  //           {item}
+  //         </option>
+  //       ))}
+  //     </select>
+  //     <AttributeName text={'Version'} />
+  //     <select value={version} onChange={handleVersionChange}>
+  //       {MySqlEngineVersionTypeList.map((item) => (
+  //         <option key={item} value={item}>
+  //           {item}
+  //         </option>
+  //       ))}
+  //     </select>
+  //     <div className='text-xl my-4 text-[#799ACF]'> Secret Setting</div>
+  //     <AttributeName text={'Secret Name'} />
+  //     <input type='text' value={secretName} onChange={handleSecretNameChange} />
+  //     <AttributeName text={'Username'} />
+  //     <input type='text' value={username} onChange={handleUsernameChange} />
+  //     <AttributeName text={'Password'} />
+  //     <input type='text' value={password} onChange={handlePasswordChange} />
+  //   </form>
+  // );
 };

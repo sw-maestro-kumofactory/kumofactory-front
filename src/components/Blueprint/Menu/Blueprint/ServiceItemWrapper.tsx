@@ -15,6 +15,7 @@ interface IProps {
 
 const ServiceItemWrapper = ({ type, children }: IProps) => {
   const createService = useBlueprintStore((state) => state.ServiceAction.createService);
+  const setOption = useBlueprintStore((state) => state.ServiceAction.setOption);
   const createOption = useBlueprintStore((state) => state.OptionAction.createOption);
   const viewBox = useBlueprintStore((state) => state.viewBox);
   const initMouseState = useBlueprintStore((state) => state.CommonAction.initMouseState);
