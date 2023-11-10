@@ -12,7 +12,7 @@ const Loading = () => {
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <BeatLoader color='orange' height={20} width={5} radius={2} margin={2} />
+        <BeatLoader color='#195091' height={20} width={5} radius={2} margin={2} />
       </div>
     </div>
   );

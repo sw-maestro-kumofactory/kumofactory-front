@@ -1,9 +1,9 @@
 'use client';
 import { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { accessTokenState } from '@/src/atoms/auth';
-import Loading from '@/src/components/common/Loading';
 import { useRouter } from 'next/navigation';
+
+import Loading from '@/src/components/common/Loading';
+import { useLogin } from '@/src/hooks/Auth/useLogin';
 
 interface CallbackProps {
   type: 'github' | 'google' | 'kakao';
@@ -12,21 +12,21 @@ interface CallbackProps {
 }
 
 const ThirdPartyCallback = ({ type, callbackURL, authRequestFunction }: CallbackProps) => {
+  const { Login } = useLogin();
   const router = useRouter();
-  const setAccessTokenState = useSetRecoilState(accessTokenState);
+
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code')!;
-    const fetchData = () => {
-      authRequestFunction(code)
-        .then((res) => {
-          const token = res.token;
-          setAccessTokenState(token);
-          console.log(1);
-          router.push('/');
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+    const fetchData = async () => {
+      try {
+        const res = await authRequestFunction(code);
+        const newToken = res.accessToken;
+        const username = res.profileName;
+        Login(newToken, username);
+        router.push('/');
+      } catch (e) {
+        console.error('component/auth/Callback.tsx', e);
+      }
     };
     fetchData();
   }, []);
