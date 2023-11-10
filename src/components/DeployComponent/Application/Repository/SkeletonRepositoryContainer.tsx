@@ -11,7 +11,7 @@ const SkeletonRepositoryContainer = () => {
       </div>
       <div className='bg-white h-[544px] rounded-b-xl overflow-y-scroll flex flex-col items-center py-6 gap-y-3'>
         {Array.from({ length: 5 }).map((_, index) => (
-          <div className='w-[868px] p-4 border-[#DAE2EC] border rounded-md'>
+          <div className='w-[868px] p-4 border-[#DAE2EC] border rounded-md' key={index}>
             <div className='flex items-center gap-x-5'>
               <div className='text-lg w-36 h-5 cursor-pointer bg-gray-300 animate-pulse'></div>
               <div className='flex items-center text-[#81929F] gap-x-1'>
