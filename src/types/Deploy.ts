@@ -27,6 +27,16 @@ export interface PersonalRepoResponse {
   fullName: string;
   private: boolean;
   fork: boolean;
+  forksCount: number;
+  description: string;
+  language: string;
+  languageColor: string;
+  starCount: number;
+  stargazersUrl: string;
+  openIssuesCount: number;
+  visibility: string;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export interface PersonalRepo extends PersonalRepoResponse {

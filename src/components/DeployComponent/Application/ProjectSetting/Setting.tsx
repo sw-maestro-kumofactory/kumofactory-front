@@ -112,8 +112,6 @@ const Setting = () => {
               <CustomList title='User' content={username} />
               <CustomList title='Repository' content={repoId} />
               <CustomList title='Selected Instance' content={targetInstanceName!} />
-              <CustomList title='Deployed Repository' content={'None'} />
-              <CustomList title='Deploy Status' content={'None'} />
             </ul>
           </div>
           <div className='w-full text-xl mt-7 font-bold'>Select Branch To Deploy</div>

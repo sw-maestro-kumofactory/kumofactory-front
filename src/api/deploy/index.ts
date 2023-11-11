@@ -21,6 +21,11 @@ export const getRepoBranches = async (owner: string, repo: string) => {
   return data;
 };
 
+export const getRepoInfo = async (id: string) => {
+  const { data } = await authAxiosInstance.get(`/api/build/info/${id}`);
+  return data;
+};
+
 export const postDeploy = async (body: DeployRequest) => {
   const { data } = await authAxiosInstance.post(`/api/build/deployAsync/v2`, body);
   return data;

@@ -84,69 +84,69 @@ const EnvironmentVariableComponent = () => {
       {EnvironmentVariables[repoId].length !== 0 && (
         <>
           <div className='w-full text-xl mb-4 font-bold'>Variable List</div>
+          <div className='ring-1 ring-inset ring-[#DAE2EC] rounded-md p-4 flex flex-col gap-y-3 mb-10 bg-white'>
+            {EnvironmentVariables[repoId].map((variable, index) => (
+              <div key={index} className='flex items-center px-6 '>
+                <input
+                  className={`w-[394px] h-[42px] mr-4 p-4 rounded-md bg-white
+              ring-1 ring-inset 
+              ${editIndex === index ? 'ring-[#00CBBF]' : 'ring-[#DAE2EC] '}`}
+                  value={editIndex === index ? editedKey : variable.key}
+                  onChange={(e) => setEditedKey(e.target.value)} // Store the temporary edited key in editedKey state
+                  disabled={editIndex !== index}
+                />
+                <div
+                  className={`w-[394px] h-[42px] mr-4 p-4 rounded-md bg-white flex items-center justify-between
+              ring-1 ring-inset 
+              ${editIndex === index ? 'ring-[#00CBBF]' : 'ring-[#DAE2EC] '}`}
+                >
+                  <input
+                    className={`w-full bg-white `}
+                    type={editIndex !== index && eyeIndex !== index ? 'password' : 'text'}
+                    value={editIndex === index ? editedValue : variable.value}
+                    onChange={(e) => setEditedValue(e.target.value)} // Store the temporary edited value in editedValue state
+                    disabled={editIndex !== index}
+                  />
+
+                  <FontAwesomeIcon
+                    className='cursor-pointer'
+                    onClick={() => {
+                      onClickEye(index);
+                    }}
+                    icon={eyeIndex === index ? faEyeSlash : faEye}
+                  />
+                </div>
+                <div
+                  className='flex justify-center rounded-2xl cursor-pointer mr-4 '
+                  onClick={() => {
+                    if (editIndex === index) {
+                      handleUpdateEnvironmentVariables();
+                      setEyeIndex(null);
+                    } else {
+                      setEditedKey(variable.key);
+                      setEditedValue(variable.value);
+                      handleEditEnvironmentVariables(index);
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon
+                    className={`${editIndex === index ? 'text-white bg-[#00CBBF] p-1 rounded-md' : ''}`}
+                    icon={editIndex === index ? faFloppyDisk : faPenToSquare}
+                  />
+                </div>
+                <div
+                  className='rounded-2xl  cursor-pointer'
+                  onClick={() => {
+                    handleDeleteEnvironmentVariables(variable.key);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </div>
+              </div>
+            ))}
+          </div>
         </>
       )}
-      <div className=' ring-1 ring-inset ring-[#DAE2EC] rounded-md p-4 flex flex-col gap-y-3 mb-10 bg-white'>
-        {EnvironmentVariables[repoId].map((variable, index) => (
-          <div key={index} className='flex items-center px-6 '>
-            <input
-              className={`w-[394px] h-[42px] mr-4 p-4 rounded-md bg-white
-              ring-1 ring-inset 
-              ${editIndex === index ? 'ring-[#00CBBF]' : 'ring-[#DAE2EC] '}`}
-              value={editIndex === index ? editedKey : variable.key}
-              onChange={(e) => setEditedKey(e.target.value)} // Store the temporary edited key in editedKey state
-              disabled={editIndex !== index}
-            />
-            <div
-              className={`w-[394px] h-[42px] mr-4 p-4 rounded-md bg-white flex items-center justify-between
-              ring-1 ring-inset 
-              ${editIndex === index ? 'ring-[#00CBBF]' : 'ring-[#DAE2EC] '}`}
-            >
-              <input
-                className={`w-full bg-white `}
-                type={editIndex !== index && eyeIndex !== index ? 'password' : 'text'}
-                value={editIndex === index ? editedValue : variable.value}
-                onChange={(e) => setEditedValue(e.target.value)} // Store the temporary edited value in editedValue state
-                disabled={editIndex !== index}
-              />
-
-              <FontAwesomeIcon
-                className='cursor-pointer'
-                onClick={() => {
-                  onClickEye(index);
-                }}
-                icon={eyeIndex === index ? faEyeSlash : faEye}
-              />
-            </div>
-            <div
-              className='flex justify-center rounded-2xl cursor-pointer mr-4 '
-              onClick={() => {
-                if (editIndex === index) {
-                  handleUpdateEnvironmentVariables();
-                  setEyeIndex(null);
-                } else {
-                  setEditedKey(variable.key);
-                  setEditedValue(variable.value);
-                  handleEditEnvironmentVariables(index);
-                }
-              }}
-            >
-              <FontAwesomeIcon
-                className={`${editIndex === index ? 'text-white bg-[#00CBBF] p-1 rounded-md' : ''}`}
-                icon={editIndex === index ? faFloppyDisk : faPenToSquare}
-              />
-            </div>
-            <div
-              className='rounded-2xl  cursor-pointer'
-              onClick={() => {
-                handleDeleteEnvironmentVariables(variable.key);
-              }}
-            >
-              <FontAwesomeIcon icon={faTrashCan} />
-            </div>
-          </div>
-        ))}
-      </div>
     </>
   );
 };

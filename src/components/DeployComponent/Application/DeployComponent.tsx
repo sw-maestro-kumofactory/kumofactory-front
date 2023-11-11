@@ -16,6 +16,8 @@ const DeployComponent = () => {
   const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
   const { setRepositoryList, initEnvironmentVariables } = useDeployStore((state) => state.DeployAction);
 
+  const colors = require('/public/github-colors.json');
+
   const username = useLoginStore((state) => state.username);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,10 +26,12 @@ const DeployComponent = () => {
       const d = await getUserRepositories();
       const tmp: Record<string, PersonalRepoResponse[]> = {};
       if (d.repoCount > 0) {
-        for (const repo of d.repoInfo) {
-          initEnvironmentVariables(repo.name);
-        }
         tmp[username] = d.repoInfo;
+        tmp[username].forEach((repo, index) => {
+          initEnvironmentVariables(tmp[username][index].name);
+          console.log(colors[tmp[username][index].language]);
+          tmp[username][index].languageColor = colors[tmp[username][index].language]?.color || '#00C0B5';
+        });
       }
 
       if (d.orgCount > 0) {
@@ -38,10 +42,11 @@ const DeployComponent = () => {
 
         const orgResults = await Promise.all(orgPromises);
         orgResults.forEach(({ org, orgRepo }) => {
-          orgRepo.forEach((repo) => {
-            initEnvironmentVariables(repo.name);
-          });
           tmp[org] = orgRepo;
+          tmp[org].forEach((repo, index) => {
+            initEnvironmentVariables(tmp[org][index].name);
+            tmp[org][index].languageColor = colors[tmp[org][index].language]?.color || '#00C0B5';
+          });
         });
       }
       setRepositoryList(tmp);
@@ -83,6 +88,8 @@ const DeployComponent = () => {
                 <ul className='pl-8 list-disc leading-8 p-3 '>
                   <CustomList title='Private IP' content={deployedResourceList[targetInstanceId].privateIp} />
                   <CustomList title='Public IP' content={deployedResourceList[targetInstanceId].publicIp!} />
+                  <CustomList title='Deployed Repository' content={'None'} />
+                  <CustomList title='Deploy Status' content={'None'} />
                 </ul>
               </div>
             </div>
@@ -99,7 +106,7 @@ const DeployComponent = () => {
           Object.keys(repositoryList).map((key) => {
             return (
               <>
-                <RepositoryContainer key={key} repoInfo={repositoryList[key]} id={key} />{' '}
+                <RepositoryContainer key={key} repoInfo={repositoryList[key]} id={key} />
               </>
             );
           })}

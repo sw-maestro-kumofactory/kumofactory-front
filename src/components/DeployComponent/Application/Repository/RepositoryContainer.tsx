@@ -24,7 +24,7 @@ const RepositoryContainer = ({ id, repoInfo }: IProps) => {
       </div>
       <div className='h-fit max-h-[544px] rounded-b-md overflow-y-scroll border-[#DAE2EC] border bg-white border-t-0 flex flex-col items-center py-6 gap-y-3 '>
         {repoInfo.map((repo, index) => (
-          <Repository key={repo.fullName} id={id} name={repo.name} />
+          <Repository key={repo.fullName} id={id} info={repo} />
         ))}
       </div>
     </div>

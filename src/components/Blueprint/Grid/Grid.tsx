@@ -228,7 +228,7 @@ const Grid = ({ id }: IProps) => {
                       </foreignObject>
                     )}
                     {hoverId === services[key].id && (
-                      <foreignObject x={services[key].x - 60} y={services[key].y + 90} width={200} height={120}>
+                      <foreignObject x={services[key].x - 60} y={services[key].y + 90} width={200} height={140}>
                         <div className='absolute z-10 w-[200px]'>
                           <div className='bg-white border border-[#DAE2EC] rounded-md shadow-md p-2'>
                             <div className='flex items-center gap-x-2'>

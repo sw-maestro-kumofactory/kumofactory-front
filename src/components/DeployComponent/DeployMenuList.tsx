@@ -7,7 +7,7 @@ interface IProps {
 
 const DeployMenuList = ({ disabled }: IProps) => {
   return (
-    <div className='overflow-x-hidden fixed w-[294px] min-w-[294px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
+    <div className='overflow-x-hidden fixed w-[294px] min-w-[294px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none bg-white'>
       <Title title='Database Setting' />
       <AvailableRDS />
       <Title title='Available Instances' />
