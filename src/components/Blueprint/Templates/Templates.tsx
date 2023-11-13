@@ -5,7 +5,7 @@ import { faArrowLeft, faCloudArrowDown, faHeart } from '@fortawesome/free-solid-
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import moment from 'moment';
 import { v1 } from 'uuid';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { faAws } from '@fortawesome/free-brands-svg-icons';
@@ -175,7 +175,17 @@ const Templates = () => {
                   </div>
                 </div>
                 <div className='flex items-center gap-x-2.5 pt-1.5'>
-                  <div className='w-8 h-8 rounded-full bg-gray-500'></div>
+                  <div className='w-8 min-w-[32px] h-8 rounded-full mr-2 flex justify-center items-center'>
+                    {templates[showDetail].username === 'KumoFactory' ? (
+                      <Image width={20} height={20} src={'/icons/Design/logo.svg'} alt={'kumo'} />
+                    ) : (
+                      <img
+                        src={`https://github.com/${templates[showDetail].username}.png`}
+                        className='rounded-full w-8 h-8'
+                        alt={'GRAVATAR'}
+                      />
+                    )}
+                  </div>
                   <div className='text-xs text-gray-400'>Create by {templates[showDetail].username}</div>
                 </div>
                 <div className='flex gap-x-4 pt-3 h-8 text-sm items-center'>

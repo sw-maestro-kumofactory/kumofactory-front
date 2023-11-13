@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import { faAws } from '@fortawesome/free-brands-svg-icons';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe';
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 import { BlueprintInfo } from '@/src/types/Blueprint';
@@ -19,6 +18,8 @@ interface IProps {
 
 const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) => {
   const [isHover, setIsHover] = useState(false);
+
+  console.log(data);
 
   return (
     <div className='w-[290px] h-[218px]'>
@@ -61,7 +62,17 @@ const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) 
         <div className='w-full h-[60px] mt-[10px]' onClick={(e) => e.stopPropagation()}>
           <div className='flex justify-between items-center text-sm'>
             {/* avatar is here */}
-            {/* <div className='w-8 min-w-[32px] h-8 bg-gray-500 rounded-full mr-2'></div> */}
+            <div className='w-8 min-w-[32px] h-8 rounded-full mr-2 flex justify-center items-start'>
+              {data.username === 'KumoFactory' ? (
+                <Image width={20} height={20} src={'/icons/Design/logo.svg'} alt={'kumo'} />
+              ) : (
+                <img
+                  src={`https://github.com/${data.username}.png`}
+                  className='rounded-full w-8 h-8'
+                  alt={'GRAVATAR'}
+                />
+              )}
+            </div>
             <div className='flex flex-col w-full'>
               <div className='w-full flex justify-between'>
                 <div className='text-[13px] text-[#323438] cursor-pointer' onClick={onClick}>
