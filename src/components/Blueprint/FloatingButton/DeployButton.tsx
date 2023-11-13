@@ -58,7 +58,6 @@ const DeployButton = () => {
   const onClickDeployButton = async () => {
     try {
       const data = getData();
-      // console.log(data);
       await postDeployBlueprintData(data);
       editUserBlueprints({ ...currentBlueprintInfo, status: 'PROVISIONING' }, true);
       setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'PROVISIONING' });

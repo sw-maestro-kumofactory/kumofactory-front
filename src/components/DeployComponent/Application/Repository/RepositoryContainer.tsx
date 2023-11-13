@@ -13,13 +13,7 @@ const RepositoryContainer = ({ id, repoInfo }: IProps) => {
   return (
     <div className='w-full max-h-[640px] min-h-fit pb-8'>
       <div className='flex items-center py-3 px-6 gap-x-4 border-[#DAE2EC] border bg-white rounded-t-md'>
-        <Image
-          src='https://avatars.githubusercontent.com/u/59858440?v=4'
-          className='rounded-full'
-          width='32'
-          height='32'
-          alt={'GRAVATAR'}
-        />
+        <img src={`https://github.com/${id}.png`} className='rounded-full w-8 h-8' alt={'GRAVATAR'} />
         <div>{id}</div>
       </div>
       <div className='h-fit max-h-[544px] rounded-b-md overflow-y-scroll border-[#DAE2EC] border bg-white border-t-0 flex flex-col items-center py-6 gap-y-3 '>

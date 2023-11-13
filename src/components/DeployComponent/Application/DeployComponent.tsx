@@ -89,6 +89,7 @@ const DeployComponent = () => {
                   <CustomList title='Private IP' content={deployedResourceList[targetInstanceId].privateIp} />
                   <CustomList title='Public IP' content={deployedResourceList[targetInstanceId].publicIp!} />
                   <CustomList title='Deployed Repository' content={'None'} />
+                  <CustomList title='Deployed Branch' content={'None'} />
                   <CustomList title='Deploy Status' content={'None'} />
                 </ul>
               </div>

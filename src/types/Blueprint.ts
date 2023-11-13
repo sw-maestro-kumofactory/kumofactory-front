@@ -27,6 +27,7 @@ export interface BlueprintInfo {
   updatedAt?: string;
   status: DeployState;
   presignedUrl?: string;
+  staticImage?: string;
 }
 
 export type BlueprintScope = 'PUBLIC' | 'PRIVATE' | 'KUMOFACTORY';

@@ -25,7 +25,7 @@ const BlueprintMenuList = () => {
   const scope = useBlueprintStore((state) => state.currentBlueprintInfo.scope);
 
   return (
-    <div className='overflow-x-hidden w-[272px] min-w-[272px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
+    <div className='overflow-x-hidden w-[290px] min-w-[290px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
       <div className='flex justify-between items-center text-[12px] font-semibold w-full mt-5'>
         <div className='w-full font-semibold flex items-center mx-5'>Scope</div>
         <div className='flex gap-x-2'>

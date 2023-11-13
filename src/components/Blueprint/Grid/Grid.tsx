@@ -57,9 +57,6 @@ const Grid = ({ id }: IProps) => {
     onMouseMove(e);
   };
 
-  console.log(services);
-  console.log(options);
-
   const handleResize = () => {
     const component = document.querySelector('.grid-wrapper')!;
     const box = component.getBoundingClientRect();
