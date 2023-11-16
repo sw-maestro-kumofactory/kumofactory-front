@@ -3,6 +3,7 @@ import { BlueprintInfo, BlueprintResponse, BlueprintScope } from '@/src/types/Bl
 
 export interface CommonState {
   currentBlueprintInfo: BlueprintInfo;
+  isKumoTemplate: string;
   blueprintScope: Record<string, BlueprintScope>;
   blueprintList: string[];
   isEdit: boolean;
@@ -32,6 +33,7 @@ export interface CommonState {
   };
   CommonAction: {
     initState: (id: string) => void;
+    setIsKumoTemplate: (id: string) => void;
     initMouseState: () => void;
     setIsTemplateOpen: (flag: boolean) => void;
     setBlueprintId: (id: string) => void;

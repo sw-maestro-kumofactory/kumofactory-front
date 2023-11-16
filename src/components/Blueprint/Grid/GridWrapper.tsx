@@ -17,6 +17,7 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const blueprintList = useBlueprintStore((state) => state.blueprintList);
+  const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
   const { setTargetInstanceId, setTargetInstanceType } = useDeployStore((state) => state.DeployAction);
@@ -44,9 +45,12 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
   };
 
   useEffect(() => {
-    if (!Object.keys(userBlueprints).includes(blueprintId)) {
+    if (!Object.keys(userBlueprints).includes(blueprintId) && !isKumoTemplate) {
       alert('잘못된 접근입니다.');
       router.push('/blueprint');
+    } else if (isKumoTemplate) {
+      initMouseState();
+      setIsLoading(false);
     } else {
       initMouseState();
       setData(blueprintId);

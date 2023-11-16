@@ -32,7 +32,9 @@ const Templates = () => {
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
   const setShowDetail = useBlueprintStore((state) => state.CommonAction.setShowDetail);
   const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
-  const { setCurrentBlueprintInfo, setIsTemplateOpen } = useBlueprintStore((state) => state.CommonAction);
+  const { setCurrentBlueprintInfo, setIsTemplateOpen, setIsKumoTemplate } = useBlueprintStore(
+    (state) => state.CommonAction,
+  );
 
   const { setTemplate } = useSetTemplate();
 
@@ -52,9 +54,9 @@ const Templates = () => {
     const tmp: Record<string, string> = {};
     const templateObj: Record<string, BlueprintInfo> = {};
     const tmpImages: Record<string, string> = {};
-    staticData.map((data) => {
-      tmpImages[data.uuid] = data.staticImage!;
-      templateObj[data.uuid] = data;
+    Object.keys(staticData).map((key) => {
+      tmpImages[key] = staticData[key].staticImage!;
+      templateObj[key] = staticData[key];
     });
     try {
       const data = await getAllTemplates();
@@ -71,38 +73,45 @@ const Templates = () => {
     setTemplates(templateObj);
   };
 
-  const onClickLoad = async (e: any, id: string) => {
+  const onClickLoad = async (e: any, id: string, isTemplate: boolean) => {
     e.stopPropagation();
 
     const flag = currentBlueprintInfo.uuid === '';
-    console.log(id);
-    try {
-      const newUUID = v1().toString();
-      const templateData = await getTemplateById(id);
-      if (flag) {
-        initState(newUUID);
-        templateData.uuid = newUUID;
+    console.log(id, isTemplate);
 
-        const templateInfo: BlueprintInfo = {
-          name: 'New Blueprint',
-          description: '',
-          scope: 'PRIVATE',
-          status: 'PENDING',
-          uuid: newUUID,
-        };
-        setCurrentBlueprintInfo(templateInfo);
-        addUserBlueprint(templateInfo, false);
+    if (isTemplate) {
+      const newUUID = v1().toString();
+      setIsKumoTemplate(id);
+      router.push(`/blueprint/${newUUID}`);
+    } else {
+      try {
+        setIsKumoTemplate('');
+        const newUUID = v1().toString();
+        const templateData = await getTemplateById(id);
+        if (flag) {
+          initState(newUUID);
+          templateData.uuid = newUUID;
+
+          const templateInfo: BlueprintInfo = {
+            name: 'New Blueprint',
+            description: '',
+            scope: 'PRIVATE',
+            status: 'PENDING',
+            uuid: newUUID,
+          };
+          setCurrentBlueprintInfo(templateInfo);
+          addUserBlueprint(templateInfo, false);
+        }
+        setTemplate({ data: templateData, isTemplate: true });
+        setIsTemplateOpen(false);
+        if (flag) router.push(`/blueprint/${newUUID}`);
+      } catch (e) {
+        console.log(e);
       }
-      setTemplate({ data: templateData, isTemplate: true });
-      setIsTemplateOpen(false);
-      if (flag) router.push(`/blueprint/${newUUID}`);
-    } catch (e) {
-      console.log(e);
     }
   };
 
   const historyBackHandler = (showDetail: string) => {
-    console.log('historyBack Handler : ', showDetail);
     if (showDetail) {
       setShowDetail('');
       return;
@@ -163,7 +172,9 @@ const Templates = () => {
                   <div className='font-extrabold text-xl'>{templates[showDetail].name}</div>
                   <div
                     className='flex w-fit gap-x-1.5 items-center text-sm text-[#323438]'
-                    onClick={(e) => onClickLoad(e, templates[showDetail].uuid)}
+                    onClick={(e) =>
+                      onClickLoad(e, templates[showDetail].uuid, templates[showDetail].scope === 'KUMOFACTORY')
+                    }
                   >
                     <div className='flex items-center gap-x-2 border border-[#DAE2EC] rounded-md p-2'>
                       <FontAwesomeIcon icon={faCopy} />

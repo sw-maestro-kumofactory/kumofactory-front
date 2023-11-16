@@ -19,13 +19,22 @@ const onClickWebThreetier = async () => {
 };
 
 const BlueprintMenuList = () => {
-  const userBlueprintsIds = useAuthStore((state) => state.userBlueprintsIds);
+  const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const scope = useBlueprintStore((state) => state.currentBlueprintInfo.scope);
 
   return (
-    <div className='overflow-x-hidden w-[290px] min-w-[290px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none'>
+    <div
+      className={`overflow-x-hidden w-[290px] min-w-[290px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none ${
+        isKumoTemplate !== '' && 'bg-gray-500/50'
+      }`}
+    >
+      {isKumoTemplate !== '' && (
+        <div className='w-full bg-white font-bold flex items-center justify-center p-4'>
+          When using Kumo Template, You can't add or change services
+        </div>
+      )}
       <div className='flex justify-between items-center text-[12px] font-semibold w-full mt-5'>
         <div className='w-full font-semibold flex items-center mx-5'>Scope</div>
         <div className='flex gap-x-2'>

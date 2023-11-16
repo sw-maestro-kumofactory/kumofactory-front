@@ -1,9 +1,9 @@
 import { BlueprintInfo } from '@/src/types/Blueprint';
 
-export const kumoTemplate: BlueprintInfo[] = [
-  {
+export const kumoTemplate: Record<string, BlueprintInfo> = {
+  NGINXWebserver: {
     id: 0, // for load blueprint
-    uuid: 'Amazon EC2 Linux NGINX Webserver',
+    uuid: 'NGINXWebserver',
     name: 'Amazon EC2 Linux NGINX Webserver',
     description: 'Amazon EC2 Linux NGINX Webserver',
     username: 'KumoFactory',
@@ -14,4 +14,4 @@ export const kumoTemplate: BlueprintInfo[] = [
     status: 'PENDING',
     staticImage: '/icons/Template/NginxWebserver.png',
   },
-];
+};

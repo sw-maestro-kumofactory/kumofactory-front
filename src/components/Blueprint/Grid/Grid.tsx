@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -11,6 +12,7 @@ import OptionContainer from '@/src/components/AWSService/Options/OptionContainer
 import { AreaTypes, IArea } from '@/src/types/Area';
 import DeployButton from '@/src/components/Blueprint/FloatingButton/DeployButton';
 import { EC2Options } from '@/src/types/Services';
+import { kumoTemplate } from '@/src/assets/kumoTemplate';
 
 interface IProps {
   id: string;
@@ -27,6 +29,7 @@ const Grid = ({ id }: IProps) => {
   const selectedLineId = useBlueprintStore((state) => state.selectedLineId);
   const lineDrawingMode = useBlueprintStore((state) => state.isLineDrawing);
   const isShowOption = useBlueprintStore((state) => state.isShowOption);
+  const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
   const doubleClickedServiceId = useBlueprintStore((state) => state.doubleClickedServiceId);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService, onDoubleClickService } = useBlueprintStore(
     (state) => state.ServiceAction,
@@ -109,6 +112,22 @@ const Grid = ({ id }: IProps) => {
     handleResize();
   }, [isShowOption]);
 
+  if (isKumoTemplate !== '') {
+    return (
+      <div
+        className='grid-wrapper w-full h-full overflow-hidden'
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsEdit(false);
+        }}
+      >
+        <DeployButton />
+        <div className='relative w-full h-full'>
+          <Image src={kumoTemplate[isKumoTemplate].staticImage!} alt={'workspace'} fill={true} />
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       className='grid-wrapper w-full h-full overflow-hidden'

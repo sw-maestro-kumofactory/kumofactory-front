@@ -11,15 +11,14 @@ import { BlueprintInfo } from '@/src/types/Blueprint';
 interface IProps {
   data: BlueprintInfo;
   onClick: () => void;
-  onClickLoad: (e: any, id: string) => void;
+  onClickLoad: (e: any, id: string, isTemplate: boolean) => void;
   thumbnail?: string;
   image?: string;
 }
 
 const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) => {
   const [isHover, setIsHover] = useState(false);
-
-  console.log(data);
+  console.log(data.scope, data);
 
   return (
     <div className='w-[290px] h-[218px]'>
@@ -36,7 +35,7 @@ const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) 
               className='w-3 h-3'
               onClick={(e) => {
                 e.stopPropagation();
-                onClickLoad(e, data.uuid);
+                onClickLoad(e, data.uuid, data.scope === 'KUMOFACTORY');
               }}
             />
           </div>

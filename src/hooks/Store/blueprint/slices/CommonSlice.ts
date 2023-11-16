@@ -32,6 +32,7 @@ export const useCommonSlice: StateCreator<
   CommonState
 > = (set, get) => ({
   blueprintScope: {},
+  isKumoTemplate: '',
   currentBlueprintInfo: {
     name: 'My blueprint',
     uuid: '',
@@ -91,6 +92,13 @@ export const useCommonSlice: StateCreator<
         state.services[id] = {};
         state.lines[id] = {};
         state.areas[id] = {};
+        state.isKumoTemplate = '';
+        return state;
+      });
+    },
+    setIsKumoTemplate: (id: string) => {
+      set((state) => {
+        state.isKumoTemplate = id;
         return state;
       });
     },

@@ -20,11 +20,12 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   const router = useRouter();
   const [isHover, setIsHover] = useState(false);
   const [svgData, setSvgData] = useState<string>('');
-  const { setCurrentBlueprintInfo, setBlueprintScope, setIsTemplateOpen } = useBlueprintStore(
+  const { setCurrentBlueprintInfo, setBlueprintScope, setIsTemplateOpen, setIsKumoTemplate } = useBlueprintStore(
     (state) => state.CommonAction,
   );
 
   const onClickLoad = async () => {
+    setIsKumoTemplate('');
     setCurrentBlueprintInfo(data);
     router.push(`/blueprint/${data.uuid}`);
   };

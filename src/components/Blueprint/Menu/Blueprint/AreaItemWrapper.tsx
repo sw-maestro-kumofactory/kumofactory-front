@@ -46,8 +46,8 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
   const viewBox = useBlueprintStore((state) => state.viewBox);
   const subnetCount = useBlueprintStore((state) => state.subnetCount[currentBlueprintInfo.uuid]);
   const initMouseState = useBlueprintStore((state) => state.CommonAction.initMouseState);
+  const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
   const createAreaByType = () => {
-    console.log(type);
     initMouseState();
     const id = 'v' + v1().toString();
 
@@ -102,8 +102,18 @@ const AreaItemWrapper = ({ type, name, scope }: IProps) => {
     createArea(area, area.type);
   };
   return (
-    <div className='flex flex-wrap cursor-pointer text-xs p-2 border-solid border-gray-400 border-t-2 '>
-      <div key={type} onClick={() => createAreaByType()}>
+    <div
+      className={`flex flex-wrap text-xs p-2 border-solid border-gray-400 border-t-2 ${
+        isKumoTemplate === '' && 'cursor-pointer'
+      }`}
+    >
+      <div
+        key={type}
+        onClick={() => {
+          if (isKumoTemplate !== '') return;
+          createAreaByType();
+        }}
+      >
         {name}
       </div>
     </div>
