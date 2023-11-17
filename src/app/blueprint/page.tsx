@@ -58,7 +58,7 @@ const BluePrint = () => {
             <div className='w-fit flex flex-wrap gap-x-[34px] gap-y-[45px]'>
               <div className='w-[290px] min-w-[290px] h-[232px] min-h-[232px] text-[#96ABBB] hover:text-[#7A91A1]'>
                 <div
-                  className='flex flex-col items-center justify-center w-full h-full text-sm rounded-md bg-white border-2  hover:bg-[#F9FBFC] cursor-pointer border-[#DAE2EC] hover:border-[#CCD6E2] hover:drop-shadow-md'
+                  className='flex flex-col items-center justify-center w-full h-full text-sm rounded-md bg-white border-2 hover:bg-[#F9FBFC] cursor-pointer border-[#DAE2EC] hover:border-[#CCD6E2] hover:drop-shadow-md'
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsTemplateOpen(true);

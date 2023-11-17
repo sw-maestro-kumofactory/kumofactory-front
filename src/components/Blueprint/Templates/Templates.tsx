@@ -254,7 +254,7 @@ const Templates = () => {
           </div>
         </div>
       ) : (
-        <div className='w-full h-full'>
+        <div className='w-full h-full '>
           <div className='flex justify-between py-[17px] pl-[27px] items-center'>
             <div className='flex'>
               <Image width={18} height={18} alt={'catalog'} src='/icons/Design/catalog.svg' />
@@ -288,28 +288,32 @@ const Templates = () => {
             </div>
           </div>
           <hr />
-          <div className='flex flex-wrap justify-center w-full h-[610px] overflow-y-scroll gap-x-7 gap-y-11 px-12 py-9 '>
-            {currentBlueprintInfo.uuid === '' && (
-              <div className='w-[290px] h-[218px]'>
-                <NewBlueprint />
+          <div className='w-full h-full flex justify-center'>
+            <div className='w-[288px] md:w-[608px] lg:w-[928px] xl:w-[1244px] py-8'>
+              <div className='w-fit flex flex-wrap h-[610px] overflow-y-scroll gap-x-7 gap-y-8 '>
+                {currentBlueprintInfo.uuid === '' && (
+                  <div className='w-[290px] h-[218px]'>
+                    <NewBlueprint />
+                  </div>
+                )}
+                <>
+                  {Object.keys(templates).map((key) => {
+                    return (
+                      <TemplateCard
+                        key={templates[key].uuid}
+                        data={templates[key]}
+                        thumbnail={thumbnails[templates[key].uuid] || undefined}
+                        image={images[templates[key].uuid] || undefined}
+                        onClick={() => {
+                          setShowDetail(templates[key].uuid);
+                        }}
+                        onClickLoad={onClickLoad}
+                      />
+                    );
+                  })}
+                </>
               </div>
-            )}
-            <>
-              {Object.keys(templates).map((key) => {
-                return (
-                  <TemplateCard
-                    key={templates[key].uuid}
-                    data={templates[key]}
-                    thumbnail={thumbnails[templates[key].uuid] || undefined}
-                    image={images[templates[key].uuid] || undefined}
-                    onClick={() => {
-                      setShowDetail(templates[key].uuid);
-                    }}
-                    onClickLoad={onClickLoad}
-                  />
-                );
-              })}
-            </>
+            </div>
           </div>
         </div>
       )}
