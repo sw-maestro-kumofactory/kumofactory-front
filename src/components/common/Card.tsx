@@ -57,7 +57,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   }, []);
 
   return (
-    <div className='w-[290px] h-[232px]'>
+    <div className='w-[290px] min-w-[290px] h-[232px] min-h-[232px]'>
       <div
         className='ImageWrapper w-full h-[174px] relative rounded-t-xl'
         onMouseEnter={() => setIsHover(true)}

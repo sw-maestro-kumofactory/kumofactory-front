@@ -45,44 +45,47 @@ const BluePrint = () => {
 
   return (
     <AuthRequired>
-      <div className='h-full flex flex-col items-center overflow-y-scroll px-[207px] py-[50px] bg-[#F9FBFC]'>
-        <div className='flex flex-col justify-center  text-[26px] font-extrabold mb-10'>
+      {/* 여기서 width 고정 시키기 -> 중앙으로 오고, wrap이 자연스럽게 되도록*/}
+      <div className='w-[640px] md:w-[768px] lg:w-[1024px] xl:w-[1280px] h-full mx-auto overflow-y-scroll py-[50px] '>
+        <div className='flex flex-col justify-center items-center text-[26px] font-extrabold mb-10'>
           <div>My Blueprints</div>
           <button className='text-gray-500 text-xs font-normal' onClick={() => setCheckListOpen(true)}>
             상황에 맞는 템플릿 생성하기
           </button>
         </div>
         <div className='w-full h-full flex justify-center'>
-          <div className='w-full flex flex-wrap gap-x-[34px] gap-y-[45px]'>
-            <div className='w-[290px] h-[232px] text-[#96ABBB] hover:text-[#7A91A1]'>
-              <div
-                className='flex flex-col items-center justify-center w-full h-full text-sm rounded-md bg-white border-2  hover:bg-[#F9FBFC] cursor-pointer border-[#DAE2EC] hover:border-[#CCD6E2] hover:drop-shadow-md'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsTemplateOpen(true);
-                  router.push('/blueprint?template=true');
-                }}
-              >
-                <FontAwesomeIcon icon={faSquarePlus} className='text-lg mb-4' />
-                New Blueprint
-              </div>
-            </div>
-            {Object.keys(userBlueprints).map((key) => {
-              return (
-                <Card
-                  key={key}
-                  data={userBlueprints[key]}
-                  isTemplate={false}
-                  onClickDelete={() => {
-                    onClickTrashCan(userBlueprints[key].uuid);
+          <div className='w-[288px] md:w-[614px] lg:w-[938px] xl:w-[1264px]'>
+            <div className='w-fit flex flex-wrap gap-x-[34px] gap-y-[45px]'>
+              <div className='w-[290px] min-w-[290px] h-[232px] min-h-[232px] text-[#96ABBB] hover:text-[#7A91A1]'>
+                <div
+                  className='flex flex-col items-center justify-center w-full h-full text-sm rounded-md bg-white border-2  hover:bg-[#F9FBFC] cursor-pointer border-[#DAE2EC] hover:border-[#CCD6E2] hover:drop-shadow-md'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsTemplateOpen(true);
+                    router.push('/blueprint?template=true');
                   }}
-                />
-              );
-            })}
-            <ModalContainer isShow={isTemplateOpen} setShow={setIsTemplateOpen}>
-              <Templates />
-            </ModalContainer>
-            <CheckListModal onClick={() => {}} setShow={setCheckListOpen} show={isCheckListOpen} />
+                >
+                  <FontAwesomeIcon icon={faSquarePlus} className='text-lg mb-4' />
+                  New Blueprint
+                </div>
+              </div>
+              {Object.keys(userBlueprints).map((key) => {
+                return (
+                  <Card
+                    key={key}
+                    data={userBlueprints[key]}
+                    isTemplate={false}
+                    onClickDelete={() => {
+                      onClickTrashCan(userBlueprints[key].uuid);
+                    }}
+                  />
+                );
+              })}
+              <ModalContainer isShow={isTemplateOpen} setShow={setIsTemplateOpen}>
+                <Templates />
+              </ModalContainer>
+              <CheckListModal onClick={() => {}} setShow={setCheckListOpen} show={isCheckListOpen} />
+            </div>
           </div>
         </div>
       </div>
