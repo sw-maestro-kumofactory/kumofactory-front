@@ -13,6 +13,8 @@ export interface BlueprintResponse {
   links: Line[];
   areas: IArea[];
   svgFile: string;
+  isTemplate: boolean;
+  templateName?: string;
 }
 
 export interface BlueprintInfo {
@@ -28,6 +30,8 @@ export interface BlueprintInfo {
   status: DeployState;
   presignedUrl?: string;
   staticImage?: string;
+  isTemplate: boolean;
+  templateName?: string;
 }
 
 export type BlueprintScope = 'PUBLIC' | 'PRIVATE' | 'KUMOFACTORY';

@@ -24,6 +24,8 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
     (state) => state.CommonAction,
   );
 
+  console.log(data);
+
   const onClickLoad = async () => {
     setIsKumoTemplate('');
     setCurrentBlueprintInfo(data);
@@ -97,6 +99,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
               <Image width={20} height={20} src={'/icons/Design/private.svg'} alt={'private'} />
             )}
           </div>
+          {/*{isTemplate && <Image className='rounded-md' src='/'} fill={true} alt='template image' />}*/}
           <svg className='w-full h-full rounded-t-[4px]'>
             {svgData && <g dangerouslySetInnerHTML={{ __html: svgData }} />}
             {isHover && <rect width='100%' height='100%' className='fill-[#33393F] opacity-[71%]' />}
@@ -105,7 +108,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
       </div>
       <div className='flex justify-between items-center p-3 h-1/4 rounded-b-md border-solid border-b-2 border-l-2 border-r-2 border-gray-300'>
         <div>
-          <div className='h-6 mb-0.5 font-semibold text-[13px] max-w-[250px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
+          <div className='h-6 mb-0.5 font-semibold text-[13px] max-w-[170px] overflow-y-hidden overflow-x-hidden whitespace-nowrap text-ellipsis'>
             {data.name}
           </div>
           <div className='text-[10px] text-[#81929F]'>last updated: {moment(data.createdAt).format('YYYY-MM-DD')}</div>

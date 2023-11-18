@@ -40,6 +40,8 @@ export const Header = () => {
   const [isBlueprint, setIsBlueprint] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
 
+  console.log(currentBlueprintInfo);
+
   const onClickRefresh = async () => {
     const data = await getBlueprintDeployStatus(currentBlueprintInfo.uuid);
     editUserBlueprints({ ...currentBlueprintInfo, status: data }, true);

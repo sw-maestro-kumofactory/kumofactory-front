@@ -39,6 +39,7 @@ export const useCommonSlice: StateCreator<
     scope: 'PRIVATE',
     status: 'FAIL',
     description: '',
+    isTemplate: false,
   },
   blueprintList: [],
   offset: {
@@ -135,6 +136,7 @@ export const useCommonSlice: StateCreator<
       scope: BlueprintScope;
       status: DeployState;
       description: string;
+      isTemplate: boolean;
     }) => {
       set((state) => {
         state.currentBlueprintInfo = info;
@@ -188,45 +190,48 @@ export const useCommonSlice: StateCreator<
         links: [],
         areas: [],
         svgFile: '',
+        isTemplate: false,
       };
       // services
-      for (const service of Object.values(get().services[id])) {
-        json['components'].push({
-          id: service.id,
-          x: service.x,
-          y: service.y,
-          type: service.type,
-          options: {},
-        });
-      }
-      // links
-      for (const line of Object.values(get().lines[id])) {
-        json['links'].push({
-          id: line.id,
-          src: {
-            x: line.src.x,
-            y: line.src.y,
-            componentId: line.src.componentId,
-          },
-          dst: {
-            x: line.dst.x,
-            y: line.dst.y,
-            componentId: line.dst.componentId,
-          },
-        });
-      }
-      // areas
-      for (const area of Object.values(get().areas[id])) {
-        json['areas'].push({
-          id: area.id,
-          x: area.x,
-          y: area.y,
-          width: area.width,
-          height: area.height,
-          type: area.type,
-          scope: area.scope,
-          az: area.az,
-        });
+      if (!get().isKumoTemplate) {
+        for (const service of Object.values(get().services[id])) {
+          json['components'].push({
+            id: service.id,
+            x: service.x,
+            y: service.y,
+            type: service.type,
+            options: {},
+          });
+        }
+        // links
+        for (const line of Object.values(get().lines[id])) {
+          json['links'].push({
+            id: line.id,
+            src: {
+              x: line.src.x,
+              y: line.src.y,
+              componentId: line.src.componentId,
+            },
+            dst: {
+              x: line.dst.x,
+              y: line.dst.y,
+              componentId: line.dst.componentId,
+            },
+          });
+        }
+        // areas
+        for (const area of Object.values(get().areas[id])) {
+          json['areas'].push({
+            id: area.id,
+            x: area.x,
+            y: area.y,
+            width: area.width,
+            height: area.height,
+            type: area.type,
+            scope: area.scope,
+            az: area.az,
+          });
+        }
       }
       return json;
     },

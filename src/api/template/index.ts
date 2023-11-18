@@ -1,5 +1,5 @@
 import { authAxiosInstance } from '@/src/api';
-import { BlueprintInfo } from '@/src/types/Blueprint';
+import { BlueprintInfo, BlueprintResponse } from '@/src/types/Blueprint';
 
 export const getTemplateById = async (id: string) => {
   const { data } = await authAxiosInstance.get(`/api/template/${id}`);
@@ -23,5 +23,14 @@ export const getAllTemplates = async () => {
 
 export const postWebThreeTier = async (body: any) => {
   const { data } = await authAxiosInstance.post(`/api/template/web-three-tier?provision=true`, body);
+  return data;
+};
+
+export const postDeployTemplate = async (body: BlueprintResponse, name: string, provision: string): Promise<any> => {
+  const { data } = await authAxiosInstance.post<BlueprintResponse>(
+    `/api/template?name=${name}&provision=${provision}`,
+    body,
+    {},
+  );
   return data;
 };

@@ -45,8 +45,7 @@ const BluePrint = () => {
 
   return (
     <AuthRequired>
-      {/* 여기서 width 고정 시키기 -> 중앙으로 오고, wrap이 자연스럽게 되도록*/}
-      <div className='w-[640px] md:w-[768px] lg:w-[1024px] xl:w-[1280px] h-full mx-auto overflow-y-scroll py-[50px] '>
+      <div className='w-[640px] md:w-[768px] lg:w-[1024px] xl:w-[1280px] h-full mx-auto  py-[50px] '>
         <div className='flex flex-col justify-center items-center text-[26px] font-extrabold mb-10'>
           <div>My Blueprints</div>
           <button className='text-gray-500 text-xs font-normal' onClick={() => setCheckListOpen(true)}>
@@ -74,7 +73,7 @@ const BluePrint = () => {
                   <Card
                     key={key}
                     data={userBlueprints[key]}
-                    isTemplate={false}
+                    isTemplate={userBlueprints[key].isTemplate}
                     onClickDelete={() => {
                       onClickTrashCan(userBlueprints[key].uuid);
                     }}

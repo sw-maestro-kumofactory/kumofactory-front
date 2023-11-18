@@ -35,3 +35,8 @@ export const getBlueprintDeployStatus = async (id: string) => {
   const { data } = await authAxiosInstance.get(`/api/blueprint/aws/status/${id}`);
   return data;
 };
+
+export const getCostOfBlueprint = async (id: string) => {
+  const { data } = await authAxiosInstance.get(`/api/blueprint/cost/${id}`);
+  return data;
+};

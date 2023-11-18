@@ -19,6 +19,7 @@ import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import { kumoTemplate } from '@/src/assets/kumoTemplate';
+import { DeployState } from '@/src/types/Deploy';
 
 const MarkdownPreview = dynamic(() => import('@uiw/react-markdown-preview'), { ssr: false });
 
@@ -77,10 +78,11 @@ const Templates = () => {
     e.stopPropagation();
 
     const flag = currentBlueprintInfo.uuid === '';
-    console.log(id, isTemplate);
 
     if (isTemplate) {
       const newUUID = v1().toString();
+      const templateData = { ...kumoTemplate[id], uuid: newUUID, status: 'PENDING' as DeployState };
+      setCurrentBlueprintInfo(templateData);
       setIsKumoTemplate(id);
       router.push(`/blueprint/${newUUID}`);
     } else {
@@ -98,6 +100,7 @@ const Templates = () => {
             scope: 'PRIVATE',
             status: 'PENDING',
             uuid: newUUID,
+            isTemplate: false,
           };
           setCurrentBlueprintInfo(templateInfo);
           addUserBlueprint(templateInfo, false);
@@ -288,9 +291,9 @@ const Templates = () => {
             </div>
           </div>
           <hr />
-          <div className='w-full h-full flex justify-center'>
+          <div className='w-full h-[610px] flex justify-center overflow-y-scroll'>
             <div className='w-[288px] md:w-[608px] lg:w-[928px] xl:w-[1244px] py-8'>
-              <div className='w-fit flex flex-wrap h-[610px] overflow-y-scroll gap-x-7 gap-y-8 '>
+              <div className='w-fit flex flex-wrap h-[610px]  gap-x-7 gap-y-8 '>
                 {currentBlueprintInfo.uuid === '' && (
                   <div className='w-[290px] h-[218px]'>
                     <NewBlueprint />
