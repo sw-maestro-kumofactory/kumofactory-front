@@ -127,7 +127,7 @@ const DeployButton = () => {
   }, [currentBlueprintInfo]);
 
   return (
-    <div className='absolute right-4 top-20 z-20'>
+    <div className='absolute right-4 top-16 z-20'>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger onClick={handlePopoverTrigger}>
           <div className='p-2 bg-[#00CBBF] text-white rounded-md cursor-pointer'>

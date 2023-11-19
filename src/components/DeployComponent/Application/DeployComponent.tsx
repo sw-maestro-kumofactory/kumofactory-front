@@ -8,6 +8,8 @@ import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import SkeletonRepositoryContainer from '@/src/components/DeployComponent/Application/Repository/SkeletonRepositoryContainer';
 import CustomList from '@/src/components/common/List/CustomList';
+import { kumoTemplate } from '@/src/assets/kumoTemplate';
+import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
 const DeployComponent = () => {
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
@@ -29,7 +31,6 @@ const DeployComponent = () => {
         tmp[username] = d.repoInfo;
         tmp[username].forEach((repo, index) => {
           initEnvironmentVariables(tmp[username][index].name);
-          console.log(colors[tmp[username][index].language]);
           tmp[username][index].languageColor = colors[tmp[username][index].language]?.color || '#00C0B5';
         });
       }

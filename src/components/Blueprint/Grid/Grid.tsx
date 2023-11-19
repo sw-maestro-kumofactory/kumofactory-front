@@ -122,7 +122,7 @@ const Grid = ({ id }: IProps) => {
         }}
       >
         <DeployButton />
-        <div className='relative w-full h-full'>
+        <div className='relative w-full h-full p-4'>
           <Image src={kumoTemplate[isKumoTemplate].staticImage!} alt={'workspace'} fill={true} />
         </div>
       </div>

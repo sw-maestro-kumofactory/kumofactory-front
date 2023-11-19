@@ -26,12 +26,11 @@ const BlueprintMenuList = () => {
 
   return (
     <div
-      className={`overflow-x-hidden w-[290px] min-w-[290px] h-full border-r-2 border-[#195091]-100 overflow-scroll select-none ${
-        isKumoTemplate !== '' && 'bg-gray-500/50'
-      }`}
+      className={`overflow-x-hidden w-[290px] min-w-[290px] h-full border-r-2 border-[#195091]-100 select-none
+      ${isKumoTemplate !== '' && 'pointer-events-none '}`}
     >
       {isKumoTemplate !== '' && (
-        <div className='w-full bg-white font-bold flex items-center justify-center p-4'>
+        <div className='fixed w-[290px] h-screen overflow-y-hiddenx font-bold text-white flex items-center justify-center p-4 bg-black/80 z-50'>
           When using Kumo Template, You can't add or change services
         </div>
       )}

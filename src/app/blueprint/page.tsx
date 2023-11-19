@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
 import { useRouter, useSearchParams } from 'next/navigation';
+import axios from 'axios';
 
 import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
@@ -23,8 +24,11 @@ const BluePrint = () => {
 
   const getTemplate = async () => {
     try {
-      const res = await getBlueprintList();
-      setUserBlueprints(res, true);
+      // const res = await getBlueprintList();
+      // ** Mocking
+      const res = await axios.get('/apiTest/kumoTemplate');
+      console.log(res);
+      setUserBlueprints(res.data, true);
     } catch (err) {
       console.log(err);
     }
