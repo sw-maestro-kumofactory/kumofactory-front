@@ -32,6 +32,7 @@ export interface BlueprintInfo {
   staticImage?: string;
   isTemplate: boolean;
   templateName?: string;
+  cost?: string;
 }
 
 export type BlueprintScope = 'PUBLIC' | 'PRIVATE' | 'KUMOFACTORY';

@@ -23,7 +23,6 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   const { setCurrentBlueprintInfo, setBlueprintScope, setIsTemplateOpen, setIsKumoTemplate } = useBlueprintStore(
     (state) => state.CommonAction,
   );
-
   const onClickLoad = async () => {
     setIsKumoTemplate(isTemplate ? data.templateName! : '');
     setCurrentBlueprintInfo(data);

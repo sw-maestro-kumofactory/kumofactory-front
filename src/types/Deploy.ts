@@ -64,6 +64,9 @@ export interface Resource {
   privateIp: string;
   uuid: string;
   publicIp?: string;
+  deployStatus: string;
+  deployedBranch: string;
+  deployedRepository: string;
 }
 
 export type DeployState = 'PROVISIONING' | 'PENDING' | 'SUCCESS' | 'FAIL';

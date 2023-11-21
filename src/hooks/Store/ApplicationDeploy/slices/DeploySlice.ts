@@ -27,6 +27,19 @@ export const useOptionSlice: StateCreator<
         return state;
       });
     },
+    addDeployStatusOfResource: (id: string, status: string) => {
+      set((state) => {
+        state.deployedResourceList[id].deployStatus = status;
+        return state;
+      });
+    },
+    addRepositoryInfoOfResource: (id: string, deployedRepository: string, deployedBranch: string) => {
+      set((state) => {
+        state.deployedResourceList[id].deployedRepository = deployedRepository;
+        state.deployedResourceList[id].deployedBranch = deployedBranch;
+        return state;
+      });
+    },
     setTargetInstanceId: (targetInstanceId: string) => {
       set((state) => ({ ...state, targetInstanceId }));
     },

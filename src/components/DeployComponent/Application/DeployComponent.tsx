@@ -1,8 +1,9 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { v1 } from 'uuid';
 
 import RepositoryContainer from '@/src/components/DeployComponent/Application/Repository/RepositoryContainer';
-import { getOrgRepositories, getUserRepositories } from '@/src/api/deploy';
+import { getOrgRepositories, getRepoInfo, getUserRepositories } from '@/src/api/deploy';
 import { PersonalRepoResponse } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
@@ -16,7 +17,9 @@ const DeployComponent = () => {
   const targetInstanceType = useDeployStore((state) => state.targetInstanceType);
   const repositoryList = useDeployStore((state) => state.repositoryList);
   const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
-  const { setRepositoryList, initEnvironmentVariables } = useDeployStore((state) => state.DeployAction);
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
+  const { setRepositoryList, initEnvironmentVariables, addRepositoryInfoOfResource, addDeployStatusOfResource } =
+    useDeployStore((state) => state.DeployAction);
 
   const colors = require('/public/github-colors.json');
 
@@ -57,6 +60,18 @@ const DeployComponent = () => {
     }
   };
 
+  const getRepoInfoOfResource = useCallback(async () => {
+    if (!targetInstanceId) return;
+    const id = deployedResourceList[targetInstanceId].instanceId;
+    const data = await getRepoInfo(id);
+    const info = data.split(' ');
+    addRepositoryInfoOfResource(targetInstanceId, info[0], info[1]);
+  }, [targetInstanceId]);
+
+  useEffect(() => {
+    getRepoInfoOfResource();
+  }, [targetInstanceId]);
+
   useEffect(() => {
     if (Object.keys(repositoryList).length === 0) {
       getRepo();
@@ -89,9 +104,18 @@ const DeployComponent = () => {
                 <ul className='pl-8 list-disc leading-8 p-3 '>
                   <CustomList title='Private IP' content={deployedResourceList[targetInstanceId].privateIp} />
                   <CustomList title='Public IP' content={deployedResourceList[targetInstanceId].publicIp!} />
-                  <CustomList title='Deployed Repository' content={'None'} />
-                  <CustomList title='Deployed Branch' content={'None'} />
-                  <CustomList title='Deploy Status' content={'None'} />
+                  <CustomList
+                    title='Deployed Repository'
+                    content={deployedResourceList[targetInstanceId].deployedRepository || 'Not Deployed'}
+                  />
+                  <CustomList
+                    title='Deployed Branch'
+                    content={deployedResourceList[targetInstanceId].deployedBranch || 'Not Deployed'}
+                  />
+                  <CustomList
+                    title='Deploy Status'
+                    content={deployedResourceList[targetInstanceId].deployStatus || 'Not Deployed'}
+                  />
                 </ul>
               </div>
             </div>
@@ -108,7 +132,7 @@ const DeployComponent = () => {
           Object.keys(repositoryList).map((key) => {
             return (
               <>
-                <RepositoryContainer key={key} repoInfo={repositoryList[key]} id={key} />
+                <RepositoryContainer key={v1().toString()} repoInfo={repositoryList[key]} id={key} />
               </>
             );
           })}

@@ -22,7 +22,7 @@ export const getRepoBranches = async (owner: string, repo: string) => {
 };
 
 export const getRepoInfo = async (id: string) => {
-  const { data } = await authAxiosInstance.get(`/api/build/info/${id}`);
+  const { data } = await authAxiosInstance.get(`/api/build/info?instanceId=${id}`);
   return data;
 };
 

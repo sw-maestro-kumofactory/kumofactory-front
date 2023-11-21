@@ -49,7 +49,11 @@ const DeployButton = () => {
   const onClickSaveConfirm = async () => {
     try {
       const data = getData();
-      await postSaveBlueprintData(data);
+      if (isKumoTemplate) {
+        await postDeployTemplate(data, kumoTemplate[isKumoTemplate].name.replaceAll(' ', '_'), 'false');
+      } else {
+        await postSaveBlueprintData(data);
+      }
       alert('Save Success!');
       setOpen(false);
     } catch (e) {

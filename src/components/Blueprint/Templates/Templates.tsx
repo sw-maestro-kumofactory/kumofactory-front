@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faCloudArrowDown, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
@@ -20,6 +20,7 @@ import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
 import { kumoTemplate } from '@/src/assets/kumoTemplate';
 import { DeployState } from '@/src/types/Deploy';
+import { getCostOfBlueprint } from '@/src/api/blueprint';
 
 const MarkdownPreview = dynamic(() => import('@uiw/react-markdown-preview'), { ssr: false });
 
@@ -78,7 +79,6 @@ const Templates = () => {
     e.stopPropagation();
 
     const flag = currentBlueprintInfo.uuid === '';
-
     if (isTemplate) {
       const newUUID = v1().toString();
       const templateData = { ...kumoTemplate[id], uuid: newUUID, status: 'PENDING' as DeployState };
@@ -122,7 +122,14 @@ const Templates = () => {
     setIsTemplateOpen(false);
   };
 
+  const getCost = useCallback(async () => {
+    if (showDetail === '') return;
+    const data = await getCostOfBlueprint(showDetail);
+    console.log(data);
+  }, [showDetail]);
+
   useEffect(() => {
+    getCost();
     const func = () => historyBackHandler(showDetail);
     window.addEventListener('popstate', func);
     return () => {
@@ -175,9 +182,7 @@ const Templates = () => {
                   <div className='font-extrabold text-xl'>{templates[showDetail].name}</div>
                   <div
                     className='flex w-fit gap-x-1.5 items-center text-sm text-[#323438]'
-                    onClick={(e) =>
-                      onClickLoad(e, templates[showDetail].uuid, templates[showDetail].scope === 'KUMOFACTORY')
-                    }
+                    onClick={(e) => onClickLoad(e, templates[showDetail].uuid, templates[showDetail].isTemplate)}
                   >
                     <div className='flex items-center gap-x-2 border border-[#DAE2EC] rounded-md p-2'>
                       <FontAwesomeIcon icon={faCopy} />

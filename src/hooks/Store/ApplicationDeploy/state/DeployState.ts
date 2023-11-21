@@ -17,6 +17,8 @@ export interface DeployState {
   environmentVariables: Record<string, EnvironmentVariables[]>;
   DeployAction: {
     addDeployedResource: (id: string, resource: Resource) => void;
+    addDeployStatusOfResource: (id: string, status: string) => void;
+    addRepositoryInfoOfResource: (id: string, deployedRepository: string, deployedBranch: string) => void;
     setTargetInstanceId: (targetInstanceId: string) => void;
     setTargetInstanceName: (targetInstanceName: string) => void;
     setTargetInstanceType: (targetInstanceType: string) => void;

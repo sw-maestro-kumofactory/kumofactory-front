@@ -15,7 +15,7 @@ import { DeployState } from '@/src/types/Deploy';
 import Status from '@/src/components/Layout/Status';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import BlueprintNameModal from '@/src/components/common/Modal/BlueprintNameModal';
-import { getResourceId } from '@/src/api/deploy';
+import { getRepoInfo, getResourceId } from '@/src/api/deploy';
 import ModalContainer from '@/src/components/common/Modal/ModalContainer';
 import Templates from '@/src/components/Blueprint/Templates/Templates';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
@@ -50,10 +50,12 @@ export const Header = () => {
   const getResourceIds = async (id: string) => {
     try {
       const data = await getResourceId(id);
-      Object.keys(data.result).map((key) => {
+      Object.keys(data.result).map(async (key) => {
         addDeployedResource(key, data.result[key]);
       });
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const onClickEdit = () => {
