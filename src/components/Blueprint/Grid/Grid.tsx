@@ -202,7 +202,6 @@ const Grid = ({ id }: IProps) => {
                 const serviceName = services[key].type;
                 const serviceNameWidth = serviceName.length * 13;
                 const xAdjustment = (90 - serviceNameWidth) / 2;
-                console.log(options[key]);
                 return (
                   <g key={services[key].id}>
                     <Service
