@@ -39,6 +39,7 @@ export const Header = () => {
   const { setInterceptor, Logout } = useLogin();
   const [isBlueprint, setIsBlueprint] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
+  const [isHome, setIsHome] = useState(pathname === '/');
 
   const onClickRefresh = async () => {
     const data = await getBlueprintDeployStatus(currentBlueprintInfo.uuid);
@@ -64,6 +65,7 @@ export const Header = () => {
 
   useEffect(() => {
     const d = pathname.split('/');
+    setIsHome(pathname === '/');
     if (d.length >= 3 && d[1] === 'blueprint') {
       setBlueprintId(d[2]);
       if (Object.keys(userBlueprints).includes(d[2])) setCurrentDeployState(userBlueprints[d[2]].status);
@@ -96,7 +98,11 @@ export const Header = () => {
   }, []);
 
   return (
-    <div className='fixed flex justify-between w-full text-sm text-[#00C0B5] border-b-2 border-[#DAE2EC] h-[50px] p-4 select-none items-center z-20 bg-white'>
+    <div
+      className={`fixed flex justify-between w-full text-sm text-[#00C0B5] border-b-2 border-[#DAE2EC] h-[50px] p-4 select-none items-center z-20 bg-white ${
+        (isHome || !currentBlueprintInfo.uuid) && 'px-[215px]'
+      }`}
+    >
       <div className='flex gap-x-4 content-center p-4 items-center'>
         <Link className='rounded-2xl' href='/'>
           <svg width='74' height='13' viewBox='0 0 74 13' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -201,25 +207,41 @@ export const Header = () => {
         </>
       )}
 
-      {!currentBlueprintInfo.uuid &&
-        (isLogin ? (
-          <>
-            <div
-              className={'cursor-pointer'}
-              onClick={() => {
-                Logout();
-              }}
+      {!currentBlueprintInfo.uuid && (
+        <div className='flex gap-x-3 items-center'>
+          {isLogin ? (
+            <>
+              <div
+                className='cursor-pointer'
+                onClick={() => {
+                  Logout();
+                  alert('Logout Success!');
+                  router.push('/');
+                }}
+              >
+                Logout
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                className='w-20 h-7 text-black rounded-sm flex items-center justify-center border border-[#E2E9F0] text-[13px]'
+                href='/auth/login'
+              >
+                Log In
+              </Link>
+            </>
+          )}
+          {isHome && (
+            <Link
+              className='flex justify-center items-center w-[155px] h-7 bg-[#00CBBF] text-white rounded-sm cursor-pointer'
+              href={!isLogin ? '/auth/login' : '/blueprint'}
             >
-              로그아웃
-            </div>
-          </>
-        ) : (
-          <>
-            <Link className='bg-[#00C0B5] text-white px-4 py-2 rounded-2xl' href='/auth/login'>
-              SignIn
+              Get Started For Free
             </Link>
-          </>
-        ))}
+          )}
+        </div>
+      )}
       <ModalContainer isShow={isTemplateOpen} setShow={setIsTemplateOpen}>
         <Templates />
       </ModalContainer>

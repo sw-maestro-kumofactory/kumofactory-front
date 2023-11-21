@@ -18,6 +18,7 @@ const BluePrint = () => {
   const router = useRouter();
   const isTemplateOpen = useBlueprintStore((state) => state.isTemplateOpen);
   const setIsTemplateOpen = useBlueprintStore((state) => state.CommonAction.setIsTemplateOpen);
+  const setBlueprintId = useBlueprintStore((state) => state.CommonAction.setBlueprintId);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
   const { setUserBlueprints, deleteUserBlueprint } = useAuthStore((state) => state.UserBlueprintAction);
   const [isCheckListOpen, setCheckListOpen] = useState(false);
