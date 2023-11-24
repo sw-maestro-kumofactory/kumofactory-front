@@ -52,9 +52,11 @@ export const Header = () => {
   const getResourceIds = async (id: string) => {
     try {
       const data = await getResourceId(id);
+      console.log(data);
       Object.keys(data.result).map(async (key) => {
         addDeployedResource(key, data.result[key]);
       });
+      setIsLoading(false);
     } catch (e) {
       console.error(e);
     }
@@ -65,15 +67,15 @@ export const Header = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const d = pathname.split('/');
     setIsHome(pathname === '/');
     if (d.length >= 3 && d[1] === 'blueprint') {
       setBlueprintId(d[2]);
       if (Object.keys(userBlueprints).includes(d[2])) setCurrentDeployState(userBlueprints[d[2]].status);
       if (d[3] === 'deploy') {
-        setIsBlueprint(false);
+        setIsBlueprint(false);	
         getResourceIds(currentBlueprintInfo.uuid);
-        setIsLoading(false);
       }
     } else {
       setIsBlueprint(true);
@@ -136,7 +138,9 @@ export const Header = () => {
             <div className='flex gap-x-4 items-center text-[#323438]'>
               <div className='max-w-xs font-bold overflow-x-hidden '>{currentBlueprintInfo.name}</div>
               <div className='w-[29px] h-[29px] flex justify-center items-center rounded-md border-solid border-2 border-[#DAE2EC]'>
-                <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
+	        <div className='w-[14px] h-14px] flex justify-center items-center>
+                  <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
+		</div>
               </div>
             </div>
           </>
