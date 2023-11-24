@@ -52,7 +52,6 @@ export const Header = () => {
   const getResourceIds = async (id: string) => {
     try {
       const data = await getResourceId(id);
-      console.log(data);
       Object.keys(data.result).map(async (key) => {
         addDeployedResource(key, data.result[key]);
       });
