@@ -18,9 +18,13 @@ export const useOptionSlice: StateCreator<
     user: '',
     branch: '',
   },
+  isLoading: true,
   environmentVariables: {},
   deployedResourceList: {},
   DeployAction: {
+    setIsLoading: (isLoading: boolean) => {
+      set((state) => ({ ...state, isLoading }));
+    },
     addDeployedResource: (id: string, resource: Resource) => {
       set((state) => {
         state.deployedResourceList[id] = resource;

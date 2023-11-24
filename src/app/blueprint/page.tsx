@@ -18,6 +18,7 @@ const BluePrint = () => {
   const router = useRouter();
   const isTemplateOpen = useBlueprintStore((state) => state.isTemplateOpen);
   const setIsTemplateOpen = useBlueprintStore((state) => state.CommonAction.setIsTemplateOpen);
+  const setBlueprintId = useBlueprintStore((state) => state.CommonAction.setBlueprintId);
   const userBlueprints = useAuthStore((state) => state.userBlueprints);
   const { setUserBlueprints, deleteUserBlueprint } = useAuthStore((state) => state.UserBlueprintAction);
   const [isCheckListOpen, setCheckListOpen] = useState(false);
@@ -25,10 +26,6 @@ const BluePrint = () => {
   const getTemplate = async () => {
     try {
       const res = await getBlueprintList();
-      // ** Mocking
-      // const res = await axios.get('/apiTest/kumoTemplate');
-      // console.log(res);
-      // setUserBlueprints(res.data, true);
       setUserBlueprints(res, true);
     } catch (err) {
       console.log(err);

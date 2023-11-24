@@ -44,6 +44,7 @@ const EC2Info = ({ option, active }: IProps) => {
   }, [active]);
 
   useEffect(() => {
+    console.log(1235);
     const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[option.id].instanceId}`);
     source.addEventListener('open', () => {});
     source.addEventListener('status', (e) => {

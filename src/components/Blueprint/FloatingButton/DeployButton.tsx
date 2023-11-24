@@ -7,7 +7,7 @@ import { current } from 'immer';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/src/components/common/Popover';
 import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
-import { postDeployBlueprintData, postSaveBlueprintData } from '@/src/api/blueprint';
+import { getBlueprintList, postDeployBlueprintData, postSaveBlueprintData } from '@/src/api/blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { postDeployTemplate, postWebThreeTier } from '@/src/api/template';
@@ -21,6 +21,7 @@ const DeployButton = () => {
   const setCurrentBlueprintInfo = useBlueprintStore((state) => state.CommonAction.setCurrentBlueprintInfo);
   const editUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.editUserBlueprints);
   const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
+  const { setUserBlueprints, deleteUserBlueprint } = useAuthStore((state) => state.UserBlueprintAction);
   const [open, setOpen] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState<boolean>(currentBlueprintInfo.status === 'PROVISIONING');
 
@@ -46,6 +47,15 @@ const DeployButton = () => {
     return body;
   };
 
+  const getTemplate = async () => {
+    try {
+      const res = await getBlueprintList();
+      setUserBlueprints(res, true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onClickSaveConfirm = async () => {
     try {
       const data = getData();
@@ -54,6 +64,7 @@ const DeployButton = () => {
       } else {
         await postSaveBlueprintData(data);
       }
+      await getTemplate();
       alert('Save Success!');
       setOpen(false);
     } catch (e) {
@@ -77,6 +88,7 @@ const DeployButton = () => {
       }
       editUserBlueprints({ ...currentBlueprintInfo, status: 'PROVISIONING' }, true);
       setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'PROVISIONING' });
+      await getTemplate();
       alert('Deploy Success!, You can see the status in the header.');
       setOpen(false);
     } catch (e) {

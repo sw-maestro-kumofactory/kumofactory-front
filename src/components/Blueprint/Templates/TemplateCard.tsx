@@ -34,7 +34,7 @@ const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) 
               className='w-3 h-3'
               onClick={(e) => {
                 e.stopPropagation();
-                onClickLoad(e, data.uuid, data.scope === 'KUMOFACTORY');
+                onClickLoad(e, data.uuid, data.username === 'KumoFactory');
               }}
             />
           </div>

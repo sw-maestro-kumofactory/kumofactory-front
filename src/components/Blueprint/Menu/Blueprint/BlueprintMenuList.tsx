@@ -1,4 +1,8 @@
 'use client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/navigation';
+
 import { Menus } from '@/src/assets/Menus';
 import { AreaItemList } from '@/src/assets/MenuItems';
 import DropDown from '@/src/components/Blueprint/downshiftTest/DropDown';
@@ -19,10 +23,15 @@ const onClickWebThreetier = async () => {
 };
 
 const BlueprintMenuList = () => {
+  const router = useRouter();
   const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const scope = useBlueprintStore((state) => state.currentBlueprintInfo.scope);
+
+  const onClickBack = () => {
+    router.back();
+  };
 
   return (
     <div
@@ -34,6 +43,13 @@ const BlueprintMenuList = () => {
           When using Kumo Template, You can't add or change services
         </div>
       )}
+      <div
+        className='flex items-center mx-5 mt-5 text-sm text-[#696969] font-bold gap-x-2 cursor-pointer'
+        onClick={onClickBack}
+      >
+        <FontAwesomeIcon icon={faArrowLeft} />
+        <span>Back To List</span>
+      </div>
       <div className='flex justify-between items-center text-[12px] font-semibold w-full mt-5'>
         <div className='w-full font-semibold flex items-center mx-5'>Scope</div>
         <div className='flex gap-x-2'>

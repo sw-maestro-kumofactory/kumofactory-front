@@ -26,7 +26,7 @@ export const postWebThreeTier = async (body: any) => {
   return data;
 };
 
-export const potDeployTemplate = async (body: BlueprintResponse, name: string, provision: string): Promise<any> => {
+export const postDeployTemplate = async (body: BlueprintResponse, name: string, provision: string): Promise<any> => {
   const { data } = await authAxiosInstance.post<BlueprintResponse>(
     `/api/template?name=${name}&provision=${provision}`,
     body,

@@ -24,6 +24,7 @@ const Setting = () => {
   const targetInstanceName = useDeployStore((state) => state.targetInstanceName);
   const username = useLoginStore((state) => state.username);
   const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
+  const addDeployStatusOfResource = useDeployStore((state) => state.DeployAction.addDeployStatusOfResource);
 
   const [language, setLanguage] = useState<string>('');
   const [curBranch, setCurBranch] = useState<string>('');
@@ -72,7 +73,10 @@ const Setting = () => {
     source.addEventListener('open', () => {});
     source.addEventListener('status', (e) => {
       if (e.data === 'success' || e.data === 'fail') {
-        alert(e.data);
+        if (deployedResourceList[targetInstanceId!].deployStatus !== 'success') {
+          alert(e.data);
+          addDeployStatusOfResource(targetInstanceId!, e.data);
+        }
         source.close();
       }
     });

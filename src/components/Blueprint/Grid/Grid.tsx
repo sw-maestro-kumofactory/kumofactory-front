@@ -128,6 +128,7 @@ const Grid = ({ id }: IProps) => {
       </div>
     );
   }
+
   return (
     <div
       className='grid-wrapper w-full h-full overflow-hidden'
