@@ -73,7 +73,7 @@ export const Header = () => {
       setBlueprintId(d[2]);
       if (Object.keys(userBlueprints).includes(d[2])) setCurrentDeployState(userBlueprints[d[2]].status);
       if (d[3] === 'deploy') {
-        setIsBlueprint(false);	
+        setIsBlueprint(false);
         getResourceIds(currentBlueprintInfo.uuid);
       }
     } else {
@@ -137,9 +137,9 @@ export const Header = () => {
             <div className='flex gap-x-4 items-center text-[#323438]'>
               <div className='max-w-xs font-bold overflow-x-hidden '>{currentBlueprintInfo.name}</div>
               <div className='w-[29px] h-[29px] flex justify-center items-center rounded-md border-solid border-2 border-[#DAE2EC]'>
-	        <div className='w-[14px] h-14px] flex justify-center items-center>
+                <div className='w-[14px] h-14px] flex justify-center items-center'>
                   <FontAwesomeIcon onClick={onClickEdit} className='h-full cursor-pointer' icon={faPenToSquare} />
-		</div>
+                </div>
               </div>
             </div>
           </>
