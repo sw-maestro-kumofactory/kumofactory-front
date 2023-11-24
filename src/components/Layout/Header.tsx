@@ -88,7 +88,7 @@ export const Header = () => {
 
   useEffect(() => {
     setCurrentDeployState(currentBlueprintInfo.status);
-  }, [userBlueprints]);
+  }, [currentBlueprintInfo]);
 
   useEffect(() => {
     setIsEdit(false);
