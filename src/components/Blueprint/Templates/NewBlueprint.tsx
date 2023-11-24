@@ -24,6 +24,7 @@ const NewBlueprint = () => {
       description: '',
       scope: 'PRIVATE',
       status: 'PENDING',
+      isTemplate: false,
       uuid: id,
     };
 
