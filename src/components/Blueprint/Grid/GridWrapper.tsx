@@ -46,6 +46,7 @@ const GridWrapper = ({ blueprintId, children }: IProps) => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     if (!Object.keys(userBlueprints).includes(blueprintId) && !isKumoTemplate) {
       alert('잘못된 접근입니다.');
       router.push('/blueprint');

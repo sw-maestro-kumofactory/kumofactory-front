@@ -18,7 +18,6 @@ interface IProps {
 
 const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) => {
   const [isHover, setIsHover] = useState(false);
-
   return (
     <div className='w-[290px] h-[218px]'>
       <div

@@ -44,7 +44,6 @@ const EC2Info = ({ option, active }: IProps) => {
   }, [active]);
 
   useEffect(() => {
-    console.log(1235);
     const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[option.id].instanceId}`);
     source.addEventListener('open', () => {});
     source.addEventListener('status', (e) => {
@@ -68,7 +67,7 @@ const EC2Info = ({ option, active }: IProps) => {
         onClick={onClickArea}
       >
         <label className={`h-fit font-semibold ${showOptions ? '' : 'text-black'}`}>{option.instanceName}(EC2)</label>
-        <div className='flex items-center pr-[22px]'>
+        <div className='flex w-[8px] h-[4px] items-center pr-[22px]'>
           <FontAwesomeIcon
             className={`h-full transition-transform duration-300 ${
               showOptions ? '' : 'transform rotate-180 text-black'

@@ -21,11 +21,11 @@ const content = [
       'If you don’t have knowledge about cloud well,You can use Template for your cloud. Kumo Factory and Users create and share templates for different situations (number of users, traffic, type of service).',
     image: '/icons/Landing/landing3.png',
   },
-  {
-    title: 'Find your Hidden cost ',
-    description: 'Find your hidden cost in your architecture. You can predict how much it will cost in the cloud.',
-    image: '/icons/Landing/landing4.png',
-  },
+//  {
+//    title: 'Find your Hidden cost ',
+  //  description: 'Find your hidden cost in your architecture. You can predict how much it will cost in the cloud.',
+  //  image: '/icons/Landing/landing4.png',
+ // },
 ];
 
 const Home = () => {

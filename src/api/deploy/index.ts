@@ -43,6 +43,7 @@ export const uploadSQLFile = async (body: FormData) => {
 export const getResourceId = async (blueprintId: string) => {
   const { data } = await authAxiosInstance.get<RecourseResponse>(`/api/build/resource/${blueprintId}`);
   const newObj: Record<string, Resource> = {};
+  console.log(data)
   Object.keys(data.result).forEach((key) => {
     newObj[data.result[key].uuid] = data.result[key];
   });

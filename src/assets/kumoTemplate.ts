@@ -1,9 +1,9 @@
 import { BlueprintInfo } from '@/src/types/Blueprint';
 
 export const kumoTemplate: Record<string, BlueprintInfo> = {
-  Amazon_EC2_Linux_NGINX_Webserver: {
+  AWS_EC2_NGINX_WEBSERVER: {
     id: 0, // for load blueprint
-    uuid: 'Amazon_EC2_Linux_NGINX_Webserver',
+    uuid: 'AWS_EC2_NGINX_WEBSERVER',
     name: 'Amazon EC2 Linux NGINX Webserver',
     description: 'AWS EC2 NGINX Webserver Template.',
     username: 'KumoFactory',
