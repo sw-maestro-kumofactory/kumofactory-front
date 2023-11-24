@@ -134,12 +134,11 @@ const Setting = () => {
               ))}
             </select>
           </div>
-          <div className='w-full text-xl mt-7 font-bold'>Select Branch To Deploy</div>
-          <div className='mt-4 text-[#195091]'>
+          <div className='w-full text-xl mt-7 font-bold'>Select Framework</div>
+          <div className='mt-4 text-[#00CBBF]'>
             For Application Deploy, You should select framework or input dockerfile path.
           </div>
           <div className='py-4 px-2'>
-            <div className='font-bold'>Select Framework</div>
             <div className='flex gap-x-8 text-sm'>
               <div
                 onClick={() => {
