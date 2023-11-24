@@ -33,7 +33,7 @@ const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) 
               className='w-3 h-3'
               onClick={(e) => {
                 e.stopPropagation();
-                onClickLoad(e, data.uuid, data.username === 'KumoFactory');
+                onClickLoad(e, thumbnail ? data.uuid : data.templateName!, data.username === 'KumoFactory');
               }}
             />
           </div>
@@ -64,7 +64,7 @@ const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) 
                 <Image width={20} height={20} src={'/icons/Design/logo.svg'} alt={'kumo'} />
               ) : (
                 <img
-                  src={`https://github.com/${data.username}.png`}
+                  src={`https://github.com/${data.staticImage!}`}
                   className='rounded-full w-8 h-8'
                   alt={'GRAVATAR'}
                 />

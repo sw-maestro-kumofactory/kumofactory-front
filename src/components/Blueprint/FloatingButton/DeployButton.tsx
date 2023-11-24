@@ -60,7 +60,7 @@ const DeployButton = () => {
     try {
       const data = getData();
       if (isKumoTemplate) {
-        await postDeployTemplate(data, kumoTemplate[isKumoTemplate].name.replaceAll(' ', '_'), 'false');
+        await postDeployTemplate(data, isKumoTemplate, 'false');
       } else {
         await postSaveBlueprintData(data);
       }
@@ -82,7 +82,7 @@ const DeployButton = () => {
     try {
       const data = getData();
       if (isKumoTemplate) {
-        await postDeployTemplate(data, kumoTemplate[isKumoTemplate].name.replaceAll(' ', '_'), 'true');
+        await postDeployTemplate(data, isKumoTemplate, 'true');
       } else {
         await postDeployBlueprintData(data);
       }

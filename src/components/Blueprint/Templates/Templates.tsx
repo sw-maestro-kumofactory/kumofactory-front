@@ -59,6 +59,7 @@ const Templates = () => {
     Object.keys(staticData).map((key) => {
       tmpImages[key] = staticData[key].staticImage!;
       templateObj[key] = staticData[key];
+      templateObj[key].templateName = key;
     });
     try {
       const data = await getAllTemplates();

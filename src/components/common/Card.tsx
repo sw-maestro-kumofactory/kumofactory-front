@@ -9,6 +9,7 @@ import { commonAxiosInstance } from '@/src/api';
 import { BlueprintInfo } from '@/src/types/Blueprint';
 import { StatusStyle } from '@/src/assets/StatusStyle';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
+import { kumoTemplate } from '@/src/assets/kumoTemplate';
 
 interface IProps {
   data: BlueprintInfo;
@@ -56,6 +57,9 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
   useEffect(() => {
     fetchSvgData();
   }, []);
+
+  console.log(data);
+  console.log(kumoTemplate);
 
   return (
     <div className='w-[290px] min-w-[290px] h-[232px] min-h-[232px]'>
@@ -111,7 +115,7 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
               )}
               <Image
                 className={`rounded-md border-gray-300 border-solid border-2 rounded-t-md z-10`}
-                src={`/icons/template/${data.templateName!}.png`}
+                src={`${kumoTemplate[data.templateName!].staticImage!}`}
                 fill={true}
                 alt='template image'
               />
