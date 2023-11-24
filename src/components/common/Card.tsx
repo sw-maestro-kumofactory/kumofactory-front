@@ -58,9 +58,6 @@ const Card = ({ data, isTemplate, onClickDelete }: IProps) => {
     fetchSvgData();
   }, []);
 
-  console.log(data);
-  console.log(kumoTemplate);
-
   return (
     <div className='w-[290px] min-w-[290px] h-[232px] min-h-[232px]'>
       <div

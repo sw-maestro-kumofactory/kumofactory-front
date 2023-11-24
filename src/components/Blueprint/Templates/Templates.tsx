@@ -83,7 +83,7 @@ const Templates = () => {
     if (isTemplate) {
       const newUUID = v1().toString();
       const templateData = { ...kumoTemplate[id], uuid: newUUID, status: 'PENDING' as DeployState };
-      setCurrentBlueprintInfo(templateData);
+      setCurrentBlueprintInfo({...templateData, status: 'PENDING'});
       setIsKumoTemplate(id);
       router.push(`/blueprint/${newUUID}`);
     } else {
