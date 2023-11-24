@@ -4,24 +4,27 @@ import Landing from '@/src/components/landing';
 
 const content = [
   {
-    title: '1234',
-    description: '1234',
-    image: '1234',
+    title: 'Create your cloud in a snap',
+    description:
+      'Create your cloud architecture without console and Deploy the cloud architecture with a single button ',
+    image: '/icons/Landing/landing1.png',
   },
   {
-    title: '1235',
-    description: '1235',
-    image: '1235',
+    title: 'Deploy your application on instance what you want',
+    description:
+      'Try deploying your application to an instance with just a few clicks. All you need to do is choose the project and the instance. You don’t need docker file, connecting to instance',
+    image: '/icons/Landing/landing2.png',
   },
   {
-    title: '1245',
-    description: '1245',
-    image: '1245',
+    title: 'Use Template for your cloud',
+    description:
+      'If you don’t have knowledge about cloud well,You can use Template for your cloud. Kumo Factory and Users create and share templates for different situations (number of users, traffic, type of service).',
+    image: '/icons/Landing/landing3.png',
   },
   {
-    title: '1345',
-    description: '1345',
-    image: '1345',
+    title: 'Find your Hidden cost ',
+    description: 'Find your hidden cost in your architecture. You can predict how much it will cost in the cloud.',
+    image: '/icons/Landing/landing4.png',
   },
 ];
 

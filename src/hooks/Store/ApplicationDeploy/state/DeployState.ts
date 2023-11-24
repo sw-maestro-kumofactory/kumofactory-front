@@ -15,7 +15,9 @@ export interface DeployState {
   repositoryList: Record<string, PersonalRepo[]>;
   repo: Repository;
   environmentVariables: Record<string, EnvironmentVariables[]>;
+  isLoading: boolean;
   DeployAction: {
+    setIsLoading: (isLoading: boolean) => void;
     addDeployedResource: (id: string, resource: Resource) => void;
     addDeployStatusOfResource: (id: string, status: string) => void;
     addRepositoryInfoOfResource: (id: string, deployedRepository: string, deployedBranch: string) => void;

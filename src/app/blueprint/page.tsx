@@ -26,10 +26,6 @@ const BluePrint = () => {
   const getTemplate = async () => {
     try {
       const res = await getBlueprintList();
-      // ** Mocking
-      // const res = await axios.get('/apiTest/kumoTemplate');
-      // console.log(res);
-      // setUserBlueprints(res.data, true);
       setUserBlueprints(res, true);
     } catch (err) {
       console.log(err);

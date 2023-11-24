@@ -122,14 +122,14 @@ const Templates = () => {
     setIsTemplateOpen(false);
   };
 
-  const getCost = useCallback(async () => {
-    if (showDetail === '') return;
-    const data = await getCostOfBlueprint(showDetail);
-    console.log(data);
-  }, [showDetail]);
+  // const getCost = useCallback(async () => {
+  //   if (showDetail === '') return;
+  //   const data = await getCostOfBlueprint(showDetail);
+  //   console.log(data);
+  // }, [showDetail]);
 
   useEffect(() => {
-    getCost();
+    // getCost();
     const func = () => historyBackHandler(showDetail);
     window.addEventListener('popstate', func);
     return () => {
@@ -181,14 +181,14 @@ const Templates = () => {
                 <div className='flex justify-between items-center'>
                   <div className='font-extrabold text-xl'>{templates[showDetail].name}</div>
                   <div
-                    className='flex w-fit gap-x-1.5 items-center text-sm text-[#323438]'
+                    className='flex w-fit gap-x-1.5 items-center text-sm text-[#323438] '
                     onClick={(e) => onClickLoad(e, templates[showDetail].uuid, templates[showDetail].isTemplate)}
                   >
-                    <div className='flex items-center gap-x-2 border border-[#DAE2EC] rounded-md p-2'>
+                    <div className='flex items-center gap-x-2 border border-[#DAE2EC] rounded-md p-2 cursor-pointer'>
                       <FontAwesomeIcon icon={faCopy} />
                       {templates[showDetail].downloadCount}
                     </div>
-                    <div className='font-bold p-2 border border-[#DAE2EC] rounded-md'>
+                    <div className='font-bold p-2 border border-[#DAE2EC] rounded-md cursor-pointer'>
                       <FontAwesomeIcon icon={faCloudArrowDown} />
                     </div>
                   </div>
@@ -219,10 +219,10 @@ const Templates = () => {
                     )}
                   </div>
                   <div className='h-4 w-0.5 border border-[#E2E9F0]'></div>
-                  <div className='flex items-center gap-x-1'>
-                    <FontAwesomeIcon className='text-[#81929F]' icon={faHeart} />
-                    <div>123</div>
-                  </div>
+                  {/*<div className='flex items-center gap-x-1'>*/}
+                  {/*  <FontAwesomeIcon className='text-[#81929F]' icon={faHeart} />*/}
+                  {/*  <div>123</div>*/}
+                  {/*</div>*/}
                 </div>
                 <div className='py-11 w-80'>
                   <div className='text-[11px] flex'>
