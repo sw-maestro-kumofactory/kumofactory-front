@@ -64,7 +64,7 @@ const TemplateCard = ({ data, onClick, thumbnail, image, onClickLoad }: IProps) 
                 <Image width={20} height={20} src={'/icons/Design/logo.svg'} alt={'kumo'} />
               ) : (
                 <img
-                  src={`https://github.com/${data.staticImage!}`}
+                  src={`https://github.com/${data.username!}.png`}
                   className='rounded-full w-8 h-8'
                   alt={'GRAVATAR'}
                 />
