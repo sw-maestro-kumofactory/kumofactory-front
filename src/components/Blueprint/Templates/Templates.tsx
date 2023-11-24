@@ -1,11 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faCloudArrowDown, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import moment from 'moment';
 import { v1 } from 'uuid';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { faAws } from '@fortawesome/free-brands-svg-icons';
@@ -18,6 +18,9 @@ import { BlueprintInfo } from '@/src/types/Blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
 import { useSetTemplate } from '@/src/hooks/useSetTemplate';
+import { kumoTemplate } from '@/src/assets/kumoTemplate';
+import { DeployState } from '@/src/types/Deploy';
+import { getCostOfBlueprint } from '@/src/api/blueprint';
 
 const MarkdownPreview = dynamic(() => import('@uiw/react-markdown-preview'), { ssr: false });
 
@@ -25,12 +28,15 @@ const Templates = () => {
   const router = useRouter();
   const [templates, setTemplates] = useState<Record<string, BlueprintInfo>>({});
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
+  const [images, setImages] = useState<Record<string, string>>({});
   const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
   const showDetail = useBlueprintStore((state) => state.showDetail);
   const initState = useBlueprintStore((state) => state.CommonAction.initState);
   const setShowDetail = useBlueprintStore((state) => state.CommonAction.setShowDetail);
   const addUserBlueprint = useAuthStore((state) => state.UserBlueprintAction.addUserBlueprint);
-  const { setCurrentBlueprintInfo, setIsTemplateOpen } = useBlueprintStore((state) => state.CommonAction);
+  const { setCurrentBlueprintInfo, setIsTemplateOpen, setIsKumoTemplate } = useBlueprintStore(
+    (state) => state.CommonAction,
+  );
 
   const { setTemplate } = useSetTemplate();
 
@@ -46,52 +52,69 @@ const Templates = () => {
   };
 
   const loadTemplates = async () => {
+    const staticData = kumoTemplate;
+    const tmp: Record<string, string> = {};
+    const templateObj: Record<string, BlueprintInfo> = {};
+    const tmpImages: Record<string, string> = {};
+    Object.keys(staticData).map((key) => {
+      tmpImages[key] = staticData[key].staticImage!;
+      templateObj[key] = staticData[key];
+    });
     try {
       const data = await getAllTemplates();
-      const tmp: Record<string, string> = {};
-      const templateObj: Record<string, BlueprintInfo> = {};
       for (let i = 0; i < data.length; i++) {
         let t = await fetchSvgData(data[i].presignedUrl!);
         tmp[data[i].uuid] = t;
         templateObj[data[i].uuid] = data[i];
       }
-      setThumbnails(tmp);
-      setTemplates(templateObj);
     } catch (e) {
       console.log(e);
     }
+    setImages(tmpImages);
+    setThumbnails(tmp);
+    setTemplates(templateObj);
   };
 
-  const onClickLoad = async (e: any, id: string) => {
+  const onClickLoad = async (e: any, id: string, isTemplate: boolean) => {
     e.stopPropagation();
-    const flag = currentBlueprintInfo.uuid === '';
-    try {
-      const newUUID = v1().toString();
-      const templateData = await getTemplateById(id);
-      if (flag) {
-        initState(newUUID);
-        templateData.uuid = newUUID;
 
-        const templateInfo: BlueprintInfo = {
-          name: 'New Blueprint',
-          description: '',
-          scope: 'PRIVATE',
-          status: 'PENDING',
-          uuid: newUUID,
-        };
-        setCurrentBlueprintInfo(templateInfo);
-        addUserBlueprint(templateInfo, false);
+    const flag = currentBlueprintInfo.uuid === '';
+    if (isTemplate) {
+      const newUUID = v1().toString();
+      const templateData = { ...kumoTemplate[id], uuid: newUUID, status: 'PENDING' as DeployState };
+      setCurrentBlueprintInfo(templateData);
+      setIsKumoTemplate(id);
+      router.push(`/blueprint/${newUUID}`);
+    } else {
+      try {
+        setIsKumoTemplate('');
+        const newUUID = v1().toString();
+        const templateData = await getTemplateById(id);
+        if (flag) {
+          initState(newUUID);
+          templateData.uuid = newUUID;
+
+          const templateInfo: BlueprintInfo = {
+            name: 'New Blueprint',
+            description: '',
+            scope: 'PRIVATE',
+            status: 'PENDING',
+            uuid: newUUID,
+            isTemplate: false,
+          };
+          setCurrentBlueprintInfo(templateInfo);
+          addUserBlueprint(templateInfo, false);
+        }
+        setTemplate({ data: templateData, isTemplate: true });
+        setIsTemplateOpen(false);
+        if (flag) router.push(`/blueprint/${newUUID}`);
+      } catch (e) {
+        console.log(e);
       }
-      setTemplate({ data: templateData, isTemplate: true });
-      setIsTemplateOpen(false);
-      if (flag) router.push(`/blueprint/${newUUID}`);
-    } catch (e) {
-      console.log(e);
     }
   };
 
   const historyBackHandler = (showDetail: string) => {
-    console.log('historyBack Handler : ', showDetail);
     if (showDetail) {
       setShowDetail('');
       return;
@@ -99,8 +122,14 @@ const Templates = () => {
     setIsTemplateOpen(false);
   };
 
+  // const getCost = useCallback(async () => {
+  //   if (showDetail === '') return;
+  //   const data = await getCostOfBlueprint(showDetail);
+  //   console.log(data);
+  // }, [showDetail]);
+
   useEffect(() => {
-    console.log('show Detail, ', showDetail);
+    // getCost();
     const func = () => historyBackHandler(showDetail);
     window.addEventListener('popstate', func);
     return () => {
@@ -152,33 +181,48 @@ const Templates = () => {
                 <div className='flex justify-between items-center'>
                   <div className='font-extrabold text-xl'>{templates[showDetail].name}</div>
                   <div
-                    className='flex w-fit gap-x-1.5 items-center text-sm text-[#323438]'
-                    onClick={(e) => onClickLoad(e, templates[showDetail].uuid)}
+                    className='flex w-fit gap-x-1.5 items-center text-sm text-[#323438] '
+                    onClick={(e) => onClickLoad(e, templates[showDetail].uuid, templates[showDetail].isTemplate)}
                   >
-                    <div className='flex items-center gap-x-2 border border-[#DAE2EC] rounded-md p-2'>
+                    <div className='flex items-center gap-x-2 border border-[#DAE2EC] rounded-md p-2 cursor-pointer'>
                       <FontAwesomeIcon icon={faCopy} />
                       {templates[showDetail].downloadCount}
                     </div>
-                    <div className='font-bold p-2 border border-[#DAE2EC] rounded-md'>
+                    <div className='font-bold p-2 border border-[#DAE2EC] rounded-md cursor-pointer'>
                       <FontAwesomeIcon icon={faCloudArrowDown} />
                     </div>
                   </div>
                 </div>
                 <div className='flex items-center gap-x-2.5 pt-1.5'>
-                  <div className='w-8 h-8 rounded-full bg-gray-500'></div>
+                  <div className='w-8 min-w-[32px] h-8 rounded-full mr-2 flex justify-center items-center'>
+                    {templates[showDetail].username === 'KumoFactory' ? (
+                      <Image width={20} height={20} src={'/icons/Design/logo.svg'} alt={'kumo'} />
+                    ) : (
+                      <img
+                        src={`https://github.com/${templates[showDetail].username}.png`}
+                        className='rounded-full w-8 h-8'
+                        alt={'GRAVATAR'}
+                      />
+                    )}
+                  </div>
                   <div className='text-xs text-gray-400'>Create by {templates[showDetail].username}</div>
                 </div>
                 <div className='flex gap-x-4 pt-3 h-8 text-sm items-center'>
                   <div className='flex justify-center gap-x-2 items-center'>
                     {/*@ts-ignore*/}
                     <FontAwesomeIcon className='w-5 h-5' icon={faAws} />
-                    <Image width={20} height={20} src={'/icons/Design/public.svg'} alt={'public'} />
+                    {templates[showDetail].scope === 'PUBLIC' && (
+                      <Image width={20} height={20} src={'/icons/Design/public.svg'} alt={'public'} />
+                    )}
+                    {templates[showDetail].scope === 'KUMOFACTORY' && (
+                      <Image width={20} height={20} src={'/icons/Design/logo.svg'} alt={'kumo'} />
+                    )}
                   </div>
                   <div className='h-4 w-0.5 border border-[#E2E9F0]'></div>
-                  <div className='flex items-center gap-x-1'>
-                    <FontAwesomeIcon className='text-[#81929F]' icon={faHeart} />
-                    <div>123</div>
-                  </div>
+                  {/*<div className='flex items-center gap-x-1'>*/}
+                  {/*  <FontAwesomeIcon className='text-[#81929F]' icon={faHeart} />*/}
+                  {/*  <div>123</div>*/}
+                  {/*</div>*/}
                 </div>
                 <div className='py-11 w-80'>
                   <div className='text-[11px] flex'>
@@ -191,10 +235,17 @@ const Templates = () => {
                   </div>
                 </div>
               </div>
-              <div>
-                <svg className='w-[290px] h-[174px] rounded-t-lg p-4 mb-4 rounded-md border border-[#DAE2EC]'>
-                  <g dangerouslySetInnerHTML={{ __html: thumbnails[showDetail] }} />
-                </svg>
+              <div className='relative w-[290px] h-[174px] rounded-t-lg rounded-md border border-[#DAE2EC]'>
+                {thumbnails[showDetail] !== undefined && (
+                  <svg className='w-full h-full'>
+                    <g dangerouslySetInnerHTML={{ __html: thumbnails[showDetail] }} />
+                  </svg>
+                )}
+                {images[showDetail] !== undefined && (
+                  <div>
+                    <Image className='rounded-md' fill={true} src={images[showDetail]} alt='template image' />
+                  </div>
+                )}
               </div>
             </div>
             <hr />
@@ -211,7 +262,7 @@ const Templates = () => {
           </div>
         </div>
       ) : (
-        <div className='w-full h-full'>
+        <div className='w-full h-full '>
           <div className='flex justify-between py-[17px] pl-[27px] items-center'>
             <div className='flex'>
               <Image width={18} height={18} alt={'catalog'} src='/icons/Design/catalog.svg' />
@@ -245,27 +296,32 @@ const Templates = () => {
             </div>
           </div>
           <hr />
-          <div className='flex flex-wrap w-full h-[610px] overflow-y-scroll gap-x-7 gap-y-11 px-12 py-9 '>
-            {currentBlueprintInfo.uuid === '' && (
-              <div className='w-[290px] h-[218px]'>
-                <NewBlueprint />
+          <div className='w-full h-[610px] flex justify-center overflow-y-scroll'>
+            <div className='w-[288px] md:w-[608px] lg:w-[928px] xl:w-[1244px] py-8'>
+              <div className='w-fit flex flex-wrap h-[610px]  gap-x-7 gap-y-8 '>
+                {currentBlueprintInfo.uuid === '' && (
+                  <div className='w-[290px] h-[218px]'>
+                    <NewBlueprint />
+                  </div>
+                )}
+                <>
+                  {Object.keys(templates).map((key) => {
+                    return (
+                      <TemplateCard
+                        key={templates[key].uuid}
+                        data={templates[key]}
+                        thumbnail={thumbnails[templates[key].uuid] || undefined}
+                        image={images[templates[key].uuid] || undefined}
+                        onClick={() => {
+                          setShowDetail(templates[key].uuid);
+                        }}
+                        onClickLoad={onClickLoad}
+                      />
+                    );
+                  })}
+                </>
               </div>
-            )}
-            <>
-              {Object.keys(templates).map((key) => {
-                return (
-                  <TemplateCard
-                    key={templates[key].uuid}
-                    data={templates[key]}
-                    thumbnail={thumbnails[templates[key].uuid]}
-                    onClick={() => {
-                      setShowDetail(templates[key].uuid);
-                    }}
-                    onClickLoad={onClickLoad}
-                  />
-                );
-              })}
-            </>
+            </div>
           </div>
         </div>
       )}

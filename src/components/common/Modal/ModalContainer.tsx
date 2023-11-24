@@ -15,7 +15,7 @@ const ModalContainer = ({ children, isShow, setShow }: IProps) => {
     isShow &&
     createPortal(
       <div
-        className='fixed top-0 left-0 flex justify-center items-center w-full h-full bg-black/50 z-20'
+        className='fixed top-0 left-0 flex justify-center items-center w-full h-full bg-black/50 z-50'
         onClick={() => {
           setShow(false);
           router.replace(pathName, undefined);

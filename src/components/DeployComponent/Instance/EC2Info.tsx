@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { ServiceOptions } from '@/src/types/Services';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import { EC2Options } from '@/src/types/Services';
+import { getRepoInfo } from '@/src/api/deploy';
 
 interface IProps {
   option: EC2Options;
@@ -19,6 +20,7 @@ const EC2Info = ({ option, active }: IProps) => {
   const setTargetInstanceId = useDeployStore((state) => state.DeployAction.setTargetInstanceId);
   const setTargetInstanceName = useDeployStore((state) => state.DeployAction.setTargetInstanceName);
   const setTargetInstanceType = useDeployStore((state) => state.DeployAction.setTargetInstanceType);
+  const addDeployStatusOfResource = useDeployStore((state) => state.DeployAction.addDeployStatusOfResource);
   const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
 
   const onClickArea = () => {
@@ -42,11 +44,12 @@ const EC2Info = ({ option, active }: IProps) => {
   }, [active]);
 
   useEffect(() => {
+    console.log(1235);
     const source = new EventSource(`/api/build/buildStatus/${deployedResourceList[option.id].instanceId}`);
     source.addEventListener('open', () => {});
     source.addEventListener('status', (e) => {
       if (e.data === 'success' || e.data === 'fail') {
-        alert(e.data);
+        addDeployStatusOfResource(option.id, e.data);
         source.close();
       }
     });

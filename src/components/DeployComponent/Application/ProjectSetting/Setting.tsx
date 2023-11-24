@@ -24,6 +24,7 @@ const Setting = () => {
   const targetInstanceName = useDeployStore((state) => state.targetInstanceName);
   const username = useLoginStore((state) => state.username);
   const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
+  const addDeployStatusOfResource = useDeployStore((state) => state.DeployAction.addDeployStatusOfResource);
 
   const [language, setLanguage] = useState<string>('');
   const [curBranch, setCurBranch] = useState<string>('');
@@ -72,7 +73,10 @@ const Setting = () => {
     source.addEventListener('open', () => {});
     source.addEventListener('status', (e) => {
       if (e.data === 'success' || e.data === 'fail') {
-        alert(e.data);
+        if (deployedResourceList[targetInstanceId!].deployStatus !== 'success') {
+          alert(e.data);
+          addDeployStatusOfResource(targetInstanceId!, e.data);
+        }
         source.close();
       }
     });
@@ -112,8 +116,6 @@ const Setting = () => {
               <CustomList title='User' content={username} />
               <CustomList title='Repository' content={repoId} />
               <CustomList title='Selected Instance' content={targetInstanceName!} />
-              <CustomList title='Deployed Repository' content={'None'} />
-              <CustomList title='Deploy Status' content={'None'} />
             </ul>
           </div>
           <div className='w-full text-xl mt-7 font-bold'>Select Branch To Deploy</div>
@@ -133,7 +135,6 @@ const Setting = () => {
             </select>
           </div>
           <div className='w-full text-xl mt-7 font-bold'>Select Branch To Deploy</div>
-          {/* Framework */}
           <div className='mt-4 text-[#195091]'>
             For Application Deploy, You should select framework or input dockerfile path.
           </div>

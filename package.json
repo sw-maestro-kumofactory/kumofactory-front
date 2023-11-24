@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@floating-ui/react": "^0.25.1",
@@ -60,7 +58,6 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-storybook": "^0.6.12",
-    "prettier": "^2.8.8",
-    "storybook": "^7.1.0-alpha.29"
+    "prettier": "^2.8.8"
   }
 }

@@ -14,6 +14,7 @@ interface IProps {
 }
 
 const ServiceItemWrapper = ({ type, children }: IProps) => {
+  const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
   const createService = useBlueprintStore((state) => state.ServiceAction.createService);
   const setOption = useBlueprintStore((state) => state.ServiceAction.setOption);
   const createOption = useBlueprintStore((state) => state.OptionAction.createOption);
@@ -31,12 +32,18 @@ const ServiceItemWrapper = ({ type, children }: IProps) => {
   };
 
   return (
-    <div className='flex flex-wrap gap-x-[11px]'>
+    <div className={`flex flex-wrap gap-x-[11px] ${isKumoTemplate === '' && 'cursor-pointer'}`}>
       {items &&
         items.map((item) => (
-          <ItemButtonContainer key={item.type} type={item.type} onClick={() => onClickCreateService(item)}>
+          <ItemButtonContainer
+            key={item.type}
+            type={item.type}
+            onClick={() => {
+              if (isKumoTemplate === '') onClickCreateService(item);
+            }}
+          >
             <svg
-              cursor='pointer'
+              cursor={`${isKumoTemplate === '' && 'pointer'}`}
               width={70}
               height={70}
               viewBox='0 0 70 70'

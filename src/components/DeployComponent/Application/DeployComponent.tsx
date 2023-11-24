@@ -1,20 +1,27 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { v1 } from 'uuid';
 
 import RepositoryContainer from '@/src/components/DeployComponent/Application/Repository/RepositoryContainer';
-import { getOrgRepositories, getUserRepositories } from '@/src/api/deploy';
+import { getOrgRepositories, getRepoInfo, getUserRepositories } from '@/src/api/deploy';
 import { PersonalRepoResponse } from '@/src/types/Deploy';
 import useDeployStore from '@/src/hooks/Store/ApplicationDeploy/useDeployStore';
 import { useLoginStore } from '@/src/hooks/Store/auth/useLoginStore';
 import SkeletonRepositoryContainer from '@/src/components/DeployComponent/Application/Repository/SkeletonRepositoryContainer';
 import CustomList from '@/src/components/common/List/CustomList';
+import { kumoTemplate } from '@/src/assets/kumoTemplate';
+import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 
 const DeployComponent = () => {
   const targetInstanceId = useDeployStore((state) => state.targetInstanceId);
   const targetInstanceType = useDeployStore((state) => state.targetInstanceType);
   const repositoryList = useDeployStore((state) => state.repositoryList);
   const deployedResourceList = useDeployStore((state) => state.deployedResourceList);
-  const { setRepositoryList, initEnvironmentVariables } = useDeployStore((state) => state.DeployAction);
+  const currentBlueprintInfo = useBlueprintStore((state) => state.currentBlueprintInfo);
+  const { setRepositoryList, initEnvironmentVariables, addRepositoryInfoOfResource, addDeployStatusOfResource } =
+    useDeployStore((state) => state.DeployAction);
+
+  const colors = require('/public/github-colors.json');
 
   const username = useLoginStore((state) => state.username);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,10 +31,11 @@ const DeployComponent = () => {
       const d = await getUserRepositories();
       const tmp: Record<string, PersonalRepoResponse[]> = {};
       if (d.repoCount > 0) {
-        for (const repo of d.repoInfo) {
-          initEnvironmentVariables(repo.name);
-        }
         tmp[username] = d.repoInfo;
+        tmp[username].forEach((repo, index) => {
+          initEnvironmentVariables(tmp[username][index].name);
+          tmp[username][index].languageColor = colors[tmp[username][index].language]?.color || '#00C0B5';
+        });
       }
 
       if (d.orgCount > 0) {
@@ -38,10 +46,11 @@ const DeployComponent = () => {
 
         const orgResults = await Promise.all(orgPromises);
         orgResults.forEach(({ org, orgRepo }) => {
-          orgRepo.forEach((repo) => {
-            initEnvironmentVariables(repo.name);
-          });
           tmp[org] = orgRepo;
+          tmp[org].forEach((repo, index) => {
+            initEnvironmentVariables(tmp[org][index].name);
+            tmp[org][index].languageColor = colors[tmp[org][index].language]?.color || '#00C0B5';
+          });
         });
       }
       setRepositoryList(tmp);
@@ -50,6 +59,18 @@ const DeployComponent = () => {
       console.log(e);
     }
   };
+
+  const getRepoInfoOfResource = useCallback(async () => {
+    if (!targetInstanceId) return;
+    const id = deployedResourceList[targetInstanceId].instanceId;
+    const data = await getRepoInfo(id);
+    const info = data.split(' ');
+    addRepositoryInfoOfResource(targetInstanceId, info[0], info[1]);
+  }, [targetInstanceId]);
+
+  useEffect(() => {
+    getRepoInfoOfResource();
+  }, [targetInstanceId]);
 
   useEffect(() => {
     if (Object.keys(repositoryList).length === 0) {
@@ -83,6 +104,18 @@ const DeployComponent = () => {
                 <ul className='pl-8 list-disc leading-8 p-3 '>
                   <CustomList title='Private IP' content={deployedResourceList[targetInstanceId].privateIp} />
                   <CustomList title='Public IP' content={deployedResourceList[targetInstanceId].publicIp!} />
+                  <CustomList
+                    title='Deployed Repository'
+                    content={deployedResourceList[targetInstanceId].deployedRepository || 'Not Deployed'}
+                  />
+                  <CustomList
+                    title='Deployed Branch'
+                    content={deployedResourceList[targetInstanceId].deployedBranch || 'Not Deployed'}
+                  />
+                  <CustomList
+                    title='Deploy Status'
+                    content={deployedResourceList[targetInstanceId].deployStatus || 'Not Deployed'}
+                  />
                 </ul>
               </div>
             </div>
@@ -99,7 +132,7 @@ const DeployComponent = () => {
           Object.keys(repositoryList).map((key) => {
             return (
               <>
-                <RepositoryContainer key={key} repoInfo={repositoryList[key]} id={key} />{' '}
+                <RepositoryContainer key={v1().toString()} repoInfo={repositoryList[key]} id={key} />
               </>
             );
           })}

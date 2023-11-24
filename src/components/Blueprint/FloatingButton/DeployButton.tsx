@@ -3,13 +3,15 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faPalette, faRocket } from '@fortawesome/free-solid-svg-icons';
+import { current } from 'immer';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/src/components/common/Popover';
 import { ExportSvg, getSvgBlob } from '@/src/utils/ExportSvg';
-import { postDeployBlueprintData, postSaveBlueprintData } from '@/src/api/blueprint';
+import { getBlueprintList, postDeployBlueprintData, postSaveBlueprintData } from '@/src/api/blueprint';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
 import useAuthStore from '@/src/hooks/Store/auth/useAuthStore';
-import { postWebThreeTier } from '@/src/api/template';
+import { postDeployTemplate, postWebThreeTier } from '@/src/api/template';
+import { kumoTemplate } from '@/src/assets/kumoTemplate';
 
 const DeployButton = () => {
   const { blueprintToJson, setBlueprintScope } = useBlueprintStore((state) => state.CommonAction);
@@ -18,7 +20,8 @@ const DeployButton = () => {
   const options = useBlueprintStore((state) => state.options);
   const setCurrentBlueprintInfo = useBlueprintStore((state) => state.CommonAction.setCurrentBlueprintInfo);
   const editUserBlueprints = useAuthStore((state) => state.UserBlueprintAction.editUserBlueprints);
-
+  const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
+  const { setUserBlueprints, deleteUserBlueprint } = useAuthStore((state) => state.UserBlueprintAction);
   const [open, setOpen] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState<boolean>(currentBlueprintInfo.status === 'PROVISIONING');
 
@@ -29,19 +32,39 @@ const DeployButton = () => {
       description: currentBlueprintInfo.description,
       scope: currentBlueprintInfo.scope,
     });
-    body.components.map((component, index) => {
-      component.options = options[component.id];
-    });
-    body.scope = scope;
-    const encodedSVG = getSvgBlob();
-    body['svgFile'] = encodedSVG;
+    body.isTemplate = !!isKumoTemplate;
+    // TODO : 이미지가 들어가야함.
+    if (isKumoTemplate) {
+      body['svgFile'] = '';
+    } else {
+      body.components.map((component, index) => {
+        component.options = options[component.id];
+      });
+      body.scope = scope;
+      const encodedSVG = getSvgBlob();
+      body['svgFile'] = encodedSVG;
+    }
     return body;
+  };
+
+  const getTemplate = async () => {
+    try {
+      const res = await getBlueprintList();
+      setUserBlueprints(res, true);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onClickSaveConfirm = async () => {
     try {
       const data = getData();
-      await postSaveBlueprintData(data);
+      if (isKumoTemplate) {
+        await postDeployTemplate(data, kumoTemplate[isKumoTemplate].name.replaceAll(' ', '_'), 'false');
+      } else {
+        await postSaveBlueprintData(data);
+      }
+      await getTemplate();
       alert('Save Success!');
       setOpen(false);
     } catch (e) {
@@ -58,10 +81,14 @@ const DeployButton = () => {
   const onClickDeployButton = async () => {
     try {
       const data = getData();
-      // console.log(data);
-      await postDeployBlueprintData(data);
+      if (isKumoTemplate) {
+        await postDeployTemplate(data, kumoTemplate[isKumoTemplate].name.replaceAll(' ', '_'), 'true');
+      } else {
+        await postDeployBlueprintData(data);
+      }
       editUserBlueprints({ ...currentBlueprintInfo, status: 'PROVISIONING' }, true);
       setCurrentBlueprintInfo({ ...currentBlueprintInfo, status: 'PROVISIONING' });
+      await getTemplate();
       alert('Deploy Success!, You can see the status in the header.');
       setOpen(false);
     } catch (e) {
@@ -116,7 +143,7 @@ const DeployButton = () => {
   }, [currentBlueprintInfo]);
 
   return (
-    <div className='absolute right-4 top-20'>
+    <div className='absolute right-4 top-16 z-20'>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger onClick={handlePopoverTrigger}>
           <div className='p-2 bg-[#00CBBF] text-white rounded-md cursor-pointer'>
@@ -146,13 +173,6 @@ const DeployButton = () => {
             <FontAwesomeIcon icon={faRocket} />
             Deploy To AWS
           </div>
-          {/*<div*/}
-          {/*  className='px-4 py-2 w-full flex gap-2 items-center cursor-pointer hover:bg-gray-100'*/}
-          {/*  onClick={onClickWebThreeTier}*/}
-          {/*>*/}
-          {/*  <FontAwesomeIcon icon={faRocket} />*/}
-          {/*  Web Three tier*/}
-          {/*</div>*/}
         </PopoverContent>
       </Popover>
     </div>

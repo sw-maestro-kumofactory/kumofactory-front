@@ -14,6 +14,7 @@ const AvailableInstances = () => {
   const [ec2List, setEc2List] = useState<string[]>([]);
 
   useEffect(() => {
+    if (services[currentBlueprintInfo.uuid] === undefined) return;
     Object.keys(services[currentBlueprintInfo.uuid]).forEach((key) => {
       if (services[currentBlueprintInfo.uuid][key].type === 'EC2') {
         setEc2List((prev) => [...prev, key]);

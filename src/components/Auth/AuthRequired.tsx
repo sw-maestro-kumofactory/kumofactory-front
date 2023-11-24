@@ -19,7 +19,7 @@ const AuthRequired = ({ children }: IProps) => {
     }
   }, []);
 
-  return <>{children}</>;
+  return <div className='bg-[#F9FBFC]'>{children}</div>;
 };
 
 export default AuthRequired;

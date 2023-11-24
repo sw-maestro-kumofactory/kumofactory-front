@@ -18,12 +18,29 @@ export const useOptionSlice: StateCreator<
     user: '',
     branch: '',
   },
+  isLoading: true,
   environmentVariables: {},
   deployedResourceList: {},
   DeployAction: {
+    setIsLoading: (isLoading: boolean) => {
+      set((state) => ({ ...state, isLoading }));
+    },
     addDeployedResource: (id: string, resource: Resource) => {
       set((state) => {
         state.deployedResourceList[id] = resource;
+        return state;
+      });
+    },
+    addDeployStatusOfResource: (id: string, status: string) => {
+      set((state) => {
+        state.deployedResourceList[id].deployStatus = status;
+        return state;
+      });
+    },
+    addRepositoryInfoOfResource: (id: string, deployedRepository: string, deployedBranch: string) => {
+      set((state) => {
+        state.deployedResourceList[id].deployedRepository = deployedRepository;
+        state.deployedResourceList[id].deployedBranch = deployedBranch;
         return state;
       });
     },

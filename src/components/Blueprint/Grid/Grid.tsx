@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 import Service from '@/src/components/AWSService/Service';
 import useBlueprintStore from '@/src/hooks/Store/blueprint/useBlueprintStore';
@@ -11,6 +12,7 @@ import OptionContainer from '@/src/components/AWSService/Options/OptionContainer
 import { AreaTypes, IArea } from '@/src/types/Area';
 import DeployButton from '@/src/components/Blueprint/FloatingButton/DeployButton';
 import { EC2Options } from '@/src/types/Services';
+import { kumoTemplate } from '@/src/assets/kumoTemplate';
 
 interface IProps {
   id: string;
@@ -27,6 +29,7 @@ const Grid = ({ id }: IProps) => {
   const selectedLineId = useBlueprintStore((state) => state.selectedLineId);
   const lineDrawingMode = useBlueprintStore((state) => state.isLineDrawing);
   const isShowOption = useBlueprintStore((state) => state.isShowOption);
+  const isKumoTemplate = useBlueprintStore((state) => state.isKumoTemplate);
   const doubleClickedServiceId = useBlueprintStore((state) => state.doubleClickedServiceId);
   const { onMouseDownService, onMouseEnterService, onMouseLeaveService, onDoubleClickService } = useBlueprintStore(
     (state) => state.ServiceAction,
@@ -56,9 +59,6 @@ const Grid = ({ id }: IProps) => {
     if (selectedServiceId) e.stopPropagation();
     onMouseMove(e);
   };
-
-  console.log(services);
-  console.log(options);
 
   const handleResize = () => {
     const component = document.querySelector('.grid-wrapper')!;
@@ -111,6 +111,23 @@ const Grid = ({ id }: IProps) => {
   useEffect(() => {
     handleResize();
   }, [isShowOption]);
+
+  if (isKumoTemplate !== '') {
+    return (
+      <div
+        className='grid-wrapper w-full h-full overflow-hidden'
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsEdit(false);
+        }}
+      >
+        <DeployButton />
+        <div className='relative w-full h-full p-4'>
+          <Image src={kumoTemplate[isKumoTemplate].staticImage!} alt={'workspace'} fill={true} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -186,7 +203,6 @@ const Grid = ({ id }: IProps) => {
                 const serviceName = services[key].type;
                 const serviceNameWidth = serviceName.length * 13;
                 const xAdjustment = (90 - serviceNameWidth) / 2;
-                console.log(options[key]);
                 return (
                   <g key={services[key].id}>
                     <Service
@@ -228,7 +244,7 @@ const Grid = ({ id }: IProps) => {
                       </foreignObject>
                     )}
                     {hoverId === services[key].id && (
-                      <foreignObject x={services[key].x - 60} y={services[key].y + 90} width={200} height={120}>
+                      <foreignObject x={services[key].x - 60} y={services[key].y + 90} width={200} height={140}>
                         <div className='absolute z-10 w-[200px]'>
                           <div className='bg-white border border-[#DAE2EC] rounded-md shadow-md p-2'>
                             <div className='flex items-center gap-x-2'>

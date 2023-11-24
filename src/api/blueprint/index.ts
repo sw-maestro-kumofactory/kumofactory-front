@@ -1,5 +1,6 @@
 import { authAxiosInstance } from '@/src/api';
 import { BlueprintInfo, BlueprintResponse, BlueprintScope } from '@/src/types/Blueprint';
+import { CostResponse } from '@/src/types/Cost';
 
 export const postSaveBlueprintData = async (body: BlueprintResponse): Promise<any> => {
   const { data } = await authAxiosInstance.post<BlueprintResponse>(`/api/blueprint/aws?provision=false`, body, {});
@@ -11,7 +12,7 @@ export const postDeployBlueprintData = async (body: BlueprintResponse): Promise<
   return data;
 };
 
-export const getBlueprintList = async (): Promise<any> => {
+export const getBlueprintList = async (): Promise<BlueprintInfo[]> => {
   const { data } = await authAxiosInstance.get<BlueprintInfo[]>(`/api/blueprint/aws/list`);
   return data;
 };
@@ -33,5 +34,10 @@ export const deleteBlueprint = async (id: string) => {
 
 export const getBlueprintDeployStatus = async (id: string) => {
   const { data } = await authAxiosInstance.get(`/api/blueprint/aws/status/${id}`);
+  return data;
+};
+
+export const getCostOfBlueprint = async (id: string): Promise<CostResponse> => {
+  const { data } = await authAxiosInstance.get<CostResponse>(`/api/blueprint/cost/${id}`);
   return data;
 };
